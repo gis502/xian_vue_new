@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
+      port: Number(env.START_PORT),
       proxy: {
         '/api': {
           target: backendBaseUrl,
