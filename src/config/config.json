@@ -1,5 +1,5 @@
 {
-  "backendBaseUrl": "http://localhost:8080",
+  "backendBaseUrl": "__BACKEND_BASE_URL__",
   "apiBaseUrl": "/api",
   "noEncryptUrls": ["/crypto/sm2/public-key"],
   "tdMapToken": [
