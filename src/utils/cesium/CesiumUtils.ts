@@ -107,7 +107,7 @@ export class CesiumUtils {
 
     const finalOptions = { ...defaultOptions, ...options }
     const container = document.getElementById(finalOptions.containerId)
-
+    
     if (!container) {
       throw new Error(`Cesium 容器 #${finalOptions.containerId} 不存在`)
     }
@@ -140,6 +140,11 @@ export class CesiumUtils {
     viewer.scene.fog.enabled = false
     viewer.scene.globe.enableLighting = false //全局光照
     viewer.shadows = false
+    // 禁用天空盒和天空大气
+    viewer.scene.skyBox.show = false
+    viewer.scene.skyAtmosphere.show = false
+    // 禁用月球
+    viewer.scene.moon.show = false
     const creditContainer = viewer.cesiumWidget.creditContainer as HTMLElement
     creditContainer.style.display = 'none'
 

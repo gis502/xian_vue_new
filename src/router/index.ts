@@ -5,13 +5,18 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/home',
+      redirect: '/rainstorm',
     },
     {
-      path: '/home',
-      name: 'home',
-      component: () => import('@/views/home/HomePage.vue'),
+      path: '/rainstorm',
+      name: 'rainstorm',
+      component: () => import('@/views/home/rainstorm/Rainstorm.vue'),
     },
+    {
+      path: '/earthquake',
+      name: 'earthquake',
+      component: () => import('@/views/home/earthquake/Earthquake.vue'),
+    }
   ],
 })
 

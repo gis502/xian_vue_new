@@ -1,9 +1,9 @@
 <template>
   <div>
-    首页
+    地震灾害链
   </div>
 </template>
-<script name="HomePage" setup lang="ts">
+<script setup lang="ts">
 </script>
 <style scoped>
 </style>
