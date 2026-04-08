@@ -32,6 +32,7 @@ export class GeoJsonManager {
   // 默认配置
   static readonly DEFAULT_OPTIONS: Required<GeoJsonOptions> = {
     showName: false,
+    default: false,
     labelStyle: {
       labelFont: '16px "微软雅黑"',
       labelColor: Color.RED,
@@ -70,7 +71,7 @@ export class GeoJsonManager {
    * 添加 GeoJSON 图层
    * @param layerId - 图层唯一标识
    * @param geojsonData - GeoJSON 数据（路径、URL 或对象）
-   * @param isDefault - 是否为默认图层（默认 false）
+   * @param isDefault - 是否为默认图层（默认 false，优先级高于 options.default）
    * @param options - 配置选项（样式、标签等）
    * @returns Promise<DataSource> 数据源实例
    */
@@ -82,6 +83,9 @@ export class GeoJsonManager {
   ): Promise<DataSource> {
     if (this.#exists(layerId)) throw new Error(`图层 ${layerId} 已存在`)
     const opt = this.#mergeOptions(options)
+    
+    // 优先使用 isDefault 参数，其次使用 options.default
+    const finalIsDefault = isDefault || opt.default
 
     // 加载并应用样式
     const dataSource = await GeoJsonDataSource.load(geojsonData)
@@ -89,7 +93,7 @@ export class GeoJsonManager {
 
     // 添加到地图
     await this.#viewer.dataSources.add(dataSource)
-    isDefault
+    finalIsDefault
       ? this.#defaultGeoJsonMap.set(layerId, dataSource)
       : this.#customGeoJsonMap.set(layerId, dataSource)
 
@@ -145,14 +149,16 @@ export class GeoJsonManager {
    * @param isDefaults - 是否为默认图层数组
    * @param options - 配置选项数组
    */
-  batchAddGeoJsonLayers(
+  async batchAddGeoJsonLayers(
     layerIds: string[],
     geojsonDatas: CustomizeGeoJsonDataSource[],
     isDefaults: boolean[],
     options?: GeoJsonOptions[],
-  ): void {
-    layerIds.forEach((id, index) =>
-      this.addGeoJsonLayer(id, geojsonDatas?.[index], isDefaults?.[index], options?.[index]),
+  ): Promise<void> {
+    await Promise.all(
+      layerIds.map((id, index) =>
+        this.addGeoJsonLayer(id, geojsonDatas?.[index], isDefaults?.[index], options?.[index])
+      )
     )
   }
 
@@ -253,6 +259,15 @@ export class GeoJsonManager {
   getGeoJsonLayerVisibility(layerId: string): boolean | null {
     const ds = this.getGeoJsonLayerById(layerId)
     return ds ? ds.show : null
+  }
+
+  /**
+   * 获取所有 GeoJSON 图层 ID
+   * @param clearType - 类型：'default'=默认图层，'custom'=自定义图层，'all'=所有图层（默认 'all'）
+   * @returns GeoJSON 图层 ID 集合
+   */
+  getGeoJsonLayerIds(clearType: ClearType = 'all'): Set<string> {
+    return this.#getTargetIdsByType(clearType)
   }
 
   // ===================== 私有方法 =====================
@@ -383,5 +398,14 @@ export class GeoJsonManager {
 
   #convertPosition(pos: Cartesian3 | [number, number, number]): Cartesian3 {
     return Array.isArray(pos) ? Cartesian3.fromDegrees(pos[0], pos[1], pos[2] || 0) : pos
+  }
+
+  #getTargetIdsByType(clearType: ClearType): Set<string> {
+    const targetIds = new Set<string>()
+    if (clearType === 'default' || clearType === 'all')
+      this.#defaultGeoJsonMap.forEach((_, key) => targetIds.add(key))
+    if (clearType === 'custom' || clearType === 'all')
+      this.#customGeoJsonMap.forEach((_, key) => targetIds.add(key))
+    return targetIds
   }
 }

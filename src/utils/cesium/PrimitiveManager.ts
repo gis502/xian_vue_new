@@ -83,6 +83,15 @@ export class PrimitiveManager {
     this.#clearMapsByType(clearType)
   }
 
+  /**
+   * 获取所有Primitive ID
+   * @param clearType - 类型：'default'=默认 Primitive，'custom'=自定义 Primitive，'all'=所有 Primitive（默认 'all'）
+   * @returns Primitive ID 集合
+   */
+  getPrimitiveIds(clearType: 'default' | 'custom' | 'all' = 'all'): Set<string> {
+    return this.#getTargetIdsByType(clearType)
+  }
+
   // ===================== 私有方法 =====================
 
   #groupPrimitivesByType(primitives: PrimitiveOptions[]) {
@@ -264,6 +273,15 @@ export class PrimitiveManager {
   #clearMapsByType(clearType: 'default' | 'custom' | 'all'): void {
     if (clearType === 'default' || clearType === 'all') this.#defaultPrimitiveMap.clear()
     if (clearType === 'custom' || clearType === 'all') this.#customPrimitiveMap.clear()
+  }
+
+  #getTargetIdsByType(clearType: 'default' | 'custom' | 'all'): Set<string> {
+    const targetIds = new Set<string>()
+    if (clearType === 'default' || clearType === 'all')
+      this.#defaultPrimitiveMap.forEach((_, key) => targetIds.add(key))
+    if (clearType === 'custom' || clearType === 'all')
+      this.#customPrimitiveMap.forEach((_, key) => targetIds.add(key))
+    return targetIds
   }
 
   #convertPosition(pos: Cartesian3 | [number, number, number]): Cartesian3 {

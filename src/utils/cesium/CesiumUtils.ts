@@ -106,6 +106,16 @@ export class CesiumUtils {
     this.#entityManager!.clearAllEntities(clearType)
   }
 
+  /**
+   * 获取所有实体ID
+   * @param clearType - 类型：'default'=默认实体，'custom'=自定义实体，'all'=所有实体（默认 'all'）
+   * @returns 实体 ID 集合
+   */
+  getEntityIds(clearType: ClearType = 'all'): Set<string> {
+    this.#checkManager(this.#entityManager, 'EntityManager')
+    return this.#entityManager!.getEntityIds(clearType)
+  }
+
   // ===================== Primitive 管理 =====================
 
   /**
@@ -144,6 +154,16 @@ export class CesiumUtils {
   clearAllPrimitives(clearType: ClearType = 'custom'): void {
     this.#checkManager(this.#primitiveManager, 'PrimitiveManager')
     this.#primitiveManager!.clearAllPrimitives(clearType)
+  }
+
+  /**
+   * 获取所有Primitive ID
+   * @param clearType - 类型：'default'=默认 Primitive，'custom'=自定义 Primitive，'all'=所有 Primitive（默认 'all'）
+   * @returns Primitive ID 集合
+   */
+  getPrimitiveIds(clearType: ClearType = 'all'): Set<string> {
+    this.#checkManager(this.#primitiveManager, 'PrimitiveManager')
+    return this.#primitiveManager!.getPrimitiveIds(clearType)
   }
 
   // ===================== 图层管理 =====================
@@ -196,6 +216,16 @@ export class CesiumUtils {
     this.#layerManager!.clearAllLayers(clearType)
   }
 
+  /**
+   * 获取所有图层 Key
+   * @param clearType - 类型：'default'=默认图层，'custom'=自定义图层，'all'=所有图层（默认 'all'）
+   * @returns 图层 Key 集合
+   */
+  getLayerKeys(clearType: ClearType = 'all'): Set<string> {
+    this.#checkManager(this.#layerManager, 'LayerManager')
+    return this.#layerManager!.getLayerKeys(clearType)
+  }
+
   // ===================== GeoJSON 图层管理 =====================
 
   /**
@@ -243,14 +273,14 @@ export class CesiumUtils {
    * @param isDefaults - 是否为默认图层数组
    * @param options - 配置选项数组
    */
-  batchAddGeoJsonLayers(
+  async batchAddGeoJsonLayers(
     layerIds: string[],
     geojsonDatas: CustomizeGeoJsonDataSource[],
     isDefaults: boolean[],
     options?: GeoJsonOptions[]
-  ): void {
+  ): Promise<void> {
     this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    this.#geoJsonManager!.batchAddGeoJsonLayers(layerIds, geojsonDatas, isDefaults, options)
+    await this.#geoJsonManager!.batchAddGeoJsonLayers(layerIds, geojsonDatas, isDefaults, options)
   }
 
   /**
@@ -329,6 +359,16 @@ export class CesiumUtils {
   getGeoJsonLayerVisibility(layerId: string): boolean | null {
     this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
     return this.#geoJsonManager!.getGeoJsonLayerVisibility(layerId)
+  }
+
+  /**
+   * 获取所有 GeoJSON 图层 ID
+   * @param clearType - 类型：'default'=默认图层，'custom'=自定义图层，'all'=所有图层（默认 'all'）
+   * @returns GeoJSON 图层 ID 集合
+   */
+  getGeoJsonLayerIds(clearType: ClearType = 'all'): Set<string> {
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
+    return this.#geoJsonManager!.getGeoJsonLayerIds(clearType)
   }
 
   // ===================== 视角控制 =====================

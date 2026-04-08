@@ -39,6 +39,7 @@ onMounted(() => {
             const areaName = area.features[0].properties.name;
             return {
                 showName: true,
+                default: true,
                 labelStyle: {
                     labelText: areaName,
                     center: [area.features[0].properties.center[0], area.features[0].properties.center[1], 0],

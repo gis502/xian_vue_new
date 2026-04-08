@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.32",
     "@element-plus/icons-vue": "^2.3.2",
     "@types/spark-md5": "^3.0.5",
     "axios": "^1.12.2",
@@ -18,26 +17,27 @@
     "gm-crypto": "^0.1.12",
     "pinia": "^3.0.3",
     "spark-md5": "^3.0.2",
-    "vue-router": "^4.6.3",
-    "vite-plugin-cesium": "^1.2.22"
+    "vite-plugin-cesium": "^1.2.22",
+    "vue": "^3.5.32",
+    "vue-router": "^4.6.3"
   },
   "devDependencies": {
+    "@tsconfig/node22": "^22.0.2",
     "@types/node": "^24.12.2",
     "@vitejs/plugin-vue": "^6.0.5",
-    "@vue/tsconfig": "^0.9.1",
-    "typescript": "~6.0.2",
-    "vite": "^8.0.4",
-    "vue-tsc": "^3.2.6",
-    "@tsconfig/node22": "^22.0.2",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-typescript": "^14.6.0",
+    "@vue/tsconfig": "^0.9.1",
     "eslint": "^9.37.0",
     "eslint-plugin-vue": "~10.5.0",
     "jiti": "^2.6.1",
     "npm-run-all2": "^8.0.4",
     "prettier": "3.6.2",
+    "typescript": "~6.0.2",
     "unplugin-auto-import": "^20.2.0",
     "unplugin-vue-components": "^30.0.0",
-    "vite-plugin-vue-devtools": "^8.0.3"
+    "vite": "^8.0.4",
+    "vite-plugin-vue-devtools": "^8.0.3",
+    "vue-tsc": "^3.2.6"
   }
 }

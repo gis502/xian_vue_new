@@ -89,6 +89,15 @@ export class LayerManager {
     this.#clearMapsByType(clearType)
   }
 
+  /**
+   * 获取所有图层 Key
+   * @param clearType - 类型：'default'=默认图层，'custom'=自定义图层，'all'=所有图层（默认 'all'）
+   * @returns 图层 Key 集合
+   */
+  getLayerKeys(clearType: 'default' | 'custom' | 'all' = 'all'): Set<string> {
+    return this.#getTargetIdsByType(clearType)
+  }
+
   // ===================== 私有方法 =====================
 
   #validateUniqueLayerKey(key: string): void {
@@ -154,5 +163,14 @@ export class LayerManager {
   #clearMapsByType(clearType: 'default' | 'custom' | 'all'): void {
     if (clearType === 'default' || clearType === 'all') this.#defaultLayerMap.clear()
     if (clearType === 'custom' || clearType === 'all') this.#customLayerMap.clear()
+  }
+
+  #getTargetIdsByType(clearType: 'default' | 'custom' | 'all'): Set<string> {
+    const targetIds = new Set<string>()
+    if (clearType === 'default' || clearType === 'all')
+      this.#defaultLayerMap.forEach((_, key) => targetIds.add(key))
+    if (clearType === 'custom' || clearType === 'all')
+      this.#customLayerMap.forEach((_, key) => targetIds.add(key))
+    return targetIds
   }
 }
