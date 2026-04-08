@@ -18,7 +18,8 @@ interface ImportMetaEnv {
 }
 
 interface ImportMeta {
-  readonly env: ImportMetaEnv
+  readonly env: ImportMetaEnv,
+  readonly glob
 }
 
 // 声明 CSS 模块类型

@@ -1,4 +1,5 @@
 import type { Cartesian3, Color } from "cesium"
+import { HeightReference, MaterialProperty } from 'cesium'
 
 /**
  * 实体配置通用类型
@@ -15,6 +16,7 @@ export interface EntityOptions {
     pixelSize?: number // 像素大小（默认：8）
     outlineColor?: Color // 轮廓颜色（默认：白色）
     outlineWidth?: number // 轮廓宽度（默认：1）
+    heightReference?: HeightReference // 高度参考（默认：CLAMP_TO_GROUND）
   }
   // 线配置（type='polyline' 时必填）
   polylineOptions?: {
@@ -30,17 +32,19 @@ export interface EntityOptions {
     color?: Color // 颜色（默认：白色）
     verticalOrigin?: number // 垂直对齐方式（默认：CENTER）
     horizontalOrigin?: number // 水平对齐方式（默认：CENTER）
+    heightReference?: HeightReference // 高度参考（默认：CLAMP_TO_GROUND）
   }
   // 面配置（type='polygon' 时必填）
   polygonOptions?: {
     hierarchy: Cartesian3[] | [number, number, number][]  // 面顶点数组
-    color?: Color // 颜色（默认：绿色）
+    // color?: Color // 颜色（默认：绿色）
     outline?: boolean // 是否显示轮廓（默认：true）
     outlineColor?: Color // 轮廓颜色（默认：黑色）
     outlineWidth?: number // 轮廓宽度（默认：1）
     height?: number // 高度（默认：0）
     extrudedHeight?: number //  extrudedHeight 高度（默认：0）
-    perPositionHeight?: boolean // 是否每个顶点高度不同（默认：true）
+    heightReference?: HeightReference // 高度参考（默认：CLAMP_TO_GROUND）
+    material?: MaterialProperty // 材质（默认：Color.WHITE）
   }
   attributes?: Record<string, unknown> // 自定义属性（用于存储额外信息）
 }
