@@ -91,7 +91,10 @@ export class CesiumViewerManager {
 
     const viewer = new Viewer(container, {
       ...finalOptions,
-      terrainProvider: createWorldTerrain(),
+      terrainProvider: createWorldTerrain({
+        requestVertexNormals: false,
+        requestWaterMask: false,
+      }),
       selectionIndicator: false,
       baseLayerPicker: false,
       contextOptions: {
@@ -113,6 +116,8 @@ export class CesiumViewerManager {
     viewer.scene.fog.enabled = false
     viewer.scene.globe.enableLighting = false
     viewer.shadows = false
+    viewer.scene.globe.showGroundAtmosphere = false
+    viewer.scene.skyBox.show = false
     const creditContainer = viewer.cesiumWidget.creditContainer as HTMLElement
     creditContainer.style.display = 'none'
 
