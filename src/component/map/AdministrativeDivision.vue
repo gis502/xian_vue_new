@@ -45,13 +45,11 @@ onMounted(() => {
     CesiumUtilsSingleton.batchAddGeoJsonLayers(
         areasId,
         areas,
-        new Array(areas.length).fill(true),
         areas.map((area, index) => {
             const areaName = area.features[0].properties.name;
-            console.log(areaName);
             return {
                 showName: true,
-                default: true,
+                isDefault: true,
                 labelStyle: {
                     labelText: areaName,
                     center: [area.features[0].properties.center[0], area.features[0].properties.center[1], 0],

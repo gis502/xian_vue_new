@@ -32,7 +32,7 @@ export class GeoJsonManager {
   // 默认配置
   static readonly DEFAULT_OPTIONS: Required<GeoJsonOptions> = {
     showName: false,
-    default: false,
+    isDefault: false,
     labelStyle: {
       labelFont: '16px "微软雅黑"',
       labelColor: Color.RED,
@@ -84,8 +84,7 @@ export class GeoJsonManager {
     if (this.#exists(layerId)) throw new Error(`图层 ${layerId} 已存在`)
     const opt = this.#mergeOptions(options)
     
-    // 优先使用 isDefault 参数，其次使用 options.default
-    const finalIsDefault = isDefault || opt.default
+    const finalIsDefault = isDefault || opt.isDefault
 
     // 加载并应用样式
     const dataSource = await GeoJsonDataSource.load(geojsonData)
@@ -146,18 +145,16 @@ export class GeoJsonManager {
    * 批量添加GeoJSON图层
    * @param layerIds - 图层 ID 数组
    * @param geojsonDatas - GeoJSON 数据数组
-   * @param isDefaults - 是否为默认图层数组
-   * @param options - 配置选项数组
+   * @param options - 配置选项数组（包含 isDefault）
    */
   async batchAddGeoJsonLayers(
     layerIds: string[],
     geojsonDatas: CustomizeGeoJsonDataSource[],
-    isDefaults: boolean[],
     options?: GeoJsonOptions[],
   ): Promise<void> {
     await Promise.all(
       layerIds.map((id, index) =>
-        this.addGeoJsonLayer(id, geojsonDatas?.[index], isDefaults?.[index], options?.[index])
+        this.addGeoJsonLayer(id, geojsonDatas?.[index], false, options?.[index])
       )
     )
   }

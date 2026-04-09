@@ -4,7 +4,7 @@ export interface PrimitiveOptions {
   id: string
   type: 'point' | 'polyline' | 'polygon' | 'billboard'
   positions: [number, number, number][] | Cartesian3[] // 点集合，线和面需要多个点
-  default?: boolean // 是否是默认的图元，默认值false
+  isDefault?: boolean // 是否为默认图元，默认值false
   color?: Color
   pixelSize?: number // 点大小
   width?: number // 线宽

@@ -35,7 +35,7 @@ export class EntityManager {
    * @returns 创建的 Entity 实例
    */
   addCesiumEntity(entityOptions: EntityOptions): Entity {
-    const { id, position, attributes = {}, default: isDefault = false } = entityOptions
+    const { id, position, attributes = {}, isDefault = false } = entityOptions
 
     if (!id) throw new Error('实体 id 为必填项')
     if (!position) throw new Error('实体 position 为必填项')

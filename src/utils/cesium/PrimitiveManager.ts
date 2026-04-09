@@ -251,7 +251,7 @@ export class PrimitiveManager {
 
   #storePrimitives(options: PrimitiveOptions[], primitive: Primitive | BillboardCollection): void {
     options.forEach((option) => {
-      if (option.default) {
+      if (option.isDefault) {
         this.#defaultPrimitiveMap.set(option.id, primitive)
       } else {
         this.#customPrimitiveMap.set(option.id, primitive)

@@ -270,17 +270,15 @@ export class CesiumUtils {
    * 批量添加GeoJSON图层
    * @param layerIds - 图层 ID 数组
    * @param geojsonDatas - GeoJSON 数据数组
-   * @param isDefaults - 是否为默认图层数组
-   * @param options - 配置选项数组
+   * @param options - 配置选项数组（包含 isDefault）
    */
   async batchAddGeoJsonLayers(
     layerIds: string[],
     geojsonDatas: CustomizeGeoJsonDataSource[],
-    isDefaults: boolean[],
     options?: GeoJsonOptions[]
   ): Promise<void> {
     this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    await this.#geoJsonManager!.batchAddGeoJsonLayers(layerIds, geojsonDatas, isDefaults, options)
+    await this.#geoJsonManager!.batchAddGeoJsonLayers(layerIds, geojsonDatas, options)
   }
 
   /**

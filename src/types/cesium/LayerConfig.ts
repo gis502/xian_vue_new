@@ -6,7 +6,7 @@ export interface LayerConfig {
   url: string     // 图层地址
   layers: string  // 图层名称
 
-  default?: boolean     // 是否是默认图层，默认值false
+  isDefault?: boolean     // 是否为默认图层，默认值false
 
   /**
    * WMTS 图层参数

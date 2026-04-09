@@ -26,7 +26,7 @@ export class LayerManager {
    * @returns 创建的 ImageryLayer 实例，失败则返回 null
    */
   createLayer(layerConfig: LayerConfig): ImageryLayer | null {
-    const { layers: layerKey, default: isDefault = false } = layerConfig
+    const { layers: layerKey, isDefault = false } = layerConfig
 
     if (!layerKey) throw new Error('layers 参数未定义')
     this.#validateUniqueLayerKey(layerKey)

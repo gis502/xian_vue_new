@@ -11,7 +11,7 @@ export type CustomizeGeoJsonDataSource = string | object;
 // 唯一配置项接口
 export interface GeoJsonOptions {
   showName?: boolean;
-  default: boolean;
+  isDefault?: boolean;
   labelStyle?: LabelConfig;
   polygonStyle?: {
     fill?: boolean;
