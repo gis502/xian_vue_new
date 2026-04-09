@@ -69,6 +69,16 @@ export class CesiumUtils {
   }
 
   /**
+   * 批量添加实体
+   * @param entityOptionsList - 实体配置选项数组
+   * @returns 创建的 Entity 实例数组
+   */
+  addCesiumEntitiesBatch(entityOptionsList: EntityOptions[]): Entity[] {
+    this.#checkManager(this.#entityManager, 'EntityManager')
+    return this.#entityManager!.addCesiumEntitiesBatch(entityOptionsList)
+  }
+
+  /**
    * 查询实体
    * @param entityId - 实体 ID
    * @returns Entity 实例，不存在则返回 null
@@ -119,7 +129,18 @@ export class CesiumUtils {
   // ===================== Primitive 管理 =====================
 
   /**
-   * 批量添加 Primitive
+   * 添加单个 Primitive
+   * @param primitive - Primitive 配置选项
+   */
+  addPrimitive(primitive: PrimitiveOptions): void {
+    this.#checkManager(this.#primitiveManager, 'PrimitiveManager')
+    this.#primitiveManager!.addPrimitive(primitive)
+  }
+
+  /**
+   * 批量添加 Primitive（优化版本）
+   * - 按类型分组后批量创建，减少 scene.primitives.add 调用次数
+   * - 同类型的多个实例合并到一个 Primitive 或 BillboardCollection 中
    * @param primitives - Primitive 配置选项数组
    */
   addPrimitivesBatch(primitives: PrimitiveOptions[]): void {
@@ -167,6 +188,16 @@ export class CesiumUtils {
   }
 
   // ===================== 图层管理 =====================
+
+  /**
+   * 批量创建图层
+   * @param layerConfigs - 图层配置数组
+   * @returns 创建的 ImageryLayer 实例数组（失败的为 null）
+   */
+  createLayersBatch(layerConfigs: LayerConfig[]): (ImageryLayer | null)[] {
+    this.#checkManager(this.#layerManager, 'LayerManager')
+    return this.#layerManager!.createLayersBatch(layerConfigs)
+  }
 
   /**
    * 创建图层
@@ -268,17 +299,18 @@ export class CesiumUtils {
 
   /**
    * 批量添加GeoJSON图层
-   * @param layerIds - 图层 ID 数组
-   * @param geojsonDatas - GeoJSON 数据数组
-   * @param options - 配置选项数组（包含 isDefault）
+   * @param layerConfigs - 图层配置数组，每个元素包含 layerId、geojsonData、isDefault 和 options
    */
   async batchAddGeoJsonLayers(
-    layerIds: string[],
-    geojsonDatas: CustomizeGeoJsonDataSource[],
-    options?: GeoJsonOptions[]
+    layerConfigs: Array<{
+      layerId: string
+      geojsonData: CustomizeGeoJsonDataSource
+      isDefault?: boolean
+      options?: GeoJsonOptions
+    }>
   ): Promise<void> {
     this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    await this.#geoJsonManager!.batchAddGeoJsonLayers(layerIds, geojsonDatas, options)
+    await this.#geoJsonManager!.batchAddGeoJsonLayers(layerConfigs)
   }
 
   /**

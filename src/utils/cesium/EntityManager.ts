@@ -8,10 +8,8 @@ import {
   HeightReference,
   VerticalOrigin,
   HorizontalOrigin,
-  ColorMaterialProperty,
   PolygonHierarchy,
   PolygonGraphics,
-  ConstantProperty,
   GridMaterialProperty,
 } from 'cesium'
 import type { EntityOptions } from '@/types/cesium/EntityOptions'
@@ -27,6 +25,41 @@ export class EntityManager {
 
   constructor(viewer: Viewer) {
     this.#viewer = viewer
+  }
+
+  /**
+   * 批量添加实体
+   * @param entityOptionsList - 实体配置选项数组
+   * @returns 创建的 Entity 实例数组
+   */
+  addCesiumEntitiesBatch(entityOptionsList: EntityOptions[]): Entity[] {
+    const entities: Entity[] = []
+    
+    // 预验证所有ID的唯一性
+    entityOptionsList.forEach(({ id }) => {
+      if (!id) throw new Error('实体 id 为必填项')
+      this.#validateUniqueId(id)
+    })
+
+    // 批量创建并添加实体
+    entityOptionsList.forEach((entityOptions) => {
+      const { id, position, attributes = {}, isDefault = false } = entityOptions
+      
+      if (!position) throw new Error(`实体 ${id} 的 position 为必填项`)
+
+      const entity = new Entity({
+        id,
+        position: this.#convertPosition(position),
+        ...attributes,
+      })
+
+      this.#configureEntityGraphics(entity, entityOptions)
+      this.#viewer.entities.add(entity)
+      this.#storeEntityId(id, isDefault)
+      entities.push(entity)
+    })
+
+    return entities
   }
 
   /**
@@ -148,7 +181,7 @@ export class EntityManager {
 
         entity.polyline = new PolylineGraphics({
           positions: this.#convertPositionArray(positions),
-          material: new ColorMaterialProperty(color),
+          material: color,
           width,
           clampToGround,
         })
@@ -195,14 +228,13 @@ export class EntityManager {
         if (!hierarchy) throw new Error('多边形实体必须传入 polygonOptions.hierarchy')
 
         entity.polygon = new PolygonGraphics({
-          hierarchy: this.#createConstantProperty(this.#processHierarchy(hierarchy)),
+          hierarchy: this.#processHierarchy(hierarchy),
           material: material,
-          outline: this.#createConstantProperty(outline),
-          outlineColor: this.#createConstantProperty(outlineColor),
-          outlineWidth: this.#createConstantProperty(outlineWidth),
-          height: this.#createConstantProperty(height),
-          extrudedHeight:
-            extrudedHeight !== undefined ? this.#createConstantProperty(extrudedHeight) : undefined,
+          outline,
+          outlineColor,
+          outlineWidth,
+          height,
+          extrudedHeight,
           heightReference,
         })
         break
@@ -231,10 +263,6 @@ export class EntityManager {
     })
 
     return new PolygonHierarchy(positions)
-  }
-
-  #createConstantProperty(value: unknown): ConstantProperty {
-    return new ConstantProperty(value)
   }
 
   #validateUniqueId(id: string): void {

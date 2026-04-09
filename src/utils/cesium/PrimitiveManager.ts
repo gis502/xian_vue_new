@@ -31,16 +31,39 @@ export class PrimitiveManager {
   }
 
   /**
+   * 添加单个 Primitive
+   * @param primitive - Primitive 配置选项
+   */
+  addPrimitive(primitive: PrimitiveOptions): void {
+    this.addPrimitivesBatch([primitive])
+  }
+
+  /**
    * 批量添加 Primitive
+   * - 按类型分组后批量创建，减少 scene.primitives.add 调用次数
+   * - 同类型的多个实例合并到一个 Primitive 或 BillboardCollection 中
    * @param primitives - Primitive 配置选项数组
    */
   addPrimitivesBatch(primitives: PrimitiveOptions[]): void {
+    if (primitives.length === 0) return
+
     const grouped = this.#groupPrimitivesByType(primitives)
 
-    if (grouped.points.length > 0) this.#addPointPrimitives(grouped.points)
-    if (grouped.polylines.length > 0) this.#addPolylinePrimitives(grouped.polylines)
-    if (grouped.polygons.length > 0) this.#addPolygonPrimitives(grouped.polygons)
-    if (grouped.billboards.length > 0) this.#addBillboardPrimitives(grouped.billboards)
+    // 并行添加不同类型的 Primitive
+    const promises: Promise<void>[] = []
+
+    if (grouped.points.length > 0) {
+      promises.push(Promise.resolve(this.#addPointPrimitives(grouped.points)))
+    }
+    if (grouped.polylines.length > 0) {
+      promises.push(Promise.resolve(this.#addPolylinePrimitives(grouped.polylines)))
+    }
+    if (grouped.polygons.length > 0) {
+      promises.push(Promise.resolve(this.#addPolygonPrimitives(grouped.polygons)))
+    }
+    if (grouped.billboards.length > 0) {
+      promises.push(Promise.resolve(this.#addBillboardPrimitives(grouped.billboards)))
+    }
   }
 
   /**

@@ -39,31 +39,35 @@ const areasColor = [
             new Color(190 / 255, 255 / 255, 232 / 255)
         ]
 const areaTransparency = 0.3;
-const labelTransparency = 0.7;
+const labelTransparency = 1;
 
 onMounted(() => {
-    CesiumUtilsSingleton.batchAddGeoJsonLayers(
-        areasId,
-        areas,
-        areas.map((area, index) => {
-            const areaName = area.features[0].properties.name;
-            return {
-                showName: true,
-                isDefault: true,
-                labelStyle: {
-                    labelText: areaName,
-                    center: [area.features[0].properties.center[0], area.features[0].properties.center[1], 0],
-                    labelColor: Color.BLACK,
-                    backgroundColor: areasColor[index].withAlpha(labelTransparency)
-                },
-                polygonStyle: {
-                    fill: true,
-                    fillColor: areasColor[index].withAlpha(areaTransparency),
-                    outline: false
-                }
+    // 构建批量添加配置数组
+    const layerConfigs = areasId.map((id, index) => ({
+        layerId: id,
+        geojsonData: areas[index],
+        isDefault: true,
+        options: {
+            showName: true,
+            labelStyle: {
+                labelText: areas[index].features[0].properties.name,
+                center: [
+                    areas[index].features[0].properties.center[0],
+                    areas[index].features[0].properties.center[1],
+                    0
+                ] as [number, number, number],
+                labelColor: Color.BLACK,
+                backgroundColor: areasColor[index].withAlpha(labelTransparency)
+            },
+            polygonStyle: {
+                fill: true,
+                fillColor: areasColor[index].withAlpha(areaTransparency),
+                outline: false
             }
-        })
-    );
+        }
+    }));
+
+    CesiumUtilsSingleton.batchAddGeoJsonLayers(layerConfigs);
 })
 
 </script>

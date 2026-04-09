@@ -13,6 +13,7 @@ import {
   Cartesian3,
   Cartographic,
   JulianDate,
+  NearFarScalar,
 } from 'cesium'
 import type { CustomizeGeoJsonDataSource, GeoJsonOptions } from '@/types/cesium/GeoJsonOptions'
 import type { LabelConfig } from '@/types/cesium/LabelConfig'
@@ -143,18 +144,19 @@ export class GeoJsonManager {
 
   /**
    * 批量添加GeoJSON图层
-   * @param layerIds - 图层 ID 数组
-   * @param geojsonDatas - GeoJSON 数据数组
-   * @param options - 配置选项数组（包含 isDefault）
+   * @param layerConfigs - 图层配置数组，每个元素包含 layerId、geojsonData、isDefault 和 options
    */
   async batchAddGeoJsonLayers(
-    layerIds: string[],
-    geojsonDatas: CustomizeGeoJsonDataSource[],
-    options?: GeoJsonOptions[],
+    layerConfigs: Array<{
+      layerId: string
+      geojsonData: CustomizeGeoJsonDataSource
+      isDefault?: boolean
+      options?: GeoJsonOptions
+    }>,
   ): Promise<void> {
     await Promise.all(
-      layerIds.map((id, index) =>
-        this.addGeoJsonLayer(id, geojsonDatas?.[index], false, options?.[index])
+      layerConfigs.map(({ layerId, geojsonData, isDefault = false, options }) =>
+        this.addGeoJsonLayer(layerId, geojsonData, isDefault, options)
       )
     )
   }
@@ -320,6 +322,8 @@ export class GeoJsonManager {
 
   /**
    * 添加标签到数据源
+   * - 禁用描边以提升渲染性能
+   * - 添加距离衰减以减少远距离渲染负担
    */
   #addLabelsToDataSource(dataSource: DataSource, label: LabelConfig): void {
     const entities = dataSource.entities.values
@@ -338,9 +342,8 @@ export class GeoJsonManager {
           text: new ConstantProperty(labelText),
           font: new ConstantProperty(label?.labelFont || `${label?.labelSize || 16}px "微软雅黑"`),
           fillColor: new ConstantProperty(label?.labelColor || Color.WHITE),
-          outlineColor: new ConstantProperty(Color.BLACK),
-          outlineWidth: new ConstantProperty(1),
-          style: new ConstantProperty(LabelStyle.FILL_AND_OUTLINE),
+          // 性能优化：禁用描边
+          style: new ConstantProperty(LabelStyle.FILL),
           pixelOffset: new ConstantProperty(
             new Cartesian2(label?.labelOffset?.x || 0, label?.labelOffset?.y || -20),
           ),
@@ -352,6 +355,13 @@ export class GeoJsonManager {
           backgroundColor: new ConstantProperty(label?.backgroundColor || Color.TRANSPARENT),
           backgroundPadding: new ConstantProperty(new Cartesian2(5, 3)),
           disableDepthTestDistance: new ConstantProperty(Number.POSITIVE_INFINITY),
+          // 性能优化：添加距离衰减，减少远距离渲染负担
+          scaleByDistance: new ConstantProperty(
+            new NearFarScalar(1.5e2, 1.0, 1.5e7, 0.5)
+          ),
+          translucencyByDistance: new ConstantProperty(
+            new NearFarScalar(1.5e2, 1.0, 1.5e7, 0.3)
+          ),
         })
       }
     })

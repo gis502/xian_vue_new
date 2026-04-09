@@ -21,6 +21,22 @@ export class LayerManager {
   }
 
   /**
+   * 批量创建图层
+   * @param layerConfigs - 图层配置数组
+   * @returns 创建的 ImageryLayer 实例数组（失败的为 null）
+   */
+  createLayersBatch(layerConfigs: LayerConfig[]): (ImageryLayer | null)[] {
+    return layerConfigs.map((config) => {
+      try {
+        return this.createLayer(config)
+      } catch (error) {
+        console.error(`创建图层 ${config.layers} 失败:`, error)
+        return null
+      }
+    })
+  }
+
+  /**
    * 创建图层
    * @param layerConfig - 图层配置
    * @returns 创建的 ImageryLayer 实例，失败则返回 null
