@@ -14,6 +14,7 @@ import {
   BillboardGraphics,
   VerticalOrigin,
   HorizontalOrigin,
+  NearFarScalar,
 } from 'cesium'
 import type { PrimitiveOptions } from '@/types/cesium/PrimitiveOptions'
 import type { Viewer } from 'cesium'
@@ -259,13 +260,24 @@ export class PrimitiveManager {
 
     options.forEach((option) => {
       const position = this.#convertPosition(option.positions[0]!)
-      collection.add({
+      
+      const billboardConfig: any = {
         id: option.id,
         position,
         image: option.image,
         scale: option.scale || 1,
         color: option.color || Color.WHITE,
-      })
+      }
+
+      if (option.scaleByDistance) {
+        billboardConfig.scaleByDistance = option.scaleByDistance
+      }
+
+      if (option.customProperties) {
+        Object.assign(billboardConfig, option.customProperties)
+      }
+
+      collection.add(billboardConfig)
     })
 
     this.#viewer.scene.primitives.add(collection)

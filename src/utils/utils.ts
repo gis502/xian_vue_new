@@ -80,6 +80,7 @@ export const Utils = {
       return result.replace(regex, String(value ?? ''))
     }, format)
   },
+
   /**
    * 深拷贝函数
    * 支持类型：原始类型、数组、对象、Date、RegExp、Map、Set、ArrayBuffer等
@@ -200,4 +201,28 @@ export const Utils = {
     // 对于其他无法处理的情况，返回原值
     return source
   },
+
+  /**
+   * 调整元素位置，确保其不超出屏幕可视区域边界
+   * @param {number} offsetX - 元素左上角原 X 坐标（相对于视口）
+   * @param {number} offsetY - 元素左上角原 Y 坐标（相对于视口）
+   * @param {number} width - 元素的宽度
+   * @param {number} height - 元素的高度
+   * @returns {[number, number]} 调整后的 [newX, newY]
+ */
+  keepWithinScreen: (offsetX: number, offsetY: number, width: number, height: number) => {
+    const viewportW = window.innerWidth;
+    const viewportH = window.innerHeight;
+
+    // 计算允许的 X 范围：最小 0，最大 (视口宽度 - 元素宽度)
+    // 如果元素宽度大于视口宽度，允许范围为 [0, 0]（即只能左对齐）
+    const maxX = Math.max(0, viewportW - width);
+    const newX = Math.min(Math.max(offsetX, 0), maxX);
+
+    // 计算允许的 Y 范围
+    const maxY = Math.max(0, viewportH - height);
+    const newY = Math.min(Math.max(offsetY, 0), maxY);
+
+    return [newX, newY];
+  }
 }

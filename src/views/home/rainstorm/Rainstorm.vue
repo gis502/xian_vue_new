@@ -1,13 +1,12 @@
 <template>
   <div>
-    <!-- 地图组件 -->
-     <MapComponent />
+    <BasicComponent :disaster-type="DisasterType.RAINSTORM" :key="DisasterType.EARTHQUAKE"/>
   </div>
 </template>
 
 <script setup lang="ts">
-import MapComponent from "@/component/map/Map.vue"
+import BasicComponent from '@/component/rain-earthquake/BasicComponent.vue';
+import { DisasterType } from '@/types/common/DisasterType';
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

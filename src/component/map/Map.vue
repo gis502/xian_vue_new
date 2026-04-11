@@ -2,23 +2,33 @@
     <div class="map_container" id="map-container"></div>
 
     <!-- 行政区划 -->
-    <AdministrativeDivision v-if="viewerLoadingCompleted"/>
+    <AdministrativeDivision v-if="useViewerStore().getViewerLoadingCompleted()" />
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted } from 'vue';
 import config from '@/config/config.json';
 import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
 import AdministrativeDivision from './AdministrativeDivision.vue';
+import { useViewerStore } from '@/stores/useViewerStore';
 
-// 指示器加载完成
-let viewerLoadingCompleted = ref(false);
+onBeforeMount(() => {
+    // 初始化为false
+    useViewerStore().setViewerLoadingCompleted(false)
+
+    // 清除viewer相关资源
+    if (CesiumUtilsSingleton.getViewer()) {
+        CesiumUtilsSingleton.clearAllResources('all')
+    }
+})
 
 onMounted(() => {
     CesiumUtilsSingleton.initCesiumViewer({
         containerId: 'map-container'
     })
-    viewerLoadingCompleted.value = true;
+
+    // 更新完成状态
+    useViewerStore().setViewerLoadingCompleted(true)
     CesiumUtilsSingleton.viewToTarget(config.defaultPosition as [number, number, number]);
 })
 

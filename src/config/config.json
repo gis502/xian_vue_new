@@ -12,5 +12,10 @@
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1ZDBjZjAxOS0wMDhhLTRmZjEtYjNmOC1iNmM2ZmY2ZmQ1N2IiLCJpZCI6MjAxMDI1LCJpYXQiOjE3MTAxNTgxNjJ9.mdbJYEzXQkBnHNqpozz7MvZjJ_X9a3JZRGPA-ytGhLI",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiNjczZTVlMy1kNDEwLTRhZWItYWM0NS1mNjYxMzJjODMwYTQiLCJpZCI6MzIxMzI2LCJpYXQiOjE3NzU2NDU1OTd9._MPcZQsxK1dGPl8IMVhKHV3PIPu4-TaOUgzsUUOP6WE"
   ],
-  "defaultPosition": [108.948024, 34.263161, 200000]
+  "defaultPosition": [108.948024, 34.263161, 300000],
+
+  "prefix": {
+    "hiddenDangerPointId": "hidden-danger-point-",
+    "riskPointId": "risk-point-"
+  }
 }

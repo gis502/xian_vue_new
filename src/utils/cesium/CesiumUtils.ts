@@ -3,7 +3,7 @@ import type { EntityOptions } from '@/types/cesium/EntityOptions'
 import type { PrimitiveOptions } from '@/types/cesium/PrimitiveOptions'
 import type { LayerConfig } from '@/types/cesium/LayerConfig'
 import type { CustomizeGeoJsonDataSource, GeoJsonOptions } from '@/types/cesium/GeoJsonOptions'
-import { Viewer, Entity, DataSource, ImageryLayer, Primitive, BillboardCollection, Cartesian3 } from 'cesium'
+import { Viewer, Entity, DataSource, ImageryLayer, Primitive, BillboardCollection, Cartesian3, ScreenSpaceEventHandler, ScreenSpaceEventType, Cartesian2, SceneTransforms } from 'cesium'
 import { CesiumViewerManager } from './CesiumViewerManager'
 import { EntityManager } from './EntityManager'
 import { PrimitiveManager } from './PrimitiveManager'
@@ -38,7 +38,7 @@ export class CesiumUtils {
    */
   initCesiumViewer(options: CesiumInitOptions, tdMapToken?: string[], type: number = 0): void {
     this.#viewerManager.initCesiumViewer(options, tdMapToken, type)
-    
+
     const viewer = this.#viewerManager.getViewer()
     if (viewer) {
       this.#entityManager = new EntityManager(viewer)
@@ -401,6 +401,20 @@ export class CesiumUtils {
     return this.#geoJsonManager!.getGeoJsonLayerIds(clearType)
   }
 
+  // ===================== 图层操作 =====================
+  /**
+   * 监听点击事件
+   */
+  clickLayer(callback: (pickedObject: object) => void) {
+    const handler = new ScreenSpaceEventHandler(this.getViewer()?.scene.canvas);
+    handler.setInputAction((clickEvent: {position: Cartesian2}) => {
+      // 在点击位置进行拾取
+      const pickedObject = CesiumUtilsSingleton.getViewer()?.scene.pick(clickEvent.position);
+
+      callback(pickedObject);
+    }, ScreenSpaceEventType.LEFT_CLICK);
+  }
+
   // ===================== 视角控制 =====================
 
   /**
@@ -463,6 +477,16 @@ export class CesiumUtils {
    */
   convertPositionArray(positions: (Cartesian3 | [number, number, number])[]): Cartesian3[] {
     return positions.map((pos) => this.convertPosition(pos))
+  }
+
+  /**
+   * 将Cartesian3坐标转换为屏幕坐标
+   * @param pos 坐标
+   * @returns 偏移量
+   */
+  convertScreenPosition(pos: Cartesian3): {x: number, y: number} {
+    const windowCoord = SceneTransforms.wgs84ToWindowCoordinates(this.getViewer()!.scene, pos);
+    return {x: windowCoord.x, y: windowCoord.y}
   }
 
   // ===================== 私有方法 =====================

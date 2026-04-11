@@ -1,9 +1,12 @@
 <template>
   <div>
-    地震灾害链
+    <BasicComponent :disaster-type="DisasterType.EARTHQUAKE" :key="DisasterType.EARTHQUAKE"/>
   </div>
 </template>
+
 <script setup lang="ts">
+import BasicComponent from '@/component/rain-earthquake/BasicComponent.vue';
+import { DisasterType } from '@/types/common/DisasterType';
 </script>
-<style scoped>
-</style>
+
+<style scoped></style>

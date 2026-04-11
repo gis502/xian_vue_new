@@ -1,4 +1,4 @@
-import type { Cartesian3, Color } from 'cesium'
+import type { Cartesian3, Color, NearFarScalar } from 'cesium'
 
 export interface PrimitiveOptions {
   id: string
@@ -10,4 +10,6 @@ export interface PrimitiveOptions {
   width?: number // 线宽
   image?: string // 广告牌图片
   scale?: number // 广告牌缩放
+  scaleByDistance?: NearFarScalar // 广告牌距离衰减缩放
+  customProperties?: Record<string, any> // 自定义属性对象
 }
