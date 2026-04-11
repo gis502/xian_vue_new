@@ -410,7 +410,6 @@ export class CesiumUtils {
     handler.setInputAction((clickEvent: {position: Cartesian2}) => {
       // 在点击位置进行拾取
       const pickedObject = CesiumUtilsSingleton.getViewer()?.scene.pick(clickEvent.position);
-
       callback(pickedObject);
     }, ScreenSpaceEventType.LEFT_CLICK);
   }

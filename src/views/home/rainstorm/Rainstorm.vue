@@ -1,12 +1,15 @@
 <template>
   <div>
-    <BasicComponent :disaster-type="DisasterType.RAINSTORM" :key="DisasterType.EARTHQUAKE"/>
+    <BasicComponent :disaster-type="DisasterType.RAINSTORM"  :key="route.fullPath"/>
   </div>
 </template>
 
 <script setup lang="ts">
 import BasicComponent from '@/component/rain-earthquake/BasicComponent.vue';
 import { DisasterType } from '@/types/common/DisasterType';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
 </script>
 
 <style scoped></style>
