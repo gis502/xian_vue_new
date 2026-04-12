@@ -1,3 +1,6 @@
+import type { Color } from "cesium"
+import type { GeoJsonFileType } from "./GeoJsonFileType"
+
 /**
  * Cesium 公共配置选项
  * 用于初始化时统一配置 Viewer 参数
@@ -19,4 +22,25 @@ export interface CesiumInitOptions {
   geocoder?: boolean     // 搜索（默认：false）
 
   sceneMode?: number // 初始场景模式（默认：3D，可选：2D=1, COLUMBUS_VIEW=2）
+
+  // 遮罩配置
+  mark?: {
+    // 是否包含遮罩，默认false
+    include?: boolean
+    // GeoJSON 数据，如果要突出显示某一区域，就传递改值
+    geoJson?: GeoJsonFileType
+    // 孔属于半球，默认东半球
+    belongingHemisphere?: 'east' | 'west'
+    // 遮罩颜色，默认黑色
+    color?: Color
+    // 边框
+    border?: {
+      // 是否显示边框，默认true
+      show?: boolean
+      // 边框颜色，默认白色
+      color?: Color
+      // 边框宽度，默认1
+      width?: number
+    }
+  }
 }

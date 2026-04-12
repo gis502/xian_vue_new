@@ -4,6 +4,15 @@ import {
   Ion,
   WebMapTileServiceImageryProvider,
   ImageryProvider,
+  PolygonHierarchy,
+  Cartesian3,
+  PolygonGeometry,
+  ArcType,
+  GeometryInstance,
+  Color,
+  Material,
+  MaterialAppearance,
+  GroundPrimitive,
 } from 'cesium'
 import type { CesiumInitOptions } from '@/types/cesium/CesiumInitOptions'
 import config from '@/config/config.json'
@@ -50,7 +59,6 @@ export class CesiumViewerManager {
       if (!this.#failedTokens.has(nextIndex)) {
         this.#currentTokenIndex = nextIndex
         Ion.defaultAccessToken = tokens[nextIndex]
-        console.log(`已切换到 Cesium Ion Token #${nextIndex + 1}`)
         return true
       }
     }
@@ -65,7 +73,7 @@ export class CesiumViewerManager {
    * @param type - 底图类型：0=影像图，1=矢量图（默认 0）
    * @param tdMapToken - 天地图 Token 数组（可选）
    */
-  initCesiumViewer(options: CesiumInitOptions, type: number = 0, tdMapToken?: string[]): void {
+  async initCesiumViewer(options: CesiumInitOptions, type: number = 0, tdMapToken?: string[]): Promise<void> {
     const defaultOptions: CesiumInitOptions = {
       containerId: options.containerId,
       shouldAnimate: true,
@@ -80,9 +88,32 @@ export class CesiumViewerManager {
       sceneModePicker: false,
       geocoder: false,
       sceneMode: SceneMode.SCENE3D,
+      mark: {
+        include: false,
+        belongingHemisphere: 'east',
+        color: Color.BLACK,
+        border: {
+          show: true,
+          color: Color.WHITE,
+          width: 1
+        }
+      }
     }
 
-    const finalOptions = { ...defaultOptions, ...options }
+    // 合并选项
+    const finalOptions: CesiumInitOptions = {
+      ...defaultOptions,
+      ...options,
+      mark: options.mark ? {
+        ...defaultOptions.mark,
+        ...options.mark,
+        border: options.mark.border ? {
+          ...defaultOptions.mark!.border,
+          ...options.mark.border
+        } : defaultOptions.mark!.border
+      } : defaultOptions.mark
+    }
+
     const container = document.getElementById(finalOptions.containerId)
 
     if (!container) {
@@ -125,6 +156,11 @@ export class CesiumViewerManager {
     })
 
     this.#viewer = viewer
+
+    // 是否突出显示指定区域
+    if (options.mark?.include) {
+      await this.#highlight(finalOptions)
+    }
   }
 
   /**
@@ -183,5 +219,132 @@ export class CesiumViewerManager {
       })
       return [vectorProvider]
     }
+  }
+
+  /**
+   * 高亮指定区域
+   * @param options - 高亮选项
+   */
+  async #highlight(options: CesiumInitOptions): Promise<void> {
+
+    if (!this.#viewer) {
+      throw new Error('请先初始化 Cesium Viewer')
+    }
+
+    if(!options.mark || !options.mark.geoJson) {
+      throw new Error('请提供 GeoJSON 数据')
+    }
+
+    // 解析边界坐标和孔洞位置
+    const parseCoordinates = () => {
+      const holes: PolygonHierarchy[] = [];
+      const boundaryCoords: number[] = [];
+      const polygons = options.mark?.geoJson!.features[0].geometry.coordinates;
+
+      polygons!.forEach((polygon, index) => {
+        const flatCoords: number[] = [];
+        polygon[0].forEach((point) => {
+          flatCoords.push(point[0], point[1]);
+        });
+
+        // 第一个是多边形外边界
+        if (index === 0) {
+          boundaryCoords.push(...flatCoords);
+        }
+
+        // 坐标反转（用于挖孔）
+        const positions = Cartesian3.fromDegreesArray(flatCoords).reverse();
+        holes.push(new PolygonHierarchy(positions));
+      });
+
+      return { holes, boundaryCoords };
+    };
+
+    const { holes, boundaryCoords } = parseCoordinates();
+
+    // 东西半球标准坐标
+    const westPositions = Cartesian3.fromDegreesArray([
+      -0.00001, 85, -0.00001, -85, -180, -85, -180, 85, -0.00001, 85,
+    ]);
+    const eastPositions = Cartesian3.fromDegreesArray([
+      0.00001, 85, 0.00001, -85, 180, -85, 180, 85, 0.00001, 85,
+    ]);
+
+    // 西半球
+    const westOption = {
+      polygonHierarchy: new PolygonHierarchy(westPositions),
+      arcType: ArcType.GEODESIC,
+    };
+    if (options.mark.belongingHemisphere === 'west') {
+      westOption.polygonHierarchy = new PolygonHierarchy(westPositions, holes);
+    }
+    const westGeometry = new PolygonGeometry(westOption);
+    const westInstance = new GeometryInstance({ geometry: westGeometry });
+
+    // 东半球
+    const eastOption = {
+      polygonHierarchy: new PolygonHierarchy(eastPositions),
+      arcType: ArcType.GEODESIC,
+    }
+    if (options.mark.belongingHemisphere === 'east') {
+      eastOption.polygonHierarchy = new PolygonHierarchy(eastPositions, holes);
+    }
+    const eastGeometry = new PolygonGeometry(eastOption);
+    const eastInstance = new GeometryInstance({ geometry: eastGeometry });
+
+    // 添加遮罩
+    const maskMaterial = new Material({
+      fabric: {
+        type: "Color",
+        uniforms: {
+          color: options.mark.color,
+        },
+      },
+    });
+    const appearance = new MaterialAppearance({
+      material: maskMaterial,
+      closed: true,
+    });
+
+    // 合并渲染
+    const globalMask = new GroundPrimitive({
+      geometryInstances: [westInstance, eastInstance],
+      appearance: appearance,
+    });
+
+    this.#viewer.scene.primitives.add(globalMask);
+
+    // 添加边界线
+    if (options.mark.border?.show) {
+      const boundaryPositions = Cartesian3.fromDegreesArray(boundaryCoords);
+      // 闭合边界线
+      boundaryPositions.push(boundaryPositions[0]);
+
+      this.#viewer.entities.add({
+        id: 'holeLine',
+        polyline: {
+          positions: boundaryPositions,
+          width: options.mark.border.width,
+          material: options.mark.border.color,
+          clampToGround: true,
+        },
+      });
+    }
+
+    // 等待完成渲染
+    return new Promise<void>((resolve) => {
+      const removeListener = this.#viewer!.scene.postRender.addEventListener(() => {
+        if (globalMask.ready) {
+          removeListener();
+          resolve();
+        }
+      });
+
+      // 设置超时保护，避免无限等待
+      setTimeout(() => {
+        removeListener();
+        resolve();
+      }, 6000);
+    });
   }
 }

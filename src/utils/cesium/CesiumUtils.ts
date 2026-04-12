@@ -3,13 +3,14 @@ import type { EntityOptions } from '@/types/cesium/EntityOptions'
 import type { PrimitiveOptions } from '@/types/cesium/PrimitiveOptions'
 import type { LayerConfig } from '@/types/cesium/LayerConfig'
 import type { CustomizeGeoJsonDataSource, GeoJsonOptions } from '@/types/cesium/GeoJsonOptions'
-import { Viewer, Entity, DataSource, ImageryLayer, Primitive, BillboardCollection, Cartesian3, ScreenSpaceEventHandler, ScreenSpaceEventType, Cartesian2, SceneTransforms } from 'cesium'
+import { Viewer, Entity, DataSource, ImageryLayer, Primitive, BillboardCollection, Cartesian3, ScreenSpaceEventHandler, ScreenSpaceEventType, Cartesian2, SceneTransforms, Color } from 'cesium'
 import { CesiumViewerManager } from './CesiumViewerManager'
 import { EntityManager } from './EntityManager'
 import { PrimitiveManager } from './PrimitiveManager'
 import { LayerManager } from './LayerManager'
 import { GeoJsonManager, type ClearType } from './GeoJsonManager'
 import { CameraController } from './CameraController'
+import type { GeoJsonFileType } from '@/types/cesium/GeoJsonFileType'
 
 // 导出 ClearType 类型
 export type { ClearType }
@@ -36,8 +37,8 @@ export class CesiumUtils {
    * @param type - 底图类型：0=影像图，1=矢量图（默认 0）
    * @param tdMapToken - 天地图 Token 数组（可选）
    */
-  initCesiumViewer(options: CesiumInitOptions, type: number = 0, tdMapToken?: string[]): void {
-    this.#viewerManager.initCesiumViewer(options, type, tdMapToken)
+  async initCesiumViewer(options: CesiumInitOptions, type: number = 0, tdMapToken?: string[]): Promise<void> {
+    await this.#viewerManager.initCesiumViewer(options, type, tdMapToken)
 
     const viewer = this.#viewerManager.getViewer()
     if (viewer) {

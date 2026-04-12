@@ -6,9 +6,9 @@
                 <img :src="mainLogo" alt="西安应急智慧logo" id="main_logo" />
             </div>
             <div class="nav-list">
-                <router-link v-for="(item, index) in topNavMap" :key="index"
-                    :to="{ name: item.name, query: item.query }" class="nav-item"
-                    :class="{ 'active': isActive(item.query.identification) }">
+                <router-link @click="useViewerStore().setViewerLoadingCompleted(false)"
+                    v-for="(item, index) in topNavMap" :key="index" :to="{ name: item.name, query: item.query }"
+                    class="nav-item" :class="{ 'active': isActive(item.query.identification) }">
                     {{ item.title }}
                 </router-link>
             </div>
@@ -42,7 +42,7 @@ const topNavMap = [
 const isActive = (identification: number) => {
     const targetId = identification.toString();
     let currentId = route.query.identification;
-    if(!currentId) return targetId === '1'
+    if (!currentId) return targetId === '1'
     if (Array.isArray(currentId)) currentId = currentId[0];
     return currentId === targetId || route.query.identification === targetId;
 };

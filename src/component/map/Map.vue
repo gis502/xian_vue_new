@@ -12,7 +12,9 @@ import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
 import AdministrativeDivision from './AdministrativeDivision.vue';
 import { useViewerStore } from '@/stores/useViewerStore';
 import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
-import Xian from '@/assets/json/XiAn.json'
+import xiAnGeoJSON from '@/assets/json/XiAn.json'
+import type { GeoJsonFileType } from '@/types/cesium/GeoJsonFileType';
+import { Color } from 'cesium';
 
 onBeforeMount(() => {
     // 初始化为false
@@ -22,11 +24,21 @@ onBeforeMount(() => {
     useLoadingInformationStore().resetStatue()
 })
 
-onMounted(() => {
-    CesiumUtilsSingleton.initCesiumViewer({
-        containerId: 'map-container'
-    })
+onMounted(async() => {
+    await CesiumUtilsSingleton.initCesiumViewer({
+        containerId: 'map-container',
+        mark: {
+            include: true,
+            geoJson: xiAnGeoJSON as GeoJsonFileType,
+            color: Color.BLACK.withAlpha(0.8),
+            border: {
+                width: 3
+            }
+        }
+    },)
 
+    useViewerStore().setViewerLoadingCompleted(true)
+    
     // 注册全局点击监听器
     CesiumUtilsSingleton.clickLayer((pickedObject: any) => {
         if (pickedObject && pickedObject.id && (typeof pickedObject.id === 'string')) {
@@ -49,7 +61,7 @@ onMounted(() => {
             // 风险点
             else if (pickedObject.id.startsWith(config.prefix.riskPointId)) {
                 useLoadingInformationStore().setRiskPointId(id)
-            }else {
+            } else {
                 // 重置状态
                 useLoadingInformationStore().resetStatue()
             }
@@ -59,8 +71,6 @@ onMounted(() => {
         }
     })
 
-    // 更新完成状态
-    useViewerStore().setViewerLoadingCompleted(true)
     CesiumUtilsSingleton.viewToTarget(config.defaultPosition as [number, number, number]);
 })
 
