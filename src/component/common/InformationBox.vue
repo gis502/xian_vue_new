@@ -44,7 +44,7 @@ onMounted(() => {
     // 数据转换
     Object.entries(props.data).forEach(([key, value]) => {
         // 判读key是不是存在field中，存在就添加到表格数据，不存在则不添加
-        if (Object.hasOwn(props.field, key)) {
+        if (Object.hasOwn(props.field, key) && value) {
             tableDatas.value.push({
                 title: props.field[key],
                 content: value
