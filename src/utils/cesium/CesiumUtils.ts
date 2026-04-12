@@ -33,11 +33,11 @@ export class CesiumUtils {
   /**
    * 初始化 Cesium Viewer
    * @param options - Viewer 初始化选项
-   * @param tdMapToken - 天地图 Token 数组（可选）
    * @param type - 底图类型：0=影像图，1=矢量图（默认 0）
+   * @param tdMapToken - 天地图 Token 数组（可选）
    */
-  initCesiumViewer(options: CesiumInitOptions, tdMapToken?: string[], type: number = 0): void {
-    this.#viewerManager.initCesiumViewer(options, tdMapToken, type)
+  initCesiumViewer(options: CesiumInitOptions, type: number = 0, tdMapToken?: string[]): void {
+    this.#viewerManager.initCesiumViewer(options, type, tdMapToken)
 
     const viewer = this.#viewerManager.getViewer()
     if (viewer) {

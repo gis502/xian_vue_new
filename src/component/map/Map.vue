@@ -12,6 +12,7 @@ import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
 import AdministrativeDivision from './AdministrativeDivision.vue';
 import { useViewerStore } from '@/stores/useViewerStore';
 import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
+import Xian from '@/assets/json/XiAn.json'
 
 onBeforeMount(() => {
     // 初始化为false

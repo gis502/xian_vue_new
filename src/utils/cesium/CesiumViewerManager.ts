@@ -4,7 +4,6 @@ import {
   Ion,
   WebMapTileServiceImageryProvider,
   ImageryProvider,
-  createWorldTerrain,
 } from 'cesium'
 import type { CesiumInitOptions } from '@/types/cesium/CesiumInitOptions'
 import config from '@/config/config.json'
@@ -62,10 +61,11 @@ export class CesiumViewerManager {
   /**
    * 初始化 Cesium Viewer
    * @param options - Viewer 初始化选项
-   * @param tdMapToken - 天地图 Token 数组（可选）
+   * @param geoJson - GeoJSON 数据，如果要突出显示某一区域，就传递改值
    * @param type - 底图类型：0=影像图，1=矢量图（默认 0）
+   * @param tdMapToken - 天地图 Token 数组（可选）
    */
-  initCesiumViewer(options: CesiumInitOptions, tdMapToken?: string[], type: number = 0): void {
+  initCesiumViewer(options: CesiumInitOptions, type: number = 0, tdMapToken?: string[]): void {
     const defaultOptions: CesiumInitOptions = {
       containerId: options.containerId,
       shouldAnimate: true,
@@ -91,10 +91,8 @@ export class CesiumViewerManager {
 
     const viewer = new Viewer(container, {
       ...finalOptions,
-      terrainProvider: createWorldTerrain({
-        requestVertexNormals: false,
-        requestWaterMask: false,
-      }),
+      // 不加载默认地形
+      terrainProvider: undefined,
       selectionIndicator: false,
       baseLayerPicker: false,
       contextOptions: {
@@ -160,7 +158,7 @@ export class CesiumViewerManager {
       minimumLevel: 0,
       maximumLevel: 18,
       credit: 'Tianditu',
-      subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
+      subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']
     }
 
     const token = tdMapToken[Math.floor(Math.random() * tdMapToken.length)]
