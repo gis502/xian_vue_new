@@ -5,6 +5,37 @@
 ## 项目介绍
 `basic_template_not_login_front` 是一个包含前端的基础开发模板，旨在为快速搭建Web应用提供完整的技术栈支持。项目前端基于Vue 3 + TypeScript + Element Plus构建，可直接作为中小型Web项目的开发起点。
 
+## 开发工具说明
+1. 使用vscode完成前端代码撰写
+2. 使用vscode中的如下插件：
+    - Vue (Official)
+    - ESLint
+    - Prettier - Code formatter
+3. 配置vscode的eslint和prettier
+3.1 设置代码自动格式化：
+- 打开vscode右下角设置（快捷键Ctrl + ,）
+- 搜索formatOnSave
+- 设置为选中状态
+3.2 启用保存时自动格式化
+- 使用快捷键 Ctrl + Shift + P 打开命令面板
+- 输入 Preferences: Open Settings (JSON) 并回车
+- 添加如下内容：
+```json
+{
+	"folders": [
+		{
+			"path": "F:/project/xian_vue_new"
+		}
+	],
+	"settings": {
+		"editor.formatOnSave": true,
+		"[vue]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode"
+		}
+	}
+}
+```
+
 
 ## 目录结构
 ```
