@@ -11,11 +11,11 @@
     - Vue (Official)
     - ESLint
     - Prettier - Code formatter
-3. 配置vscode的eslint和prettier
+3. 配置vscode的eslint和prettier <br/>
 3.1 设置代码自动格式化：
 - 打开vscode右下角设置（快捷键Ctrl + ,）
 - 搜索formatOnSave
-- 设置为选中状态
+- 设置为选中状态<br/>
 3.2 启用保存时自动格式化
 - 使用快捷键 Ctrl + Shift + P 打开命令面板
 - 输入 Preferences: Open Settings (JSON) 并回车
