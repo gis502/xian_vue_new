@@ -1,9 +1,9 @@
-import { defineStore } from 'pinia'
-import { type Ref, ref } from 'vue'
+import { defineStore } from 'pinia';
+import { type Ref, ref } from 'vue';
 
 export const useCryptStore = defineStore('crypt', () => {
   // sm2公钥
-  const sm2PublicKey: Ref<string> = ref('')
+  const sm2PublicKey: Ref<string> = ref('');
 
-  return { sm2PublicKey }
-})
+  return { sm2PublicKey };
+});

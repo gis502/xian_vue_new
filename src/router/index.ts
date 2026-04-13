@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -6,22 +6,22 @@ const router = createRouter({
     {
       path: '/',
       name: 'index',
-      component: () => import('@/views/Index.vue'),
+      component: () => import('@/views/IndexView.vue'),
       redirect: 'rainstorm',
       children: [
         {
           path: 'rainstorm',
           name: 'rainstorm',
-          component: () => import('@/views/home/rainstorm/Rainstorm.vue'),
+          component: () => import('@/views/home/rainstorm/RainstormView.vue'),
         },
         {
           path: 'earthquake',
           name: 'earthquake',
-          component: () => import('@/views/home/earthquake/Earthquake.vue'),
-        }
-      ]
-    }
+          component: () => import('@/views/home/earthquake/EarthquakeView.vue'),
+        },
+      ],
+    },
   ],
-})
+});
 
-export default router
+export default router;

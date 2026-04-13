@@ -1,64 +1,72 @@
 <!-- 入口 -->
 <template>
-    <div class="nav-container">
-        <div class="top-nav" :style="{ 'background-image': `url(${backgroundImage})` }">
-            <div class="logo-img">
-                <img :src="mainLogo" alt="西安应急智慧logo" id="main_logo" />
-            </div>
-            <div class="nav-list">
-                <router-link @click="useViewerStore().setViewerLoadingCompleted(false)"
-                    v-for="(item, index) in topNavMap" :key="index" :to="{ name: item.name, query: item.query }"
-                    class="nav-item" :class="{ 'active': isActive(item.query.identification) }">
-                    {{ item.title }}
-                </router-link>
-            </div>
-        </div>
+  <div class="nav-container">
+    <div
+      class="top-nav"
+      :style="{ 'background-image': `url(${backgroundImage})` }"
+    >
+      <div class="logo-img">
+        <img :src="mainLogo" alt="西安应急智慧logo" id="main_logo" />
+      </div>
+      <div class="nav-list">
+        <router-link
+          @click="useViewerStore().setViewerLoadingCompleted(false)"
+          v-for="(item, index) in topNavMap"
+          :key="index"
+          :to="{ name: item.name, query: item.query }"
+          class="nav-item"
+          :class="{ active: isActive(item.query.identification) }"
+        >
+          {{ item.title }}
+        </router-link>
+      </div>
     </div>
-    <div class="content-container">
-        <RouterView />
-    </div>
+  </div>
+  <div class="content-container">
+    <RouterView />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useViewerStore } from '@/stores/useViewerStore';
-import { RouterView, useRoute } from 'vue-router';
-import mainLogo from '@/assets/images/main-logo.png';
-import backgroundImage from '@/assets/images/background-image.png';
+  import { useViewerStore } from '@/stores/useViewerStore';
+  import { RouterView, useRoute } from 'vue-router';
+  import mainLogo from '@/assets/images/main-logo.png';
+  import backgroundImage from '@/assets/images/background-image.png';
 
-useViewerStore().setViewerLoadingCompleted(true);
+  useViewerStore().setViewerLoadingCompleted(true);
 
-const route = useRoute();
+  const route = useRoute();
 
-const topNavMap = [
+  const topNavMap = [
     { title: '暴雨灾害链', name: 'rainstorm', query: { identification: 1 } },
     { title: '地震灾害链', name: 'earthquake', query: { identification: 2 } },
     { title: '多灾种灾害链分析', name: 'index', query: { identification: 3 } },
     { title: '灾害链情景推演', name: 'index', query: { identification: 4 } },
     { title: '数据管理', name: 'index', query: { identification: 5 } },
-    { title: '文件管理', name: 'index', query: { identification: 6 } }
-];
+    { title: '文件管理', name: 'index', query: { identification: 6 } },
+  ];
 
-// 判断当前导航项是否激活
-const isActive = (identification: number) => {
+  // 判断当前导航项是否激活
+  const isActive = (identification: number) => {
     const targetId = identification.toString();
     let currentId = route.query.identification;
-    if (!currentId) return targetId === '1'
+    if (!currentId) return targetId === '1';
     if (Array.isArray(currentId)) currentId = currentId[0];
     return currentId === targetId || route.query.identification === targetId;
-};
+  };
 </script>
 
 <style scoped>
-.nav-container {
+  .nav-container {
     height: 50px;
     width: 100%;
     position: relative;
     top: 0;
     left: 0;
     z-index: 10000000;
-}
+  }
 
-.top-nav {
+  .top-nav {
     width: 100%;
     height: 50px;
     background-size: cover;
@@ -66,44 +74,44 @@ const isActive = (identification: number) => {
     padding: 0 40px;
     box-sizing: border-box;
     display: flex;
-}
+  }
 
-.nav-list {
+  .nav-list {
     margin-left: 100px;
     display: flex;
     align-items: center;
-}
+  }
 
-.nav-item {
+  .nav-item {
     color: white;
     text-decoration: none;
     padding: 0 20px;
     height: 50px;
     line-height: 50px;
     transition: background-color 0.3s;
-}
+  }
 
-.nav-item:hover {
+  .nav-item:hover {
     background-color: rgba(255, 255, 255, 0.3);
-}
+  }
 
-.content-container {
+  .content-container {
     height: 100vh;
     width: 100vw;
     position: absolute;
     top: 0;
     left: 0;
-}
+  }
 
-#main_logo {
+  #main_logo {
     height: 50px;
     margin-right: 100px;
-}
+  }
 
-.nav-item.active {
+  .nav-item.active {
     background-color: rgba(255, 255, 255, 0.3);
     border-bottom: 3px solid #409eff;
     font-weight: bold;
     box-sizing: border-box;
-}
+  }
 </style>

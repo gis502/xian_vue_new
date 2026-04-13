@@ -1,5 +1,5 @@
 export interface GeoJsonFileType {
-  type: "FeatureCollection";
+  type: 'FeatureCollection';
   features: {
     geometry: {
       coordinates: number[][][][];

@@ -1,9 +1,5 @@
-import type {
-    Cartesian3,
-  Color,
-  DataSource,
-} from "cesium";
-import type { LabelConfig } from "./LabelConfig";
+import type { Cartesian3, Color, DataSource } from 'cesium';
+import type { LabelConfig } from './LabelConfig';
 
 // 数据源：字符串路径/URL | GeoJSON对象
 export type CustomizeGeoJsonDataSource = string | object;

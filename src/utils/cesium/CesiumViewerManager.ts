@@ -13,33 +13,33 @@ import {
   Material,
   MaterialAppearance,
   GroundPrimitive,
-} from 'cesium'
-import type { CesiumInitOptions } from '@/types/cesium/CesiumInitOptions'
-import config from '@/config/config.json'
+} from 'cesium';
+import type { CesiumInitOptions } from '@/types/cesium/CesiumInitOptions';
+import config from '@/config/config.json';
 
 /**
  * Cesium Viewer 管理器
  */
 export class CesiumViewerManager {
-  #viewer: Viewer | null = null
-  #currentTokenIndex: number = 0
-  #failedTokens: Set<number> = new Set()
+  #viewer: Viewer | null = null;
+  #currentTokenIndex: number = 0;
+  #failedTokens: Set<number> = new Set();
 
   constructor() {
-    this.#initializeToken()
+    this.#initializeToken();
   }
 
   /**
    * 初始化并设置有效的 Token
    */
   #initializeToken(): void {
-    const tokens = config.cesiumIonDefaultAccessToken
+    const tokens = config.cesiumIonDefaultAccessToken;
     if (!Array.isArray(tokens) || tokens.length === 0) {
-      console.warn('Cesium Ion Token 配置为空')
-      return
+      console.warn('Cesium Ion Token 配置为空');
+      return;
     }
 
-    Ion.defaultAccessToken = tokens[this.#currentTokenIndex]
+    Ion.defaultAccessToken = tokens[this.#currentTokenIndex];
   }
 
   /**
@@ -47,24 +47,24 @@ export class CesiumViewerManager {
    * @returns 是否成功切换
    */
   #switchToNextToken(): boolean {
-    const tokens = config.cesiumIonDefaultAccessToken
+    const tokens = config.cesiumIonDefaultAccessToken;
     if (!Array.isArray(tokens) || tokens.length <= 1) {
-      return false
+      return false;
     }
 
-    this.#failedTokens.add(this.#currentTokenIndex)
+    this.#failedTokens.add(this.#currentTokenIndex);
 
     for (let i = 1; i < tokens.length; i++) {
-      const nextIndex = (this.#currentTokenIndex + i) % tokens.length
+      const nextIndex = (this.#currentTokenIndex + i) % tokens.length;
       if (!this.#failedTokens.has(nextIndex)) {
-        this.#currentTokenIndex = nextIndex
-        Ion.defaultAccessToken = tokens[nextIndex]
-        return true
+        this.#currentTokenIndex = nextIndex;
+        Ion.defaultAccessToken = tokens[nextIndex];
+        return true;
       }
     }
 
-    console.warn('所有 Cesium Ion Token 均已失效')
-    return false
+    console.warn('所有 Cesium Ion Token 均已失效');
+    return false;
   }
   /**
    * 初始化 Cesium Viewer
@@ -73,7 +73,11 @@ export class CesiumViewerManager {
    * @param type - 底图类型：0=影像图，1=矢量图（默认 0）
    * @param tdMapToken - 天地图 Token 数组（可选）
    */
-  async initCesiumViewer(options: CesiumInitOptions, type: number = 0, tdMapToken?: string[]): Promise<void> {
+  async initCesiumViewer(
+    options: CesiumInitOptions,
+    type: number = 0,
+    tdMapToken?: string[]
+  ): Promise<void> {
     const defaultOptions: CesiumInitOptions = {
       containerId: options.containerId,
       shouldAnimate: true,
@@ -95,29 +99,33 @@ export class CesiumViewerManager {
         border: {
           show: true,
           color: Color.WHITE,
-          width: 1
-        }
-      }
-    }
+          width: 1,
+        },
+      },
+    };
 
     // 合并选项
     const finalOptions: CesiumInitOptions = {
       ...defaultOptions,
       ...options,
-      mark: options.mark ? {
-        ...defaultOptions.mark,
-        ...options.mark,
-        border: options.mark.border ? {
-          ...defaultOptions.mark!.border,
-          ...options.mark.border
-        } : defaultOptions.mark!.border
-      } : defaultOptions.mark
-    }
+      mark: options.mark
+        ? {
+            ...defaultOptions.mark,
+            ...options.mark,
+            border: options.mark.border
+              ? {
+                  ...defaultOptions.mark!.border,
+                  ...options.mark.border,
+                }
+              : defaultOptions.mark!.border,
+          }
+        : defaultOptions.mark,
+    };
 
-    const container = document.getElementById(finalOptions.containerId)
+    const container = document.getElementById(finalOptions.containerId);
 
     if (!container) {
-      throw new Error(`Cesium 容器 #${finalOptions.containerId} 不存在`)
+      throw new Error(`Cesium 容器 #${finalOptions.containerId} 不存在`);
     }
 
     const viewer = new Viewer(container, {
@@ -138,28 +146,30 @@ export class CesiumViewerManager {
         },
         allowTextureFilterAnisotropic: true,
       },
-    })
+    });
 
     // 性能优化配置
-    viewer.scene.globe.depthTestAgainstTerrain = false
-    viewer.scene.fog.enabled = false
-    viewer.scene.globe.enableLighting = false
-    viewer.shadows = false
-    viewer.scene.globe.showGroundAtmosphere = false
-    viewer.scene.skyBox.show = false
-    const creditContainer = viewer.cesiumWidget.creditContainer as HTMLElement
-    creditContainer.style.display = 'none'
+    viewer.scene.globe.depthTestAgainstTerrain = false;
+    viewer.scene.fog.enabled = false;
+    viewer.scene.globe.enableLighting = false;
+    viewer.shadows = false;
+    viewer.scene.globe.showGroundAtmosphere = false;
+    viewer.scene.skyBox.show = false;
+    const creditContainer = viewer.cesiumWidget.creditContainer as HTMLElement;
+    creditContainer.style.display = 'none';
 
     // 添加底图
-    this.#createImageryProviders(type, tdMapToken || config.tdMapToken).forEach((provider) => {
-      viewer.imageryLayers.addImageryProvider(provider)
-    })
+    this.#createImageryProviders(type, tdMapToken || config.tdMapToken).forEach(
+      (provider) => {
+        viewer.imageryLayers.addImageryProvider(provider);
+      }
+    );
 
-    this.#viewer = viewer
+    this.#viewer = viewer;
 
     // 是否突出显示指定区域
     if (options.mark?.include) {
-      await this.#highlight(finalOptions)
+      await this.#highlight(finalOptions);
     }
   }
 
@@ -169,9 +179,9 @@ export class CesiumViewerManager {
    */
   destroyCesiumViewer(clearAllResources: () => void): void {
     if (this.#viewer) {
-      clearAllResources()
-      this.#viewer.destroy()
-      this.#viewer = null
+      clearAllResources();
+      this.#viewer.destroy();
+      this.#viewer = null;
     }
   }
 
@@ -180,13 +190,16 @@ export class CesiumViewerManager {
    * @returns Viewer 实例，如果未初始化则返回 null
    */
   getViewer(): Viewer | null {
-    return this.#viewer
+    return this.#viewer;
   }
 
   /**
    * 创建底图 ImageryProvider
    */
-  #createImageryProviders(type: number, tdMapToken: string[]): ImageryProvider[] {
+  #createImageryProviders(
+    type: number,
+    tdMapToken: string[]
+  ): ImageryProvider[] {
     const option = {
       tileMatrixSetID: 'w',
       format: 'tiles',
@@ -194,30 +207,30 @@ export class CesiumViewerManager {
       minimumLevel: 0,
       maximumLevel: 18,
       credit: 'Tianditu',
-      subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']
-    }
+      subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
+    };
 
-    const token = tdMapToken[Math.floor(Math.random() * tdMapToken.length)]
+    const token = tdMapToken[Math.floor(Math.random() * tdMapToken.length)];
 
     if (type === 0) {
       const imageryProvider = new WebMapTileServiceImageryProvider({
         url: `https://{s}.tianditu.gov.cn/img_w/wmts?tk=${token}`,
         layer: 'img',
         ...option,
-      })
+      });
       const annotationProvider = new WebMapTileServiceImageryProvider({
         url: `https://{s}.tianditu.gov.cn/cia_w/wmts?tk=${token}`,
         layer: 'cia',
         ...option,
-      })
-      return [imageryProvider, annotationProvider]
+      });
+      return [imageryProvider, annotationProvider];
     } else {
       const vectorProvider = new WebMapTileServiceImageryProvider({
         url: `https://{s}.tianditu.gov.cn/vec_w/wmts?tk=${token}`,
         layer: 'vec',
         ...option,
-      })
-      return [vectorProvider]
+      });
+      return [vectorProvider];
     }
   }
 
@@ -226,13 +239,12 @@ export class CesiumViewerManager {
    * @param options - 高亮选项
    */
   async #highlight(options: CesiumInitOptions): Promise<void> {
-
     if (!this.#viewer) {
-      throw new Error('请先初始化 Cesium Viewer')
+      throw new Error('请先初始化 Cesium Viewer');
     }
 
-    if(!options.mark || !options.mark.geoJson) {
-      throw new Error('请提供 GeoJSON 数据')
+    if (!options.mark || !options.mark.geoJson) {
+      throw new Error('请提供 GeoJSON 数据');
     }
 
     // 解析边界坐标和孔洞位置
@@ -285,7 +297,7 @@ export class CesiumViewerManager {
     const eastOption = {
       polygonHierarchy: new PolygonHierarchy(eastPositions),
       arcType: ArcType.GEODESIC,
-    }
+    };
     if (options.mark.belongingHemisphere === 'east') {
       eastOption.polygonHierarchy = new PolygonHierarchy(eastPositions, holes);
     }
@@ -295,7 +307,7 @@ export class CesiumViewerManager {
     // 添加遮罩
     const maskMaterial = new Material({
       fabric: {
-        type: "Color",
+        type: 'Color',
         uniforms: {
           color: options.mark.color,
         },
@@ -333,12 +345,14 @@ export class CesiumViewerManager {
 
     // 等待完成渲染
     return new Promise<void>((resolve) => {
-      const removeListener = this.#viewer!.scene.postRender.addEventListener(() => {
-        if (globalMask.ready) {
-          removeListener();
-          resolve();
+      const removeListener = this.#viewer!.scene.postRender.addEventListener(
+        () => {
+          if (globalMask.ready) {
+            removeListener();
+            resolve();
+          }
         }
-      });
+      );
 
       // 设置超时保护，避免无限等待
       setTimeout(() => {

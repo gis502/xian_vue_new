@@ -11,20 +11,20 @@ import {
   PolygonHierarchy,
   PolygonGraphics,
   GridMaterialProperty,
-} from 'cesium'
-import type { EntityOptions } from '@/types/cesium/EntityOptions'
-import type { Viewer } from 'cesium'
+} from 'cesium';
+import type { EntityOptions } from '@/types/cesium/EntityOptions';
+import type { Viewer } from 'cesium';
 
 /**
  * 实体管理器
  */
 export class EntityManager {
-  #viewer: Viewer
-  #defaultEntityIds = new Set<string>()
-  #customEntityIds = new Set<string>()
+  #viewer: Viewer;
+  #defaultEntityIds = new Set<string>();
+  #customEntityIds = new Set<string>();
 
   constructor(viewer: Viewer) {
-    this.#viewer = viewer
+    this.#viewer = viewer;
   }
 
   /**
@@ -33,33 +33,38 @@ export class EntityManager {
    * @returns 创建的 Entity 实例数组
    */
   addCesiumEntitiesBatch(entityOptionsList: EntityOptions[]): Entity[] {
-    const entities: Entity[] = []
-    
+    const entities: Entity[] = [];
+
     // 预验证所有ID的唯一性
     entityOptionsList.forEach(({ id }) => {
-      if (!id) throw new Error('实体 id 为必填项')
-      this.#validateUniqueId(id)
-    })
+      if (!id) throw new Error('实体 id 为必填项');
+      this.#validateUniqueId(id);
+    });
 
     // 批量创建并添加实体
     entityOptionsList.forEach((entityOptions) => {
-      const { id, position, attributes = {}, isDefault = false } = entityOptions
-      
-      if (!position) throw new Error(`实体 ${id} 的 position 为必填项`)
+      const {
+        id,
+        position,
+        attributes = {},
+        isDefault = false,
+      } = entityOptions;
+
+      if (!position) throw new Error(`实体 ${id} 的 position 为必填项`);
 
       const entity = new Entity({
         id,
         position: this.#convertPosition(position),
         ...attributes,
-      })
+      });
 
-      this.#configureEntityGraphics(entity, entityOptions)
-      this.#viewer.entities.add(entity)
-      this.#storeEntityId(id, isDefault)
-      entities.push(entity)
-    })
+      this.#configureEntityGraphics(entity, entityOptions);
+      this.#viewer.entities.add(entity);
+      this.#storeEntityId(id, isDefault);
+      entities.push(entity);
+    });
 
-    return entities
+    return entities;
   }
 
   /**
@@ -68,23 +73,23 @@ export class EntityManager {
    * @returns 创建的 Entity 实例
    */
   addCesiumEntity(entityOptions: EntityOptions): Entity {
-    const { id, position, attributes = {}, isDefault = false } = entityOptions
+    const { id, position, attributes = {}, isDefault = false } = entityOptions;
 
-    if (!id) throw new Error('实体 id 为必填项')
-    if (!position) throw new Error('实体 position 为必填项')
-    this.#validateUniqueId(id)
+    if (!id) throw new Error('实体 id 为必填项');
+    if (!position) throw new Error('实体 position 为必填项');
+    this.#validateUniqueId(id);
 
     const entity = new Entity({
       id,
       position: this.#convertPosition(position),
       ...attributes,
-    })
+    });
 
-    this.#configureEntityGraphics(entity, entityOptions)
+    this.#configureEntityGraphics(entity, entityOptions);
 
-    this.#viewer.entities.add(entity)
-    this.#storeEntityId(id, isDefault)
-    return entity
+    this.#viewer.entities.add(entity);
+    this.#storeEntityId(id, isDefault);
+    return entity;
   }
 
   /**
@@ -93,8 +98,8 @@ export class EntityManager {
    * @returns Entity 实例，不存在则返回 null
    */
   getCesiumEntityById(entityId: string): Entity | null {
-    if (!this.#entityExists(entityId)) return null
-    return this.#viewer.entities.getById(entityId) || null
+    if (!this.#entityExists(entityId)) return null;
+    return this.#viewer.entities.getById(entityId) || null;
   }
 
   /**
@@ -104,17 +109,17 @@ export class EntityManager {
    */
   removeCesiumEntity(entityId: string): boolean {
     if (!this.#entityExists(entityId)) {
-      console.warn(`实体 ID ${entityId} 不存在`)
-      return false
+      console.warn(`实体 ID ${entityId} 不存在`);
+      return false;
     }
 
-    const entity = this.#viewer.entities.getById(entityId)
+    const entity = this.#viewer.entities.getById(entityId);
     if (entity) {
-      this.#viewer.entities.remove(entity)
-      this.#removeEntityId(entityId)
-      return true
+      this.#viewer.entities.remove(entity);
+      this.#removeEntityId(entityId);
+      return true;
     }
-    return false
+    return false;
   }
 
   /**
@@ -122,7 +127,7 @@ export class EntityManager {
    * @param entityIds - 实体 ID 数组
    */
   batchRemoveCesiumEntities(entityIds: string[]): void {
-    entityIds.forEach((id) => this.removeCesiumEntity(id))
+    entityIds.forEach((id) => this.removeCesiumEntity(id));
   }
 
   /**
@@ -130,14 +135,14 @@ export class EntityManager {
    * @param clearType - 清除类型：'default'=默认实体，'custom'=自定义实体，'all'=所有实体（默认 'custom'）
    */
   clearAllEntities(clearType: 'default' | 'custom' | 'all' = 'custom'): void {
-    const targetIds = this.#getTargetIdsByType(clearType)
+    const targetIds = this.#getTargetIdsByType(clearType);
 
     targetIds.forEach((id) => {
-      const entity = this.#viewer.entities.getById(id)
-      if (entity) this.#viewer.entities.remove(entity)
-    })
+      const entity = this.#viewer.entities.getById(id);
+      if (entity) this.#viewer.entities.remove(entity);
+    });
 
-    this.#clearCollectionsByType(clearType)
+    this.#clearCollectionsByType(clearType);
   }
 
   /**
@@ -146,7 +151,7 @@ export class EntityManager {
    * @returns 实体 ID 集合
    */
   getEntityIds(clearType: 'default' | 'custom' | 'all' = 'all'): Set<string> {
-    return this.#getTargetIdsByType(clearType)
+    return this.#getTargetIdsByType(clearType);
   }
 
   // ===================== 私有方法 =====================
@@ -160,15 +165,15 @@ export class EntityManager {
           outlineColor = Color.WHITE,
           outlineWidth = 1,
           heightReference = HeightReference.CLAMP_TO_GROUND,
-        } = options.pointOptions || {}
+        } = options.pointOptions || {};
         entity.point = new PointGraphics({
           color,
           pixelSize,
           outlineColor,
           outlineWidth,
           heightReference,
-        })
-        break
+        });
+        break;
       }
       case 'polyline': {
         const {
@@ -176,16 +181,17 @@ export class EntityManager {
           color = Color.BLUE,
           width = 3,
           clampToGround = false,
-        } = options.polylineOptions || {}
-        if (!positions) throw new Error('线实体必须传入 polylineOptions.positions')
+        } = options.polylineOptions || {};
+        if (!positions)
+          throw new Error('线实体必须传入 polylineOptions.positions');
 
         entity.polyline = new PolylineGraphics({
           positions: this.#convertPositionArray(positions),
           material: color,
           width,
           clampToGround,
-        })
-        break
+        });
+        break;
       }
       case 'billboard': {
         const {
@@ -195,8 +201,9 @@ export class EntityManager {
           verticalOrigin = VerticalOrigin.CENTER,
           horizontalOrigin = HorizontalOrigin.CENTER,
           heightReference = HeightReference.CLAMP_TO_GROUND,
-        } = options.billboardOptions || {}
-        if (!image) throw new Error('Billboard 实体必须传入 billboardOptions.image')
+        } = options.billboardOptions || {};
+        if (!image)
+          throw new Error('Billboard 实体必须传入 billboardOptions.image');
 
         entity.billboard = new BillboardGraphics({
           image,
@@ -205,8 +212,8 @@ export class EntityManager {
           verticalOrigin,
           horizontalOrigin,
           heightReference,
-        })
-        break
+        });
+        break;
       }
       case 'polygon': {
         const {
@@ -220,12 +227,13 @@ export class EntityManager {
           material = new GridMaterialProperty({
             color: Color.GREEN.withAlpha(0.3),
             cellAlpha: 0.2,
-            lineCount: new Cartesian3(8, 8, 0) as any,
-            lineThickness: new Cartesian3(2.0, 2.0, 0) as any,
+            lineCount: new Cartesian3(8, 8, 0),
+            lineThickness: new Cartesian3(2.0, 2.0, 0),
           }),
-        } = options.polygonOptions || {}
+        } = options.polygonOptions || {};
 
-        if (!hierarchy) throw new Error('多边形实体必须传入 polygonOptions.hierarchy')
+        if (!hierarchy)
+          throw new Error('多边形实体必须传入 polygonOptions.hierarchy');
 
         entity.polygon = new PolygonGraphics({
           hierarchy: this.#processHierarchy(hierarchy),
@@ -236,77 +244,87 @@ export class EntityManager {
           height,
           extrudedHeight,
           heightReference,
-        })
-        break
+        });
+        break;
       }
       default:
-        throw new Error(`不支持的实体类型：${options.type}`)
+        throw new Error(`不支持的实体类型：${options.type}`);
     }
   }
 
   #processHierarchy(
-    hier: PolygonHierarchy | Cartesian3[] | [number, number][] | [number, number, number][],
+    hier:
+      | PolygonHierarchy
+      | Cartesian3[]
+      | [number, number][]
+      | [number, number, number][]
   ): PolygonHierarchy {
-    if (hier instanceof PolygonHierarchy) return hier
+    if (hier instanceof PolygonHierarchy) return hier;
     if (!Array.isArray(hier) || hier.length < 3) {
-      throw new Error('多边形层级必须是非空数组且至少 3 个顶点')
+      throw new Error('多边形层级必须是非空数组且至少 3 个顶点');
     }
 
     const positions = hier.map((pos) => {
-      if (pos instanceof Cartesian3) return pos
+      if (pos instanceof Cartesian3) return pos;
       if (Array.isArray(pos) && pos.length >= 2) {
-        return Cartesian3.fromDegrees(pos[0], pos[1], pos[2] || 0)
+        return Cartesian3.fromDegrees(pos[0], pos[1], pos[2] || 0);
       }
       throw new Error(
-        `无效坐标格式：${JSON.stringify(pos)}，应为 [经, 纬] 或 [经, 纬, 高] 或 Cartesian3`,
-      )
-    })
+        `无效坐标格式：${JSON.stringify(pos)}，应为 [经, 纬] 或 [经, 纬, 高] 或 Cartesian3`
+      );
+    });
 
-    return new PolygonHierarchy(positions)
+    return new PolygonHierarchy(positions);
   }
 
   #validateUniqueId(id: string): void {
     if (this.#defaultEntityIds.has(id) || this.#customEntityIds.has(id)) {
-      throw new Error(`实体 ID ${id} 已存在`)
+      throw new Error(`实体 ID ${id} 已存在`);
     }
   }
 
   #entityExists(id: string): boolean {
-    return this.#defaultEntityIds.has(id) || this.#customEntityIds.has(id)
+    return this.#defaultEntityIds.has(id) || this.#customEntityIds.has(id);
   }
 
   #storeEntityId(id: string, isDefault: boolean): void {
     if (isDefault) {
-      this.#defaultEntityIds.add(id)
+      this.#defaultEntityIds.add(id);
     } else {
-      this.#customEntityIds.add(id)
+      this.#customEntityIds.add(id);
     }
   }
 
   #removeEntityId(id: string): void {
-    this.#defaultEntityIds.delete(id)
-    this.#customEntityIds.delete(id)
+    this.#defaultEntityIds.delete(id);
+    this.#customEntityIds.delete(id);
   }
 
   #getTargetIdsByType(clearType: 'default' | 'custom' | 'all'): Set<string> {
-    const targetIds = new Set<string>()
+    const targetIds = new Set<string>();
     if (clearType === 'default' || clearType === 'all')
-      this.#defaultEntityIds.forEach((id) => targetIds.add(id))
+      this.#defaultEntityIds.forEach((id) => targetIds.add(id));
     if (clearType === 'custom' || clearType === 'all')
-      this.#customEntityIds.forEach((id) => targetIds.add(id))
-    return targetIds
+      this.#customEntityIds.forEach((id) => targetIds.add(id));
+    return targetIds;
   }
 
   #clearCollectionsByType(clearType: 'default' | 'custom' | 'all'): void {
-    if (clearType === 'default' || clearType === 'all') this.#defaultEntityIds.clear()
-    if (clearType === 'custom' || clearType === 'all') this.#customEntityIds.clear()
+    if (clearType === 'default' || clearType === 'all')
+      this.#defaultEntityIds.clear();
+    if (clearType === 'custom' || clearType === 'all')
+      this.#customEntityIds.clear();
   }
 
   #convertPosition(pos: Cartesian3 | [number, number, number]): Cartesian3 {
-    return Array.isArray(pos) ? Cartesian3.fromDegrees(pos[0], pos[1], pos[2] || 0) : pos
+    return Array.isArray(pos)
+      ? Cartesian3.fromDegrees(pos[0], pos[1], pos[2] || 0)
+      : pos;
   }
 
-  #convertPositionArray(positions: (Cartesian3 | [number, number, number])[]): Cartesian3[] {
-    return positions.map((pos) => this.#convertPosition(pos))
+  #convertPositionArray(
+    positions: (Cartesian3 | [number, number, number])[]
+  ): Cartesian3[] {
+    return positions.map((pos) => this.#convertPosition(pos));
   }
 }

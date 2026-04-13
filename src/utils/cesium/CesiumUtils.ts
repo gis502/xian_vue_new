@@ -1,34 +1,51 @@
-import type { CesiumInitOptions } from '@/types/cesium/CesiumInitOptions'
-import type { EntityOptions } from '@/types/cesium/EntityOptions'
-import type { PrimitiveOptions } from '@/types/cesium/PrimitiveOptions'
-import type { LayerConfig } from '@/types/cesium/LayerConfig'
-import type { CustomizeGeoJsonDataSource, GeoJsonOptions } from '@/types/cesium/GeoJsonOptions'
-import { Viewer, Entity, DataSource, ImageryLayer, Primitive, BillboardCollection, Cartesian3, ScreenSpaceEventHandler, ScreenSpaceEventType, Cartesian2, SceneTransforms, Color } from 'cesium'
-import { CesiumViewerManager } from './CesiumViewerManager'
-import { EntityManager } from './EntityManager'
-import { PrimitiveManager } from './PrimitiveManager'
-import { LayerManager } from './LayerManager'
-import { GeoJsonManager, type ClearType } from './GeoJsonManager'
-import { CameraController } from './CameraController'
-import type { GeoJsonFileType } from '@/types/cesium/GeoJsonFileType'
+import type { CesiumInitOptions } from '@/types/cesium/CesiumInitOptions';
+import type { EntityOptions } from '@/types/cesium/EntityOptions';
+import type { PrimitiveOptions } from '@/types/cesium/PrimitiveOptions';
+import type { LayerConfig } from '@/types/cesium/LayerConfig';
+import type {
+  CustomizeGeoJsonDataSource,
+  GeoJsonOptions,
+} from '@/types/cesium/GeoJsonOptions';
+import {
+  Viewer,
+  Entity,
+  DataSource,
+  ImageryLayer,
+  Primitive,
+  BillboardCollection,
+  Cartesian3,
+  ScreenSpaceEventHandler,
+  ScreenSpaceEventType,
+  Cartesian2,
+  SceneTransforms,
+  Rectangle,
+} from 'cesium';
+import { CesiumViewerManager } from './CesiumViewerManager';
+import { EntityManager } from './EntityManager';
+import { PrimitiveManager } from './PrimitiveManager';
+import { LayerManager } from './LayerManager';
+import { GeoJsonManager, type ClearType } from './GeoJsonManager';
+import { CameraController } from './CameraController';
+import config from '@/config/config.json';
+import type { ClickObject } from '@/types/cesium/ClickObject';
 
 // 导出 ClearType 类型
-export type { ClearType }
+export type { ClearType };
 
 /**
  * Cesium 工具类（重构版 - 委托模式）
  */
 export class CesiumUtils {
   // 管理器实例
-  #viewerManager: CesiumViewerManager
-  #entityManager: EntityManager | null = null
-  #primitiveManager: PrimitiveManager | null = null
-  #layerManager: LayerManager | null = null
-  #geoJsonManager: GeoJsonManager | null = null
-  #cameraController: CameraController | null = null
+  #viewerManager: CesiumViewerManager;
+  #entityManager: EntityManager | null = null;
+  #primitiveManager: PrimitiveManager | null = null;
+  #layerManager: LayerManager | null = null;
+  #geoJsonManager: GeoJsonManager | null = null;
+  #cameraController: CameraController | null = null;
 
   constructor() {
-    this.#viewerManager = new CesiumViewerManager()
+    this.#viewerManager = new CesiumViewerManager();
   }
 
   /**
@@ -37,24 +54,65 @@ export class CesiumUtils {
    * @param type - 底图类型：0=影像图，1=矢量图（默认 0）
    * @param tdMapToken - 天地图 Token 数组（可选）
    */
-  async initCesiumViewer(options: CesiumInitOptions, type: number = 0, tdMapToken?: string[]): Promise<void> {
-    await this.#viewerManager.initCesiumViewer(options, type, tdMapToken)
+  async initCesiumViewer(
+    options: CesiumInitOptions,
+    type: number = 0,
+    tdMapToken?: string[]
+  ): Promise<void> {
+    await this.#viewerManager.initCesiumViewer(options, type, tdMapToken);
 
-    const viewer = this.#viewerManager.getViewer()
+    const viewer = this.#viewerManager.getViewer();
     if (viewer) {
-      this.#entityManager = new EntityManager(viewer)
-      this.#primitiveManager = new PrimitiveManager(viewer)
-      this.#layerManager = new LayerManager(viewer)
-      this.#geoJsonManager = new GeoJsonManager(viewer)
-      this.#cameraController = new CameraController(viewer)
+      this.#entityManager = new EntityManager(viewer);
+      this.#primitiveManager = new PrimitiveManager(viewer);
+      this.#layerManager = new LayerManager(viewer);
+      this.#geoJsonManager = new GeoJsonManager(viewer);
+      this.#cameraController = new CameraController(viewer);
     }
+  }
+
+  /**
+   * 设置相机高度限制
+   * @param minHeight - 最小高度
+   * @param maxHeight - 最大高度
+   */
+  setHeightLimits(
+    minHeight: number = config.camera.min,
+    maxHeight: number = config.camera.max
+  ) {
+    this.#cameraController!.setHeightLimits(minHeight, maxHeight);
+  }
+
+  /**
+   * 清除相机高度限制
+   */
+  clearHightLimits(): void {
+    this.#cameraController!.clearHeightLimits();
+  }
+
+  /**
+   * 监听相机移动结束事件，并判断相机是否超出指定矩形范围
+   * @param range - 矩形范围[左下角经纬度，右上角经纬度]
+   * @param duration - 飞行持续时间（秒），默认1秒
+   */
+  outOverView(
+    range: [
+      [number, number],
+      [number, number],
+    ] = config.defauleRectangleRange as [[number, number], [number, number]],
+    duration: number = 1
+  ) {
+    const rectangle = Rectangle.fromDegrees(...range[0], ...range[1]);
+    this.#cameraController!.outOverView(rectangle, duration);
   }
 
   /**
    * 销毁 Cesium Viewer
    */
   destroyCesiumViewer(): void {
-    this.#viewerManager.destroyCesiumViewer(() => this.clearAllResources('all'))
+    this.#viewerManager.destroyCesiumViewer(() =>
+      this.clearAllResources('all')
+    );
   }
 
   // ===================== 实体管理 =====================
@@ -65,8 +123,8 @@ export class CesiumUtils {
    * @returns 创建的 Entity 实例
    */
   addCesiumEntity(entityOptions: EntityOptions): Entity {
-    this.#checkManager(this.#entityManager, 'EntityManager')
-    return this.#entityManager!.addCesiumEntity(entityOptions)
+    this.#checkManager(this.#entityManager, 'EntityManager');
+    return this.#entityManager!.addCesiumEntity(entityOptions);
   }
 
   /**
@@ -75,8 +133,8 @@ export class CesiumUtils {
    * @returns 创建的 Entity 实例数组
    */
   addCesiumEntitiesBatch(entityOptionsList: EntityOptions[]): Entity[] {
-    this.#checkManager(this.#entityManager, 'EntityManager')
-    return this.#entityManager!.addCesiumEntitiesBatch(entityOptionsList)
+    this.#checkManager(this.#entityManager, 'EntityManager');
+    return this.#entityManager!.addCesiumEntitiesBatch(entityOptionsList);
   }
 
   /**
@@ -85,8 +143,8 @@ export class CesiumUtils {
    * @returns Entity 实例，不存在则返回 null
    */
   getCesiumEntityById(entityId: string): Entity | null {
-    this.#checkManager(this.#entityManager, 'EntityManager')
-    return this.#entityManager!.getCesiumEntityById(entityId)
+    this.#checkManager(this.#entityManager, 'EntityManager');
+    return this.#entityManager!.getCesiumEntityById(entityId);
   }
 
   /**
@@ -95,8 +153,8 @@ export class CesiumUtils {
    * @returns 是否删除成功
    */
   removeCesiumEntity(entityId: string): boolean {
-    this.#checkManager(this.#entityManager, 'EntityManager')
-    return this.#entityManager!.removeCesiumEntity(entityId)
+    this.#checkManager(this.#entityManager, 'EntityManager');
+    return this.#entityManager!.removeCesiumEntity(entityId);
   }
 
   /**
@@ -104,8 +162,8 @@ export class CesiumUtils {
    * @param entityIds - 实体 ID 数组
    */
   batchRemoveCesiumEntities(entityIds: string[]): void {
-    this.#checkManager(this.#entityManager, 'EntityManager')
-    this.#entityManager!.batchRemoveCesiumEntities(entityIds)
+    this.#checkManager(this.#entityManager, 'EntityManager');
+    this.#entityManager!.batchRemoveCesiumEntities(entityIds);
   }
 
   /**
@@ -113,8 +171,8 @@ export class CesiumUtils {
    * @param clearType - 清除类型：'default'=默认实体，'custom'=自定义实体，'all'=所有实体（默认 'custom'）
    */
   clearAllEntities(clearType: ClearType = 'custom'): void {
-    this.#checkManager(this.#entityManager, 'EntityManager')
-    this.#entityManager!.clearAllEntities(clearType)
+    this.#checkManager(this.#entityManager, 'EntityManager');
+    this.#entityManager!.clearAllEntities(clearType);
   }
 
   /**
@@ -123,8 +181,8 @@ export class CesiumUtils {
    * @returns 实体 ID 集合
    */
   getEntityIds(clearType: ClearType = 'all'): Set<string> {
-    this.#checkManager(this.#entityManager, 'EntityManager')
-    return this.#entityManager!.getEntityIds(clearType)
+    this.#checkManager(this.#entityManager, 'EntityManager');
+    return this.#entityManager!.getEntityIds(clearType);
   }
 
   // ===================== Primitive 管理 =====================
@@ -134,8 +192,8 @@ export class CesiumUtils {
    * @param primitive - Primitive 配置选项
    */
   addPrimitive(primitive: PrimitiveOptions): void {
-    this.#checkManager(this.#primitiveManager, 'PrimitiveManager')
-    this.#primitiveManager!.addPrimitive(primitive)
+    this.#checkManager(this.#primitiveManager, 'PrimitiveManager');
+    this.#primitiveManager!.addPrimitive(primitive);
   }
 
   /**
@@ -145,8 +203,8 @@ export class CesiumUtils {
    * @param primitives - Primitive 配置选项数组
    */
   addPrimitivesBatch(primitives: PrimitiveOptions[]): void {
-    this.#checkManager(this.#primitiveManager, 'PrimitiveManager')
-    this.#primitiveManager!.addPrimitivesBatch(primitives)
+    this.#checkManager(this.#primitiveManager, 'PrimitiveManager');
+    this.#primitiveManager!.addPrimitivesBatch(primitives);
   }
 
   /**
@@ -155,8 +213,8 @@ export class CesiumUtils {
    * @returns Primitive 或 BillboardCollection 实例，不存在则返回 undefined
    */
   getPrimitiveById(id: string): Primitive | BillboardCollection | undefined {
-    this.#checkManager(this.#primitiveManager, 'PrimitiveManager')
-    return this.#primitiveManager!.getPrimitiveById(id)
+    this.#checkManager(this.#primitiveManager, 'PrimitiveManager');
+    return this.#primitiveManager!.getPrimitiveById(id);
   }
 
   /**
@@ -165,8 +223,8 @@ export class CesiumUtils {
    * @returns 是否删除成功
    */
   removePrimitiveById(id: string): boolean {
-    this.#checkManager(this.#primitiveManager, 'PrimitiveManager')
-    return this.#primitiveManager!.removePrimitiveById(id)
+    this.#checkManager(this.#primitiveManager, 'PrimitiveManager');
+    return this.#primitiveManager!.removePrimitiveById(id);
   }
 
   /**
@@ -174,8 +232,8 @@ export class CesiumUtils {
    * @param clearType - 清除类型：'default'=默认 Primitive，'custom'=自定义 Primitive，'all'=所有 Primitive（默认 'custom'）
    */
   clearAllPrimitives(clearType: ClearType = 'custom'): void {
-    this.#checkManager(this.#primitiveManager, 'PrimitiveManager')
-    this.#primitiveManager!.clearAllPrimitives(clearType)
+    this.#checkManager(this.#primitiveManager, 'PrimitiveManager');
+    this.#primitiveManager!.clearAllPrimitives(clearType);
   }
 
   /**
@@ -184,8 +242,8 @@ export class CesiumUtils {
    * @returns Primitive ID 集合
    */
   getPrimitiveIds(clearType: ClearType = 'all'): Set<string> {
-    this.#checkManager(this.#primitiveManager, 'PrimitiveManager')
-    return this.#primitiveManager!.getPrimitiveIds(clearType)
+    this.#checkManager(this.#primitiveManager, 'PrimitiveManager');
+    return this.#primitiveManager!.getPrimitiveIds(clearType);
   }
 
   // ===================== 图层管理 =====================
@@ -196,8 +254,8 @@ export class CesiumUtils {
    * @returns 创建的 ImageryLayer 实例数组（失败的为 null）
    */
   createLayersBatch(layerConfigs: LayerConfig[]): (ImageryLayer | null)[] {
-    this.#checkManager(this.#layerManager, 'LayerManager')
-    return this.#layerManager!.createLayersBatch(layerConfigs)
+    this.#checkManager(this.#layerManager, 'LayerManager');
+    return this.#layerManager!.createLayersBatch(layerConfigs);
   }
 
   /**
@@ -206,8 +264,8 @@ export class CesiumUtils {
    * @returns 创建的 ImageryLayer 实例，失败则返回 null
    */
   createLayer(layerConfig: LayerConfig): ImageryLayer | null {
-    this.#checkManager(this.#layerManager, 'LayerManager')
-    return this.#layerManager!.createLayer(layerConfig)
+    this.#checkManager(this.#layerManager, 'LayerManager');
+    return this.#layerManager!.createLayer(layerConfig);
   }
 
   /**
@@ -216,8 +274,8 @@ export class CesiumUtils {
    * @returns ImageryLayer 实例，不存在则返回 undefined
    */
   getLayerByKey(key: string): ImageryLayer | undefined {
-    this.#checkManager(this.#layerManager, 'LayerManager')
-    return this.#layerManager!.getLayerByKey(key)
+    this.#checkManager(this.#layerManager, 'LayerManager');
+    return this.#layerManager!.getLayerByKey(key);
   }
 
   /**
@@ -226,8 +284,8 @@ export class CesiumUtils {
    * @returns 是否删除成功
    */
   removeLayerByKey(key: string): boolean {
-    this.#checkManager(this.#layerManager, 'LayerManager')
-    return this.#layerManager!.removeLayerByKey(key)
+    this.#checkManager(this.#layerManager, 'LayerManager');
+    return this.#layerManager!.removeLayerByKey(key);
   }
 
   /**
@@ -235,8 +293,8 @@ export class CesiumUtils {
    * @param layerIds - 图层 ID 数组
    */
   batchRemoveLayers(layerIds: string[]): void {
-    this.#checkManager(this.#layerManager, 'LayerManager')
-    this.#layerManager!.batchRemoveLayers(layerIds)
+    this.#checkManager(this.#layerManager, 'LayerManager');
+    this.#layerManager!.batchRemoveLayers(layerIds);
   }
 
   /**
@@ -244,8 +302,8 @@ export class CesiumUtils {
    * @param clearType - 清除类型：'default'=默认图层，'custom'=自定义图层，'all'=所有图层（默认 'custom'）
    */
   clearAllLayers(clearType: ClearType = 'custom'): void {
-    this.#checkManager(this.#layerManager, 'LayerManager')
-    this.#layerManager!.clearAllLayers(clearType)
+    this.#checkManager(this.#layerManager, 'LayerManager');
+    this.#layerManager!.clearAllLayers(clearType);
   }
 
   /**
@@ -254,8 +312,8 @@ export class CesiumUtils {
    * @returns 图层 Key 集合
    */
   getLayerKeys(clearType: ClearType = 'all'): Set<string> {
-    this.#checkManager(this.#layerManager, 'LayerManager')
-    return this.#layerManager!.getLayerKeys(clearType)
+    this.#checkManager(this.#layerManager, 'LayerManager');
+    return this.#layerManager!.getLayerKeys(clearType);
   }
 
   // ===================== GeoJSON 图层管理 =====================
@@ -264,18 +322,16 @@ export class CesiumUtils {
    * 添加 GeoJSON 图层
    * @param layerId - 图层唯一标识
    * @param geojsonData - GeoJSON 数据（路径、URL 或对象）
-   * @param isDefault - 是否为默认图层（默认 false）
    * @param options - 配置选项（样式、标签等）
    * @returns Promise<DataSource> 数据源实例
    */
   async addGeoJsonLayer(
     layerId: string,
     geojsonData: CustomizeGeoJsonDataSource,
-    isDefault: boolean = false,
     options?: GeoJsonOptions
   ): Promise<DataSource> {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    return this.#geoJsonManager!.addGeoJsonLayer(layerId, geojsonData, isDefault, options)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    return this.#geoJsonManager!.addGeoJsonLayer(layerId, geojsonData, options);
   }
 
   /**
@@ -284,8 +340,8 @@ export class CesiumUtils {
    * @returns DataSource 实例，不存在则返回 undefined
    */
   getGeoJsonLayerById(layerId: string): DataSource | undefined {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    return this.#geoJsonManager!.getGeoJsonLayerById(layerId)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    return this.#geoJsonManager!.getGeoJsonLayerById(layerId);
   }
 
   /**
@@ -294,8 +350,8 @@ export class CesiumUtils {
    * @returns 是否删除成功
    */
   removeGeoJsonLayer(layerId: string): boolean {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    return this.#geoJsonManager!.removeGeoJsonLayer(layerId)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    return this.#geoJsonManager!.removeGeoJsonLayer(layerId);
   }
 
   /**
@@ -304,14 +360,14 @@ export class CesiumUtils {
    */
   async batchAddGeoJsonLayers(
     layerConfigs: Array<{
-      layerId: string
-      geojsonData: CustomizeGeoJsonDataSource
-      isDefault?: boolean
-      options?: GeoJsonOptions
+      layerId: string;
+      geojsonData: CustomizeGeoJsonDataSource;
+      isDefault?: boolean;
+      options?: GeoJsonOptions;
     }>
   ): Promise<void> {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    await this.#geoJsonManager!.batchAddGeoJsonLayers(layerConfigs)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    await this.#geoJsonManager!.batchAddGeoJsonLayers(layerConfigs);
   }
 
   /**
@@ -319,8 +375,8 @@ export class CesiumUtils {
    * @param layerIds - 图层 ID 数组
    */
   batchRemoveGeoJsonLayers(layerIds: string[]): void {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    this.#geoJsonManager!.batchRemoveGeoJsonLayers(layerIds)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    this.#geoJsonManager!.batchRemoveGeoJsonLayers(layerIds);
   }
 
   /**
@@ -328,8 +384,8 @@ export class CesiumUtils {
    * @param clearType - 清除类型：'default'=默认图层，'custom'=自定义图层，'all'=所有图层（默认 'custom'）
    */
   clearAllGeoJsonLayers(clearType: ClearType = 'custom'): void {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    this.#geoJsonManager!.clearAllGeoJsonLayers(clearType)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    this.#geoJsonManager!.clearAllGeoJsonLayers(clearType);
   }
 
   /**
@@ -338,8 +394,8 @@ export class CesiumUtils {
    * @returns 是否操作成功
    */
   showGeoJsonLayer(layerId: string): boolean {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    return this.#geoJsonManager!.showGeoJsonLayer(layerId)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    return this.#geoJsonManager!.showGeoJsonLayer(layerId);
   }
 
   /**
@@ -348,8 +404,8 @@ export class CesiumUtils {
    * @returns 是否操作成功
    */
   hideGeoJsonLayer(layerId: string): boolean {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    return this.#geoJsonManager!.hideGeoJsonLayer(layerId)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    return this.#geoJsonManager!.hideGeoJsonLayer(layerId);
   }
 
   /**
@@ -358,8 +414,8 @@ export class CesiumUtils {
    * @returns 切换后的显示状态，图层不存在则返回 null
    */
   toggleGeoJsonLayer(layerId: string): boolean | null {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    return this.#geoJsonManager!.toggleGeoJsonLayer(layerId)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    return this.#geoJsonManager!.toggleGeoJsonLayer(layerId);
   }
 
   /**
@@ -368,8 +424,8 @@ export class CesiumUtils {
    * @returns 成功显示的图层数量
    */
   batchShowGeoJsonLayers(layerIds: string[]): number {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    return this.#geoJsonManager!.batchShowGeoJsonLayers(layerIds)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    return this.#geoJsonManager!.batchShowGeoJsonLayers(layerIds);
   }
 
   /**
@@ -378,8 +434,8 @@ export class CesiumUtils {
    * @returns 成功隐藏的图层数量
    */
   batchHideGeoJsonLayers(layerIds: string[]): number {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    return this.#geoJsonManager!.batchHideGeoJsonLayers(layerIds)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    return this.#geoJsonManager!.batchHideGeoJsonLayers(layerIds);
   }
 
   /**
@@ -388,8 +444,8 @@ export class CesiumUtils {
    * @returns 显示状态，图层不存在则返回 null
    */
   getGeoJsonLayerVisibility(layerId: string): boolean | null {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    return this.#geoJsonManager!.getGeoJsonLayerVisibility(layerId)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    return this.#geoJsonManager!.getGeoJsonLayerVisibility(layerId);
   }
 
   /**
@@ -398,19 +454,21 @@ export class CesiumUtils {
    * @returns GeoJSON 图层 ID 集合
    */
   getGeoJsonLayerIds(clearType: ClearType = 'all'): Set<string> {
-    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager')
-    return this.#geoJsonManager!.getGeoJsonLayerIds(clearType)
+    this.#checkManager(this.#geoJsonManager, 'GeoJsonManager');
+    return this.#geoJsonManager!.getGeoJsonLayerIds(clearType);
   }
 
   // ===================== 图层操作 =====================
   /**
    * 监听点击事件
    */
-  clickLayer(callback: (pickedObject: object) => void) {
+  clickLayer(callback: (pickedObject: ClickObject) => void) {
     const handler = new ScreenSpaceEventHandler(this.getViewer()?.scene.canvas);
-    handler.setInputAction((clickEvent: {position: Cartesian2}) => {
+    handler.setInputAction((clickEvent: { position: Cartesian2 }) => {
       // 在点击位置进行拾取
-      const pickedObject = CesiumUtilsSingleton.getViewer()?.scene.pick(clickEvent.position);
+      const pickedObject = CesiumUtilsSingleton.getViewer()?.scene.pick(
+        clickEvent.position
+      );
       callback(pickedObject);
     }, ScreenSpaceEventType.LEFT_CLICK);
   }
@@ -422,9 +480,12 @@ export class CesiumUtils {
    * @param target - 目标位置 [经度, 纬度, 高度] 或 Cartesian3
    * @param duration - 飞行持续时间（秒，默认 2）
    */
-  flyToTarget(target: [number, number, number] | Cartesian3, duration = 2): void {
-    this.#checkManager(this.#cameraController, 'CameraController')
-    this.#cameraController!.flyToTarget(target, duration)
+  flyToTarget(
+    target: [number, number, number] | Cartesian3,
+    duration = 2
+  ): void {
+    this.#checkManager(this.#cameraController, 'CameraController');
+    this.#cameraController!.flyToTarget(target, duration);
   }
 
   /**
@@ -432,8 +493,8 @@ export class CesiumUtils {
    * @param target - 目标位置 [经度, 纬度, 高度] 或 Cartesian3
    */
   viewToTarget(target: [number, number, number] | Cartesian3): void {
-    this.#checkManager(this.#cameraController, 'CameraController')
-    this.#cameraController!.viewToTarget(target)
+    this.#checkManager(this.#cameraController, 'CameraController');
+    this.#cameraController!.viewToTarget(target);
   }
 
   // ===================== 清除与资源管理 =====================
@@ -443,10 +504,10 @@ export class CesiumUtils {
    * @param clearType - 清除类型：'default'=默认资源，'custom'=自定义资源，'all'=所有资源（默认 'custom'）
    */
   clearAllResources(clearType: ClearType = 'custom'): void {
-    this.clearAllEntities(clearType)
-    this.clearAllPrimitives(clearType)
-    this.clearAllLayers(clearType)
-    this.clearAllGeoJsonLayers(clearType)
+    this.clearAllEntities(clearType);
+    this.clearAllPrimitives(clearType);
+    this.clearAllLayers(clearType);
+    this.clearAllGeoJsonLayers(clearType);
   }
 
   // ===================== getter 和 setter函数 =====================
@@ -456,7 +517,7 @@ export class CesiumUtils {
    * @returns Viewer 实例，如果未初始化则返回 null
    */
   getViewer(): Viewer | null {
-    return this.#viewerManager.getViewer()
+    return this.#viewerManager.getViewer();
   }
 
   // ===================== 辅助函数 =====================
@@ -467,7 +528,9 @@ export class CesiumUtils {
    * @returns Cartesian3 坐标
    */
   convertPosition(pos: Cartesian3 | [number, number, number]): Cartesian3 {
-    return Array.isArray(pos) ? Cartesian3.fromDegrees(pos[0], pos[1], pos[2] || 0) : pos
+    return Array.isArray(pos)
+      ? Cartesian3.fromDegrees(pos[0], pos[1], pos[2] || 0)
+      : pos;
   }
 
   /**
@@ -475,8 +538,10 @@ export class CesiumUtils {
    * @param positions - 位置坐标数组
    * @returns Cartesian3 坐标数组
    */
-  convertPositionArray(positions: (Cartesian3 | [number, number, number])[]): Cartesian3[] {
-    return positions.map((pos) => this.convertPosition(pos))
+  convertPositionArray(
+    positions: (Cartesian3 | [number, number, number])[]
+  ): Cartesian3[] {
+    return positions.map((pos) => this.convertPosition(pos));
   }
 
   /**
@@ -484,9 +549,12 @@ export class CesiumUtils {
    * @param pos 坐标
    * @returns 偏移量
    */
-  convertScreenPosition(pos: Cartesian3): {x: number, y: number} {
-    const windowCoord = SceneTransforms.wgs84ToWindowCoordinates(this.getViewer()!.scene, pos);
-    return {x: windowCoord.x, y: windowCoord.y}
+  convertScreenPosition(pos: Cartesian3): { x: number; y: number } {
+    const windowCoord = SceneTransforms.wgs84ToWindowCoordinates(
+      this.getViewer()!.scene,
+      pos
+    );
+    return { x: windowCoord.x, y: windowCoord.y };
   }
 
   // ===================== 私有方法 =====================
@@ -496,9 +564,9 @@ export class CesiumUtils {
    * @param manager - 管理器实例
    * @param managerName - 管理器名称（用于错误提示）
    */
-  #checkManager(manager: any, managerName: string): void {
+  #checkManager(manager: unknown, managerName: string): void {
     if (!manager) {
-      throw new Error(`${managerName} 未初始化，请先调用 initCesiumViewer()`)
+      throw new Error(`${managerName} 未初始化，请先调用 initCesiumViewer()`);
     }
   }
 }
@@ -506,4 +574,4 @@ export class CesiumUtils {
 /**
  * CesiumUtils 单例实例
  */
-export const CesiumUtilsSingleton = new CesiumUtils()
+export const CesiumUtilsSingleton = new CesiumUtils();

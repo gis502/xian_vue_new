@@ -1,4 +1,4 @@
 export enum DisasterType {
-    RAINSTORM = 'rainstorm',
-    EARTHQUAKE= 'earthquake'
+  RAINSTORM = 'rainstorm',
+  EARTHQUAKE = 'earthquake',
 }
