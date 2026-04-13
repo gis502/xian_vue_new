@@ -7,15 +7,17 @@
 
 <script lang="ts" setup>
   import { onBeforeMount, onMounted } from 'vue';
-  import config from '@/config/config.json';
-  import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
+
   import AdministrativeDivision from './AdministrativeDivision.vue';
   import { useViewerStore } from '@/stores/useViewerStore';
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
-  import type { GeoJsonFileType } from '@/types/cesium/GeoJsonFileType';
-  import { Color, ScreenSpaceEventType } from 'cesium';
-  import type { ClickObject } from '@/types/cesium/ClickObject';
+
+  import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { xiAn } from '@/assets';
+  import { Color } from 'cesium';
+  import type { GeoJsonFileType } from '@/types/cesium/GeoJsonFileType';
+  import config from '@/config/config.json';
+  import { useMap } from '@/hooks/map/useMap';
 
   onBeforeMount(() => {
     // 初始化为false
@@ -26,6 +28,7 @@
   });
 
   onMounted(async () => {
+    // 初始化Cesium
     await CesiumUtilsSingleton.initCesiumViewer({
       containerId: 'map-container',
       mark: {
@@ -38,63 +41,20 @@
       },
     });
 
+    // 设置状态
     useViewerStore().setViewerLoadingCompleted(true);
 
     // 注册全局点击监听器
-    CesiumUtilsSingleton.clickLayer((pickedObject: ClickObject) => {
-      if (
-        pickedObject &&
-        pickedObject.id &&
-        typeof pickedObject.id === 'string'
-      ) {
-        const matchResult = pickedObject.id.match(/\d+$/);
-        const id = matchResult ? parseInt(matchResult[0]) : -1;
-
-        // 当id改变时候，重置状态
-        if (
-          useLoadingInformationStore().getHiddenPointId() !== id &&
-          useLoadingInformationStore().getRiskPointId() !== id
-        ) {
-          useLoadingInformationStore().resetStatue();
-        }
-
-        // 点击对象
-        useLoadingInformationStore().setClickObject(pickedObject);
-
-        // 隐患点
-        if (pickedObject.id.startsWith(config.prefix.hiddenDangerPointId)) {
-          useLoadingInformationStore().setHiddenPointId(id);
-        }
-
-        // 风险点
-        else if (pickedObject.id.startsWith(config.prefix.riskPointId)) {
-          useLoadingInformationStore().setRiskPointId(id);
-        } else {
-          // 重置状态
-          useLoadingInformationStore().resetStatue();
-        }
-      } else {
-        // 重置状态
-        useLoadingInformationStore().resetStatue();
-      }
-    });
+    useMap().registerAndClickOnTheListener();
 
     // 注册全局滚轮监听器
-    CesiumUtilsSingleton.getViewer()!.scene.canvas.addEventListener(
-      'wheel',
-      () => {
-        // 设置最小最大高度
-        CesiumUtilsSingleton.setHeightLimits();
-      }
-    );
+    useMap().registerAScrollListener();
 
     // 当行政区超出页面时，自动拉回视角
-    CesiumUtilsSingleton.outOverView();
+    useMap().automaticallyAdjustThePerspective();
 
-    // 禁止全局默认双击事件
-    CesiumUtilsSingleton.getViewer()?.cesiumWidget.screenSpaceEventHandler.removeInputAction(
-      ScreenSpaceEventType.LEFT_DOUBLE_CLICK
-    );
+    // 禁止事件
+    useMap().prohibitedEvents();
 
     // 默认视角
     CesiumUtilsSingleton.viewToTarget(

@@ -34,28 +34,17 @@
   import { useViewerStore } from '@/stores/useViewerStore';
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
-  import { riskAreaIcon } from '@/assets';
+  import { useRiskPoint } from '@/hooks/rain-earthquake/useRiskPoint';
 
   const riskPoints = ref<Point[]>([]);
 
-  const informationBoxTitle = '风险区域';
+  // 信息框相关配置
   const offsetX = ref(0);
   const offsetY = ref(0);
   const riskPointDetail = ref<Point>();
 
-  const field = {
-    riskName: '风险区名称',
-    unitCode: '统一编号',
-    housing: '住房（间）',
-    permanentPopulation: '常住人口（人）',
-    residentCounts: '居民户数（户）',
-    riskProperty: '威胁财产（万元）',
-    inspectorName: '巡查员姓名',
-    inspectorTele: '巡查员手机号',
-    position: '位置',
-    lon: '经度',
-    lat: '纬度',
-  };
+  // 获取钩子函数
+  const { informationBoxTitle, field, getDisasterIcon } = useRiskPoint();
 
   $api.riskSpots.getBasePoins().then((res) => {
     riskPoints.value = res.data;
@@ -98,12 +87,6 @@
       }
     }
   );
-</script>
-
-<script lang="ts">
-  function getDisasterIcon(): string {
-    return riskAreaIcon;
-  }
 </script>
 
 <style scoped></style>

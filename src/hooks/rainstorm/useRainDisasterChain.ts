@@ -4,7 +4,7 @@ import { HiddenPointType } from '@/types/common/DisasterType';
 import type { PaginationType } from '@/types/common/PaginationType';
 
 // 灾害链影响点列表钩子函数
-export function useRainDisasterChain() {
+export const useRainDisasterChain = () => {
   // 搜索条件
   const conditions = ref({
     tableData: '',
@@ -70,4 +70,4 @@ export function useRainDisasterChain() {
     changeConditions,
     changeCurrentPage,
   };
-}
+};

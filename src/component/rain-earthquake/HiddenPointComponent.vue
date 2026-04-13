@@ -38,32 +38,23 @@
   import { useViewerStore } from '@/stores/useViewerStore';
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
-  import {
-    debrisFlowIcon,
-    flashFloodIcon,
-    landslideIcon,
-    waterLoggingIcon,
-  } from '@/assets';
+  import { useHiddenPoint } from '@/hooks/rain-earthquake/useHiddenPoint';
 
+  // 接收父组件传递的参数
   const props = defineProps<{
     disasterType: DisasterType;
   }>();
 
+  // 基本隐患点数据
   const baseHiddenPoints = ref<Point[]>([]);
-
+  // 信息框相关字段
   const informationBoxTitle = ref('');
   const offsetX = ref(0);
   const offsetY = ref(0);
   const hiddenDangerPointDetail = ref<Point>();
 
-  const field = {
-    fieldCode: '野外编号',
-    disasterName: '灾害点名称',
-    position: '位置',
-    disasterType: '灾害类型',
-    scaleGrade: '规模等级',
-    riskGrade: '风险等级',
-  };
+  // 获取钩子函数
+  const { field, getDisasterIcon } = useHiddenPoint();
 
   $api.hiddenDangerSpots.getBasePoins(props.disasterType).then((res) => {
     baseHiddenPoints.value = res.data;
@@ -111,22 +102,4 @@
     }
   );
 </script>
-
-<script lang="ts">
-  function getDisasterIcon(disasterType?: string): string {
-    switch (disasterType) {
-      case '滑坡':
-        return landslideIcon;
-      case '泥石流':
-        return debrisFlowIcon;
-      case '内涝':
-        return waterLoggingIcon;
-      case '山洪':
-        return flashFloodIcon;
-      default:
-        throw new Error(`未知的灾害类型: ${disasterType}`);
-    }
-  }
-</script>
-
 <style scoped></style>

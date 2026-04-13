@@ -7,7 +7,7 @@ import {
 } from '@/assets';
 
 // 引入图例钩子函数
-export function useRainLegend() {
+export const useRainLegend = () => {
   // 图例数据
   const legendList = [
     { name: '滑坡隐患点', link: landslideIcon },
@@ -18,4 +18,4 @@ export function useRainLegend() {
   ];
 
   return { legendList };
-}
+};
