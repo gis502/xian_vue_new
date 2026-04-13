@@ -42,7 +42,6 @@
 
     // 注册全局点击监听器
     CesiumUtilsSingleton.clickLayer((pickedObject: ClickObject) => {
-      console.log('点击对象：', pickedObject);
       if (
         pickedObject &&
         pickedObject.id &&
