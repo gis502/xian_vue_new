@@ -4,37 +4,39 @@
 </template>
 
 <script lang="ts" setup>
-  import BaQiiao from '@/assets/json/BaQiao.json';
-  import BeiLin from '@/assets/json/BeiLin.json';
-  import ChangAn from '@/assets/json/ChangAn.json';
-  import GaoLing from '@/assets/json/GaoLing.json';
-  import HuYi from '@/assets/json/HuYi.json';
-  import LanTian from '@/assets/json/LanTian.json';
-  import LianHu from '@/assets/json/LianHu.json';
-  import LinTong from '@/assets/json/LinTong.json';
-  import WeiYang from '@/assets/json/WeiYang.json';
-  import XinCheng from '@/assets/json/XinCheng.json';
-  import YanLiang from '@/assets/json/YanLiang.json';
-  import YanTa from '@/assets/json/YanTa.json';
-  import ZhouZhi from '@/assets/json/ZhouZhi.json';
+  import {
+    baQiao,
+    beiLin,
+    changAn,
+    gaoLing,
+    huYi,
+    lanTian,
+    lianHu,
+    linTong,
+    weiYang,
+    xinCheng,
+    yanLiang,
+    yanTa,
+    zhouZhi,
+  } from '@/assets';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { Color } from 'cesium';
   import { onMounted } from 'vue';
 
   const areas = [
-    BaQiiao,
-    BeiLin,
-    ChangAn,
-    GaoLing,
-    HuYi,
-    LanTian,
-    LianHu,
-    LinTong,
-    WeiYang,
-    XinCheng,
-    YanLiang,
-    YanTa,
-    ZhouZhi,
+    baQiao,
+    beiLin,
+    changAn,
+    gaoLing,
+    huYi,
+    lanTian,
+    lianHu,
+    linTong,
+    weiYang,
+    xinCheng,
+    yanLiang,
+    yanTa,
+    zhouZhi,
   ];
   const areasId = [
     'baqiao',

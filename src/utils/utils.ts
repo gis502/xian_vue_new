@@ -238,4 +238,18 @@ export const Utils = {
 
     return [newX, newY];
   },
+
+  /**
+   * 将数组拆分为指定大小的子数组
+   * @param {T[]} arr - 要拆分的数组
+   * @param {number} [size=2] - 子数组的大小
+   * @returns {T[][]} 拆分后的子数组
+   */
+  chunkArray: <T>(arr: T[], size: number = 2): T[][] => {
+    const result = [];
+    for (let i = 0; i < arr.length; i += size) {
+      result.push(arr.slice(i, i + size));
+    }
+    return result;
+  },
 };

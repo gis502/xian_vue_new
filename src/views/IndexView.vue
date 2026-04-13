@@ -6,7 +6,7 @@
       :style="{ 'background-image': `url(${backgroundImage})` }"
     >
       <div class="logo-img">
-        <img :src="mainLogo" alt="西安应急智慧logo" id="main_logo" />
+        <img :src="mainLogoImage" alt="西安应急智慧logo" id="main_logo" />
       </div>
       <div class="nav-list">
         <router-link
@@ -30,8 +30,7 @@
 <script setup lang="ts">
   import { useViewerStore } from '@/stores/useViewerStore';
   import { RouterView, useRoute } from 'vue-router';
-  import mainLogo from '@/assets/images/main-logo.png';
-  import backgroundImage from '@/assets/images/background-image.png';
+  import { backgroundImage, mainLogoImage } from '@/assets';
 
   useViewerStore().setViewerLoadingCompleted(true);
 

@@ -12,10 +12,10 @@
   import AdministrativeDivision from './AdministrativeDivision.vue';
   import { useViewerStore } from '@/stores/useViewerStore';
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
-  import xiAnGeoJSON from '@/assets/json/XiAn.json';
   import type { GeoJsonFileType } from '@/types/cesium/GeoJsonFileType';
   import { Color, ScreenSpaceEventType } from 'cesium';
   import type { ClickObject } from '@/types/cesium/ClickObject';
+  import { xiAn } from '@/assets';
 
   onBeforeMount(() => {
     // 初始化为false
@@ -30,7 +30,7 @@
       containerId: 'map-container',
       mark: {
         include: true,
-        geoJson: xiAnGeoJSON as GeoJsonFileType,
+        geoJson: xiAn as GeoJsonFileType,
         color: Color.BLACK.withAlpha(0.8),
         border: {
           width: 3,

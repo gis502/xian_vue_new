@@ -29,12 +29,12 @@
   import { $api } from '@/api/api.ts';
   import type { Point } from '@/types/base/Point';
   import LoadingPoints from '@/component/rain-earthquake/LoadingPoints.vue';
-  import riskArea from '@/assets/images/icon/risk-area.png';
   import config from '@/config/config.json';
   import InformationBox from '@/component/common/InformationBox.vue';
   import { useViewerStore } from '@/stores/useViewerStore';
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
+  import { riskAreaIcon } from '@/assets';
 
   const riskPoints = ref<Point[]>([]);
 
@@ -102,7 +102,7 @@
 
 <script lang="ts">
   function getDisasterIcon(): string {
-    return riskArea;
+    return riskAreaIcon;
   }
 </script>
 

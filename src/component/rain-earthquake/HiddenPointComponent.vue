@@ -33,15 +33,17 @@
   import { $api } from '@/api/api.ts';
   import type { Point } from '@/types/base/Point';
   import LoadingPoints from '@/component/rain-earthquake/LoadingPoints.vue';
-  import landslide from '@/assets/images/icon/landslide.png';
-  import debrisFlow from '@/assets/images/icon/debris-flow.png';
-  import flashFlood from '@/assets/images/icon/flash-flood.png';
-  import waterlogging from '@/assets/images/icon/waterlogging.png';
   import config from '@/config/config.json';
   import InformationBox from '@/component/common/InformationBox.vue';
   import { useViewerStore } from '@/stores/useViewerStore';
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
+  import {
+    debrisFlowIcon,
+    flashFloodIcon,
+    landslideIcon,
+    waterLoggingIcon,
+  } from '@/assets';
 
   const props = defineProps<{
     disasterType: DisasterType;
@@ -114,13 +116,13 @@
   function getDisasterIcon(disasterType?: string): string {
     switch (disasterType) {
       case '滑坡':
-        return landslide;
+        return landslideIcon;
       case '泥石流':
-        return debrisFlow;
+        return debrisFlowIcon;
       case '内涝':
-        return waterlogging;
+        return waterLoggingIcon;
       case '山洪':
-        return flashFlood;
+        return flashFloodIcon;
       default:
         throw new Error(`未知的灾害类型: ${disasterType}`);
     }
