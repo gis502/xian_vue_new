@@ -4,9 +4,9 @@ import type { DisasterType } from "@/types/common/DisasterType"
 import httpInstance from "@/utils/request/http"
 
 /**
- * 获取隐患点数据
- * @param disasterType 灾害类型
- * @returns 隐患点数据
+ * 获取隐患点基础数据
+ * @param disasterType - 灾害类型
+ * @returns 隐患点数据数组
  */
 export const getBasePoins = (disasterType: DisasterType): Promise<ApiResponse<XianHiddenDangerSpots[]>> => {
     return httpInstance.get('/hidden-danger-spots/base-points', {
@@ -18,7 +18,7 @@ export const getBasePoins = (disasterType: DisasterType): Promise<ApiResponse<Xi
 
 /**
  * 根据id获取隐患点详情
- * @param id 隐患点id
+ * @param id - 隐患点id
  * @returns 隐患点详情
  */
 export const getPointDetailById = (id: number): Promise<ApiResponse<XianHiddenDangerSpots>> => {

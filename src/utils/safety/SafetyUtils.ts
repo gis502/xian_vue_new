@@ -12,9 +12,14 @@ const SM4_MODE = SM4.constants.ECB;
 const SM4_INPUT_ENCODING = 'utf8';
 const SM4_OUTPUT_ENCODING = 'hex';
 
+/**
+ * 安全工具类
+ * 提供SM2/SM4加密解密功能
+ */
 export const SafetyUtils = {
   /**
    * 获取SM2公钥
+   * @returns SM2公钥
    */
   getSm2PublicKey: async (): Promise<string> => {
     const cryptStore = useCryptStore();
@@ -32,7 +37,8 @@ export const SafetyUtils = {
   },
 
   /**
-   * 生成随机SM4密钥（16字节=32位十六进制字符串）
+   * 生成随机SM4密钥（16字节）
+   * @returns SM4密钥
    */
   generateSm4Key: (): string => {
     return SafetyUtils._generateRandomHex(16);
@@ -40,6 +46,9 @@ export const SafetyUtils = {
 
   /**
    * SM2非对称加密（公钥加密）
+   * @param data - 待加密数据
+   * @param publicKey - 公钥（可选）
+   * @returns 加密后的数据
    */
   sm2Encrypt: async (
     data: object | string,
@@ -65,6 +74,9 @@ export const SafetyUtils = {
 
   /**
    * SM2非对称解密（私钥解密）
+   * @param data - 待解密数据
+   * @param privateKey - 私钥
+   * @returns 解密后的数据
    */
   sm2Decrypt: async (data: string, privateKey: string): Promise<string> => {
     try {
@@ -81,6 +93,9 @@ export const SafetyUtils = {
 
   /**
    * SM4对称加密（ECB模式）
+   * @param key - 密钥
+   * @param data - 待加密数据
+   * @returns 加密后的数据
    */
   sm4Encrypt: (key: string, data: object | string): string => {
     try {
@@ -98,6 +113,9 @@ export const SafetyUtils = {
 
   /**
    * SM4对称解密（ECB模式）
+   * @param key - 密钥
+   * @param encryptedData - 待解密数据
+   * @returns 解密后的数据
    */
   sm4Decrypt: (key: string, encryptedData: string): object | string => {
     try {
@@ -121,6 +139,9 @@ export const SafetyUtils = {
 
   /**
    * 加密FormData中的普通字段
+   * @param key - 密钥
+   * @param formData - 表单数据
+   * @returns 加密后的表单数据
    */
   encryptFormData: (key: string, formData: FormData): FormData => {
     const encryptedFormData = new FormData();
@@ -141,6 +162,8 @@ export const SafetyUtils = {
 
   /**
    * 生成指定长度的随机十六进制字符串
+   * @param length - 长度
+   * @returns 随机十六进制字符串
    */
   _generateRandomHex: (length: number): string => {
     const uint8Array = new Uint8Array(length);

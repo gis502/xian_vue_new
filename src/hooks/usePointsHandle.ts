@@ -10,11 +10,12 @@ import {
 
 /**
  * 公共批量处理点钩子函数
+ * @returns 添加点的方法
  */
 export const usePointsHandle = () => {
   /**
-   * 添加点
-   * @param points - 点数据
+   * 批量添加点
+   * @param points - 点数据数组
    * @param getDisasterIcon - 获取灾害图标的函数
    * @param prefix - 前缀
    * @returns 点的ID列表

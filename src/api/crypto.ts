@@ -3,8 +3,8 @@ import type { ApiResponse } from '@/types/ApiResponse'
 import httpInstance from '@/utils/request/http'
 
 /**
- * 获取sm2加密公钥
- * @returns
+ * 获取SM2加密公钥
+ * @returns SM2公钥响应
  */
 export const getSm2PublicKey = (): Promise<ApiResponse<Sm2PublicKeyResponse>> => {
   return httpInstance.get('/crypto/sm2/public-key')

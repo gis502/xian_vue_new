@@ -36,6 +36,12 @@ export const Utils = {
     };
   },
 
+  /**
+   * 日期格式化函数
+   * @param format - 格式化字符串（支持YYYY、MM、DD、HH、mm、ss等）
+   * @param date - 日期对象，默认为当前时间
+   * @returns 格式化后的日期字符串
+   */
   formatDate: (format: string, date: Date = new Date()): string => {
     // 基础时间数据
     const year = date.getFullYear();

@@ -1,9 +1,6 @@
-# basic_template_not_login_front
-开发基本模版——前端
-# basic_template_not_login_front
-
-## 项目介绍
-`basic_template_not_login_front` 是一个包含前端的基础开发模板，旨在为快速搭建Web应用提供完整的技术栈支持。项目前端基于Vue 3 + TypeScript + Element Plus构建，可直接作为中小型Web项目的开发起点。
+# xian_vue_new
+西安项目前端
+# xian_vue_new
 
 ## 开发工具说明
 1. 使用vscode完成前端代码撰写

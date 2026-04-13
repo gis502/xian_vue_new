@@ -3,8 +3,14 @@ import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
 import { ScreenSpaceEventType } from 'cesium';
 import type { ClickObject } from '@/types/cesium/ClickObject';
 import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
+/**
+ * 地图交互相关钩子函数
+ * @returns 注册监听器和视角控制方法
+ */
 export const useMap = () => {
-  // 注册全局点击监听器
+  /**
+   * 注册全局点击监听器
+   */
   const registerAndClickOnTheListener = () => {
     CesiumUtilsSingleton.clickLayer((pickedObject: ClickObject) => {
       if (
@@ -45,7 +51,9 @@ export const useMap = () => {
     });
   };
 
-  // 注册全局滚轮监听器
+  /**
+   * 注册全局滚轮监听器
+   */
   const registerAScrollListener = () => {
     CesiumUtilsSingleton.getViewer()!.scene.canvas.addEventListener(
       'wheel',
@@ -56,12 +64,16 @@ export const useMap = () => {
     );
   };
 
-  // 当行政区超出页面时，自动拉回视角
+  /**
+   * 当行政区超出页面时，自动拉回视角
+   */
   const automaticallyAdjustThePerspective = () => {
     CesiumUtilsSingleton.outOverView();
   };
 
-  // 禁止事件
+  /**
+   * 禁止默认事件
+   */
   const prohibitedEvents = () => {
     // 禁止全局默认双击事件
     CesiumUtilsSingleton.getViewer()?.cesiumWidget.screenSpaceEventHandler.removeInputAction(

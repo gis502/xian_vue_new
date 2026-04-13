@@ -15,6 +15,10 @@ declare module 'axios' {
   }
 }
 
+/**
+ * Axios HTTP请求实例
+ * 包含请求/响应拦截器，支持SM2/SM4加密解密
+ */
 const httpInstance = axios.create({
   baseURL: configJson.apiBaseUrl,
   timeout: 15000, // 增加超时时间

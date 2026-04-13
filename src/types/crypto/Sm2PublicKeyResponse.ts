@@ -1,6 +1,7 @@
+/**
+ * SM2公钥响应接口
+ */
 export interface Sm2PublicKeyResponse {
-  /**
-   * 公钥
-   */
+  /** SM2公钥 */
   publicKey: string;
 }

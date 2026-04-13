@@ -1,9 +1,18 @@
 import { riskAreaIcon } from '@/assets';
 
+/**
+ * 风险点相关钩子函数
+ * @returns 信息框标题、字段映射和获取图标方法
+ */
 export const useRiskPoint = () => {
-  // 信息框标题
+  /**
+   * 信息框标题
+   */
   const informationBoxTitle = '风险区域';
 
+  /**
+   * 字段映射配置
+   */
   const field = {
     riskName: '风险区名称',
     unitCode: '统一编号',
@@ -18,6 +27,10 @@ export const useRiskPoint = () => {
     lat: '纬度',
   };
 
+  /**
+   * 获取风险点图标
+   * @returns 图标路径
+   */
   function getDisasterIcon(): string {
     return riskAreaIcon;
   }
