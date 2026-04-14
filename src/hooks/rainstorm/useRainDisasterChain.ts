@@ -2,6 +2,8 @@ import { ref } from 'vue';
 import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots';
 import type { PaginationType } from '@/types/common/PaginationType';
 import { PointType } from '@/types/common/DisasterType';
+import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
+import config from '@/config/config.json';
 
 /**
  * 暴雨灾害链影响点列表钩子函数
@@ -136,6 +138,52 @@ export const useRainDisasterChain = () => {
     },
   ];
 
+  /**
+   * 右侧按钮信息
+   */
+  const rightButtonInfo = [
+    {
+      name: '暴雨下载',
+      callback: () => {
+        console.log('暴雨下载');
+      },
+    },
+    {
+      name: '图件下载',
+      callback: () => {
+        console.log('图件下载');
+      },
+    },
+    {
+      name: '雷达云图',
+      callback: () => {
+        console.log('雷达云图');
+      },
+    },
+    {
+      name: '信息表格',
+      callback: () => {
+        console.log('信息表格');
+      },
+    },
+    {
+      name: '场景重置',
+      callback: () => {
+        CesiumUtilsSingleton.clearAllResources('custom');
+      },
+      executeOnce: true,
+    },
+    {
+      name: '视角重置',
+      callback: () => {
+        CesiumUtilsSingleton.flyToTarget(
+          config.defaultPosition as [number, number, number]
+        );
+      },
+      executeOnce: true,
+    },
+  ];
+
   // 把所有需要用到的数据/方法 return 出去
   return {
     conditions,
@@ -144,6 +192,7 @@ export const useRainDisasterChain = () => {
     tableColumns,
     paginationConfig,
     leftButtonInfo,
+    rightButtonInfo,
     changeConditions,
     changeCurrentPage,
   };

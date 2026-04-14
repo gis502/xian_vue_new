@@ -21,6 +21,9 @@
 
     <!-- 左侧按钮组件 -->
     <LeftButtonComponent :button-list="leftButtonInfo" />
+
+    <!-- 右侧按钮组件 -->
+    <RightButtonComponent :button-list="rightButtonInfo" />
   </div>
 </template>
 
@@ -29,6 +32,7 @@
   import DisasterChainPointComponent from '@/component/rain-earthquake/DisasterChainPointComponent.vue';
   import LeftButtonComponent from '@/component/rain-earthquake/LeftButtonComponent.vue';
   import LegendComponent from '@/component/rain-earthquake/LegendComponent.vue';
+  import RightButtonComponent from '@/component/rain-earthquake/RightButtonComponent.vue';
   import { useRainDisasterChain } from '@/hooks/rainstorm/useRainDisasterChain';
   import { useRainLegend } from '@/hooks/rainstorm/useRainLegend';
   import { DisasterType } from '@/types/common/DisasterType.ts';
@@ -44,6 +48,7 @@
     tableColumns,
     paginationConfig,
     leftButtonInfo,
+    rightButtonInfo,
     changeConditions,
     changeCurrentPage,
   } = useRainDisasterChain();
