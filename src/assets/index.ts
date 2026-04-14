@@ -11,6 +11,10 @@ export { default as riskAreaIcon } from '@/assets/images/icon/risk-area.png';
 export { default as backgroundImage } from '@/assets/images/background-image.png';
 export { default as logoImage } from '@/assets/images/logo.png';
 export { default as mainLogoImage } from '@/assets/images/main-logo.png';
+export { default as leftBlueButton } from '@/assets/images/left-blue-button.png';
+export { default as leftOrangeButton } from '@/assets/images/left-orange-button.png';
+export { default as rightBlueButton } from '@/assets/images/right-blue-button.png';
+export { default as rightOrangeButton } from '@/assets/images/right-orange-button.png';
 
 // json
 export { default as baQiao } from '@/assets/json/BaQiao.json';

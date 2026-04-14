@@ -1,10 +1,12 @@
 <template>
   <div>
+    <!-- 基础组件 -->
     <BasicComponent
       :disaster-type="DisasterType.RAINSTORM"
       :key="route.fullPath"
     />
 
+    <!-- 灾害链影响列表组件 -->
     <DisasterChainPointComponent
       :select-options="selectOptions"
       :table-data-list="tableDatas"
@@ -14,13 +16,18 @@
       @change-current-page="changeCurrentPage"
     />
 
+    <!-- 图例组件 -->
     <LegendComponent :legend-list="legendList" :cols-num="2" />
+
+    <!-- 左侧按钮组件 -->
+    <LeftButtonComponent :button-list="leftButtonInfo" />
   </div>
 </template>
 
 <script setup lang="ts">
   import BasicComponent from '@/component/rain-earthquake/BasicComponent.vue';
   import DisasterChainPointComponent from '@/component/rain-earthquake/DisasterChainPointComponent.vue';
+  import LeftButtonComponent from '@/component/rain-earthquake/LeftButtonComponent.vue';
   import LegendComponent from '@/component/rain-earthquake/LegendComponent.vue';
   import { useRainDisasterChain } from '@/hooks/rainstorm/useRainDisasterChain';
   import { useRainLegend } from '@/hooks/rainstorm/useRainLegend';
@@ -36,6 +43,7 @@
     tableDatas,
     tableColumns,
     paginationConfig,
+    leftButtonInfo,
     changeConditions,
     changeCurrentPage,
   } = useRainDisasterChain();

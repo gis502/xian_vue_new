@@ -169,7 +169,7 @@
     padding: 15px;
     border-radius: 2px;
     z-index: 1000;
-    width: 550px;
+    width: 500px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     font-size: 14px;
     border: 1px solid rgba(0, 225, 255, 0.5);

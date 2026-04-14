@@ -54,20 +54,74 @@ export const useEarthquakeDisasterChain = () => {
    * 修改搜索条件
    * @param value - 新的搜索条件
    */
-  function changeConditions(value: {
+  const changeConditions = (value: {
     tableData: string;
     hiddenPoint: PointType;
-  }): void {
+  }): void => {
     conditions.value = value;
-  }
+  };
 
   /**
    * 修改页码
    * @param value - 新的页码
    */
-  function changeCurrentPage(value: number) {
+  const changeCurrentPage = (value: number) => {
     paginationConfig.value.currentPage = value;
-  }
+  };
+
+  /**
+   * 左侧按钮信息
+   */
+  const leftButtonInfo = [
+    {
+      name: '周边分析',
+      callback: () => {
+        console.log('周边分析');
+      },
+    },
+    {
+      name: '关联分析',
+      callback: () => {
+        console.log('关联分析');
+      },
+    },
+    {
+      name: '次生衍生灾害链分析',
+      callback: () => {
+        console.log('次生衍生灾害链分析');
+      },
+    },
+    {
+      name: '历史相似性分析',
+      callback: () => {
+        console.log('历史相似性分析');
+      },
+    },
+    {
+      name: '灾害链模型库测试',
+      callback: () => {
+        console.log('灾害链模型库测试');
+      },
+    },
+    {
+      name: '承灾体信息提取',
+      callback: () => {
+        console.log('承灾体信息提取');
+      },
+    },
+    {
+      name: '地震滑坡堰塞湖泥石流(7级)',
+      callback: () => {
+        console.log('地震滑坡堰塞湖泥石流(7级)');
+      },
+    },
+    {
+      name: '地震滑坡堰塞湖泥石流(8级)',
+      callback: () => {
+        console.log('地震滑坡堰塞湖泥石流(8级)');
+      },
+    },
+  ];
 
   // 把所有需要用到的数据/方法 return 出去
   return {
@@ -76,6 +130,7 @@ export const useEarthquakeDisasterChain = () => {
     tableDatas,
     tableColumns,
     paginationConfig,
+    leftButtonInfo,
     changeConditions,
     changeCurrentPage,
   };
