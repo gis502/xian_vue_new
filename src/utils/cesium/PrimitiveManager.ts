@@ -122,6 +122,44 @@ export class PrimitiveManager {
     return this.#getTargetIdsByType(clearType);
   }
 
+  /**
+   * 批量显示或隐藏Primitive
+   * @param ids - Primitive ID 数组
+   * @param visible - 是否显示
+   */
+  batchTogglePrimitives(ids: string[], visible: boolean): void {
+    const uniquePrimitives = new Set<Primitive | BillboardCollection>();
+
+    for (const id of ids) {
+      const primitive = this.getPrimitiveById(id);
+      if (primitive) {
+        uniquePrimitives.add(primitive);
+      } else {
+        console.warn(`Primitive ID "${id}" 不存在，无法设置显示`);
+      }
+    }
+
+    for (const primitive of uniquePrimitives) {
+      primitive.show = visible;
+    }
+  }
+
+  /**
+   * 批量显示Primitive
+   * @param ids - Primitive ID 数组
+   */
+  batchShowPrimitives(ids: string[]): void {
+    this.batchTogglePrimitives(ids, true);
+  }
+
+  /**
+   * 批量隐藏Primitive
+   * @param ids - Primitive ID 数组
+   */
+  batchHidePrimitives(ids: string[]): void {
+    this.batchTogglePrimitives(ids, false);
+  }
+
   // ===================== 私有方法 =====================
 
   #groupPrimitivesByType(primitives: PrimitiveOptions[]) {

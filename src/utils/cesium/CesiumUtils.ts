@@ -246,6 +246,34 @@ export class CesiumUtils {
     return this.#primitiveManager!.getPrimitiveIds(clearType);
   }
 
+  /**
+   * 批量切换Primitives可见性
+   * @param ids - Primitive ID 数组
+   * @param visible - 是否可见
+   */
+  batchTogglePrimitives(ids: string[], visible: boolean): void {
+    this.#checkManager(this.#primitiveManager, 'PrimitiveManager');
+    this.#primitiveManager!.batchTogglePrimitives(ids, visible);
+  }
+
+  /**
+   * 批量显示Primitives
+   * @param ids - Primitive ID 数组
+   */
+  batchShowPrimitives(ids: string[]): void {
+    this.#checkManager(this.#primitiveManager, 'PrimitiveManager');
+    this.#primitiveManager!.batchShowPrimitives(ids);
+  }
+
+  /**
+   * 批量隐藏Primitives
+   * @param ids - Primitive ID 数组
+   */
+  batchHidePrimitives(ids: string[]): void {
+    this.#checkManager(this.#primitiveManager, 'PrimitiveManager');
+    this.#primitiveManager!.batchHidePrimitives(ids);
+  }
+
   // ===================== 图层管理 =====================
 
   /**

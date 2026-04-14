@@ -6,7 +6,7 @@
   import { RouterView } from 'vue-router';
   import { ElLoading } from 'element-plus';
   import { watch } from 'vue';
-  import { useViewerStore } from './stores/useViewerStore';
+  import { useStatusStore } from './stores/useStatusStore';
 
   const loadingOption = {
     fullscreen: true,
@@ -16,7 +16,7 @@
   let loadingInstanve = ElLoading.service(loadingOption);
 
   watch(
-    () => useViewerStore().getViewerLoadingCompleted(),
+    () => useStatusStore().getAppLoadingCompleted(),
     (val) => {
       if (val) {
         loadingInstanve.close();

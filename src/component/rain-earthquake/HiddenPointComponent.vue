@@ -4,12 +4,12 @@
     <!-- 加载基础隐患点 -->
     <LoadingPoints
       v-if="
-        useViewerStore().getViewerLoadingCompleted() &&
-        baseHiddenPoints.length > 0
+        useStatusStore().getAppLoadingCompleted() && baseHiddenPoints.length > 0
       "
       :base-points="baseHiddenPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.hiddenDangerPointId"
+      :show-points="useStatusStore().getHiddenDangerPointShow()"
     />
 
     <!-- 显示信息框 -->
@@ -35,7 +35,7 @@
   import LoadingPoints from '@/component/rain-earthquake/LoadingPoints.vue';
   import config from '@/config/config.json';
   import InformationBox from '@/component/common/InformationBox.vue';
-  import { useViewerStore } from '@/stores/useViewerStore';
+  import { useStatusStore } from '@/stores/useStatusStore';
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { useHiddenPoint } from '@/hooks/rain-earthquake/useHiddenPoint';

@@ -7,11 +7,11 @@
     <!-- 隐患点组件 -->
     <HiddenPointComponent
       :disaster-type="props.disasterType"
-      v-if="useViewerStore().getViewerLoadingCompleted()"
+      v-if="useStatusStore().getAppLoadingCompleted()"
     />
 
     <!-- 风险点组件 -->
-    <RiskPointComponent v-if="useViewerStore().getViewerLoadingCompleted()" />
+    <RiskPointComponent v-if="useStatusStore().getAppLoadingCompleted()" />
   </div>
 </template>
 
@@ -20,7 +20,7 @@
   import type { DisasterType } from '@/types/common/DisasterType.ts';
   import HiddenPointComponent from './HiddenPointComponent.vue';
   import RiskPointComponent from './RiskPointComponent.vue';
-  import { useViewerStore } from '@/stores/useViewerStore';
+  import { useStatusStore } from '@/stores/useStatusStore';
 
   // 获取父组件传递德数据
   const props = defineProps<{

@@ -6,11 +6,14 @@
       type="primary"
       @click="changeStatus"
       circle
-      :title="`${btnStatus ? '关闭' : '打开'}灾害链影响点列表`"
-      >{{ btnStatus ? '-' : '+' }}</el-button
+      :title="`${useStatusStore().getDisasterChainPointShow() ? '关闭' : '打开'}灾害链影响点列表`"
+      >{{ useStatusStore().getDisasterChainPointShow() ? '-' : '+' }}</el-button
     >
   </div>
-  <div class="disaster-list-box" v-show="btnStatus">
+  <div
+    class="disaster-list-box"
+    v-show="useStatusStore().getDisasterChainPointShow()"
+  >
     <header class="table-title">
       <span>灾害链影响点列表</span>
     </header>
@@ -73,6 +76,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { useStatusStore } from '@/stores/useStatusStore';
   import type { Point } from '@/types/base/Point';
   import { PointType } from '@/types/common/DisasterType';
   import type { PaginationType } from '@/types/common/PaginationType';
@@ -94,11 +98,6 @@
     ): void;
     (e: 'changeCurrentPage', value: number): void;
   }>();
-
-  // ==================== 状态管理 ====================
-
-  // 按钮状态
-  const btnStatus: Ref<boolean> = ref(false);
 
   // 搜索条件
   const conditions: Ref<{ tableData: string; hiddenPoint: PointType }> = ref({
@@ -123,7 +122,9 @@
 
   // 切换面板显示状态
   const changeStatus = () => {
-    btnStatus.value = !btnStatus.value;
+    useStatusStore().setDisasterChainPointShow(
+      !useStatusStore().getDisasterChainPointShow()
+    );
   };
 
   // 上一页

@@ -10,7 +10,7 @@
       </div>
       <div class="nav-list">
         <router-link
-          @click="useViewerStore().setViewerLoadingCompleted(false)"
+          @click="useStatusStore().setAppLoadingCompleted(false)"
           v-for="(item, index) in topNavMap"
           :key="index"
           :to="{ name: item.name, query: item.query }"
@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-  import { useViewerStore } from '@/stores/useViewerStore';
+  import { useStatusStore } from '@/stores/useStatusStore';
   import { RouterView } from 'vue-router';
   import { backgroundImage, mainLogoImage } from '@/assets';
   import { useIndex } from '@/hooks/useIndex';

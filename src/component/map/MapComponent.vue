@@ -2,14 +2,14 @@
   <div class="map_container" id="map-container"></div>
 
   <!-- 行政区划 -->
-  <AdministrativeDivision v-if="useViewerStore().getViewerLoadingCompleted()" />
+  <AdministrativeDivision v-if="useStatusStore().getAppLoadingCompleted()" />
 </template>
 
 <script lang="ts" setup>
   import { onBeforeMount, onMounted } from 'vue';
 
   import AdministrativeDivision from './AdministrativeDivision.vue';
-  import { useViewerStore } from '@/stores/useViewerStore';
+  import { useStatusStore } from '@/stores/useStatusStore';
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
 
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
@@ -21,7 +21,7 @@
 
   onBeforeMount(() => {
     // 初始化为false
-    useViewerStore().setViewerLoadingCompleted(false);
+    useStatusStore().setAppLoadingCompleted(false);
 
     // 重置状态
     useLoadingInformationStore().resetStatue();
@@ -42,7 +42,7 @@
     });
 
     // 设置状态
-    useViewerStore().setViewerLoadingCompleted(true);
+    useStatusStore().setAppLoadingCompleted(true);
 
     // 注册全局点击监听器
     useMap().registerAndClickOnTheListener();

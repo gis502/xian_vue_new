@@ -1,6 +1,20 @@
 <!-- 图例组件 -->
 <template>
-  <div class="legend-box">
+  <!-- 控制按钮 -->
+  <div
+    class="control-box"
+    :style="{
+      bottom: `${useStatusStore().getLegendShow() ? 248 : 25}px`,
+    }"
+  >
+    <el-button
+      @click="changeStatus"
+      circle
+      :title="`${useStatusStore().getLegendShow() ? '关闭' : '打开'}图例`"
+      >{{ useStatusStore().getLegendShow() ? '-' : '+' }}</el-button
+    >
+  </div>
+  <div class="legend-box" v-show="useStatusStore().getLegendShow()">
     <div class="title-box">
       <header>图例</header>
     </div>
@@ -26,6 +40,7 @@
 </template>
 
 <script setup lang="ts">
+  import { useStatusStore } from '@/stores/useStatusStore';
   import { Utils } from '@/utils/utils';
   import { onMounted, ref, type Ref } from 'vue';
 
@@ -37,6 +52,11 @@
 
   // 处理后图例列表
   const finalLegendList: Ref<{ name: string; link: string }[][]> = ref([]);
+
+  // 切换图例显示状态
+  const changeStatus = () => {
+    useStatusStore().setLegendShow(!useStatusStore().getLegendShow());
+  };
 
   onMounted(() => {
     finalLegendList.value = Utils.chunkArray(props.legendList, props.colsNum);
@@ -56,6 +76,12 @@
     color: white;
     font-family: Arial, sans-serif;
     border: 1px solid rgba(0, 225, 255, 1);
+  }
+
+  .control-box {
+    position: absolute;
+    right: 30px;
+    z-index: 1001;
   }
 
   .title-box {

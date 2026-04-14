@@ -3,12 +3,11 @@
   <div>
     <!-- 加载风险点 -->
     <LoadingPoints
-      v-if="
-        useViewerStore().getViewerLoadingCompleted() && riskPoints.length > 0
-      "
+      v-if="useStatusStore().getAppLoadingCompleted() && riskPoints.length > 0"
       :base-points="riskPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.riskPointId"
+      :show-points="useStatusStore().getRiskPointShow()"
     />
 
     <!-- 显示信息框 -->
@@ -31,7 +30,7 @@
   import LoadingPoints from '@/component/rain-earthquake/LoadingPoints.vue';
   import config from '@/config/config.json';
   import InformationBox from '@/component/common/InformationBox.vue';
-  import { useViewerStore } from '@/stores/useViewerStore';
+  import { useStatusStore } from '@/stores/useStatusStore';
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { useRiskPoint } from '@/hooks/rain-earthquake/useRiskPoint';
