@@ -1,6 +1,6 @@
 import type { ApiResponse } from "@/types/ApiResponse"
 import type { XianHiddenDangerSpots } from "@/types/base/XianHiddenDangerSpots"
-import type { DisasterType } from "@/types/common/DisasterType"
+import type { DisasterType } from "@/types/common/DisasterType.ts"
 import httpInstance from "@/utils/request/http"
 
 /**

@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-  import { DisasterType } from '@/types/common/DisasterType';
+  import { DisasterType } from '@/types/common/DisasterType.ts';
   import { ref, watch } from 'vue';
   import { $api } from '@/api/api.ts';
   import type { Point } from '@/types/base/Point';

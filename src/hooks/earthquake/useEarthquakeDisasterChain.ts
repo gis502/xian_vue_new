@@ -7,7 +7,7 @@ import { PointType } from '@/types/common/DisasterType';
  * 暴雨灾害链影响点列表钩子函数
  * @returns 搜索条件、表格数据、分页配置及相关方法
  */
-export const useRainDisasterChain = () => {
+export const useEarthquakeDisasterChain = () => {
   /**
    * 搜索条件
    */
@@ -22,8 +22,7 @@ export const useRainDisasterChain = () => {
   const selectOptions = [
     { value: PointType.LANDSLIDE, label: '滑坡' },
     { value: PointType.DEBRIS_FLOW, label: '泥石流' },
-    { value: PointType.FLASH_FLOOD, label: '山洪' },
-    { value: PointType.WATER_LOGGING, label: '内涝' },
+    { value: PointType.RISK_AREA, label: '风险区' },
   ];
 
   /**

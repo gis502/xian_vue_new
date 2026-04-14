@@ -5,7 +5,6 @@
       :key="route.fullPath"
     />
 
-    <!-- 直接使用钩子返回的数据 -->
     <DisasterChainPointComponent
       :select-options="selectOptions"
       :table-data-list="tableDatas"
@@ -25,12 +24,14 @@
   import LegendComponent from '@/component/rain-earthquake/LegendComponent.vue';
   import { useRainDisasterChain } from '@/hooks/rainstorm/useRainDisasterChain';
   import { useRainLegend } from '@/hooks/rainstorm/useRainLegend';
-  import { DisasterType } from '@/types/common/DisasterType';
+  import { DisasterType } from '@/types/common/DisasterType.ts';
+  import { watch } from 'vue';
   import { useRoute } from 'vue-router';
 
   const route = useRoute();
 
   const {
+    conditions,
     selectOptions,
     tableDatas,
     tableColumns,
@@ -40,6 +41,15 @@
   } = useRainDisasterChain();
 
   const { legendList } = useRainLegend();
+
+  // 监听条件变化
+  watch(
+    conditions,
+    () => {
+      console.log('条件改变');
+    },
+    { deep: true }
+  );
 </script>
 
 <style scoped></style>

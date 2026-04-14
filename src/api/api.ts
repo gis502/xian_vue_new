@@ -1,4 +1,4 @@
-import type { DisasterType } from '@/types/common/DisasterType'
+import type { DisasterType } from '@/types/common/DisasterType.ts'
 import { getSm2PublicKey } from './crypto'
 import { getBasePoins as getHiddenDangerBasePoints, getPointDetailById as getHiddenDangerPointDetailById} from './hidden-danger-spots'
 import { getBasePoins as getRiskBasePoints, getPointDetailById as getRiskPointDetailById} from './risk-spots'

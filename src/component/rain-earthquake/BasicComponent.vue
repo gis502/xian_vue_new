@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
   import MapComponent from '@/component/map/MapComponent.vue';
-  import type { DisasterType } from '@/types/common/DisasterType';
+  import type { DisasterType } from '@/types/common/DisasterType.ts';
   import HiddenPointComponent from './HiddenPointComponent.vue';
   import RiskPointComponent from './RiskPointComponent.vue';
   import { useViewerStore } from '@/stores/useViewerStore';

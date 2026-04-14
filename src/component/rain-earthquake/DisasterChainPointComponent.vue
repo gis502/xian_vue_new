@@ -74,13 +74,13 @@
 
 <script lang="ts" setup>
   import type { Point } from '@/types/base/Point';
-  import { HiddenPointType } from '@/types/common/DisasterType';
+  import { PointType } from '@/types/common/DisasterType';
   import type { PaginationType } from '@/types/common/PaginationType';
   import { ref, watch, computed, type Ref } from 'vue';
 
   // 接收父组件的参数
   const props = defineProps<{
-    selectOptions: { label: string; value: HiddenPointType }[];
+    selectOptions: { label: string; value: PointType }[];
     tableDataList: Point[];
     tableColumns: { title: string; key: string }[];
     pageOption: PaginationType;
@@ -90,7 +90,7 @@
   const emits = defineEmits<{
     (
       e: 'changeConditions',
-      value: { tableData: string; hiddenPoint: HiddenPointType }
+      value: { tableData: string; hiddenPoint: PointType }
     ): void;
     (e: 'changeCurrentPage', value: number): void;
   }>();
@@ -101,8 +101,10 @@
   const btnStatus: Ref<boolean> = ref(false);
 
   // 搜索条件
-  const conditions: Ref<{ tableData: string; hiddenPoint: HiddenPointType }> =
-    ref({ tableData: '', hiddenPoint: HiddenPointType.LANDSLIDE });
+  const conditions: Ref<{ tableData: string; hiddenPoint: PointType }> = ref({
+    tableData: '',
+    hiddenPoint: PointType.LANDSLIDE,
+  });
 
   // ==================== 计算属性 ====================
 
