@@ -10,6 +10,7 @@
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.hiddenDangerPointId"
       :show-points="useStatusStore().getHiddenDangerPointShow()"
+      :is-default="true"
     />
 
     <!-- 显示信息框 -->

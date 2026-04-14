@@ -18,12 +18,14 @@ export const usePointsHandle = () => {
    * @param points - 点数据数组
    * @param getDisasterIcon - 获取灾害图标的函数
    * @param prefix - 前缀
+   * @param isDefault - 是否为默认图元，默认false
    * @returns 点的ID列表
    */
   function addPoints(
     points: Point[],
     getDisasterIcon: (disasterType?: string) => string,
-    prefix: string
+    prefix: string,
+    isDefault: boolean = false
   ): string[] {
     // 设置加载配置
     const options: PrimitiveOptions[] = [];
@@ -48,7 +50,7 @@ export const usePointsHandle = () => {
           image: getDisasterIcon(point.disasterType),
           scale: 0.8,
           width: 40,
-          isDefault: false,
+          isDefault: isDefault,
           scaleByDistance: new NearFarScalar(500, 1, 5e5, 0.3),
           customProperties: {
             verticalOrigin: VerticalOrigin.BOTTOM,

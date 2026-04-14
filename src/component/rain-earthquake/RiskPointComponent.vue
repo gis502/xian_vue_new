@@ -8,6 +8,7 @@
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.riskPointId"
       :show-points="useStatusStore().getRiskPointShow()"
+      :is-default="true"
     />
 
     <!-- 显示信息框 -->

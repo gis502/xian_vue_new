@@ -197,7 +197,7 @@ export class CesiumUtils {
   }
 
   /**
-   * 批量添加 Primitive（优化版本）
+   * 批量添加 Primitive
    * - 按类型分组后批量创建，减少 scene.primitives.add 调用次数
    * - 同类型的多个实例合并到一个 Primitive 或 BillboardCollection 中
    * @param primitives - Primitive 配置选项数组
@@ -384,13 +384,12 @@ export class CesiumUtils {
 
   /**
    * 批量添加GeoJSON图层
-   * @param layerConfigs - 图层配置数组，每个元素包含 layerId、geojsonData、isDefault 和 options
+   * @param layerConfigs - 图层配置数组，每个元素包含 layerId、geojsonData 和 options
    */
   async batchAddGeoJsonLayers(
     layerConfigs: Array<{
       layerId: string;
       geojsonData: CustomizeGeoJsonDataSource;
-      isDefault?: boolean;
       options?: GeoJsonOptions;
     }>
   ): Promise<void> {

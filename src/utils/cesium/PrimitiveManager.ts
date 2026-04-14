@@ -103,7 +103,6 @@ export class PrimitiveManager {
    */
   clearAllPrimitives(clearType: 'default' | 'custom' | 'all' = 'custom'): void {
     const targetMap = this.#getTargetMapByType(clearType);
-
     targetMap.forEach((primitive) => {
       this.#viewer.scene.primitives.remove(primitive);
     });

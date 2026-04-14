@@ -19,9 +19,9 @@
     const layerConfigs = areasId.map((id, index) => ({
       layerId: id,
       geojsonData: areas[index],
-      isDefault: true,
       options: {
         showName: true,
+        isDefault: true,
         labelStyle: {
           labelText: areas[index].features[0].properties.name,
           center: [

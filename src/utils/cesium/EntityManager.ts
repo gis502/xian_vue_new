@@ -136,7 +136,6 @@ export class EntityManager {
    */
   clearAllEntities(clearType: 'default' | 'custom' | 'all' = 'custom'): void {
     const targetIds = this.#getTargetIdsByType(clearType);
-
     targetIds.forEach((id) => {
       const entity = this.#viewer.entities.getById(id);
       if (entity) this.#viewer.entities.remove(entity);

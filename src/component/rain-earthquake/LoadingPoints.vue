@@ -15,6 +15,7 @@
     getDisasterIcon: (disasterType?: string) => string;
     prefix: string;
     showPoints: boolean;
+    isDefault?: boolean;
   }>();
 
   // 点处理钩子
@@ -25,7 +26,8 @@
     const ids: string[] = pointsHandle.addPoints(
       props.basePoints,
       props.getDisasterIcon,
-      props.prefix
+      props.prefix,
+      props.isDefault
     );
 
     // 显示隐藏点
