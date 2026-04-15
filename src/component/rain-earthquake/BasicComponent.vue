@@ -7,11 +7,11 @@
     <!-- 隐患点组件 -->
     <HiddenPointComponent
       :disaster-type="props.disasterType"
-      v-if="useStatusStore().getAppLoadingCompleted()"
+      v-if="useStatusStore().appLoadingCompleted"
     />
 
     <!-- 风险点组件 -->
-    <RiskPointComponent v-if="useStatusStore().getAppLoadingCompleted()" />
+    <RiskPointComponent v-if="useStatusStore().appLoadingCompleted" />
   </div>
 </template>
 

@@ -7,15 +7,16 @@
   import { onMounted } from 'vue';
   import { usePointsHandle } from '@/hooks/usePointsHandle';
   import type { Point } from '@/types/base/Point';
-  import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
+  import type { LoadingResource } from '@/types/common/LoadingResourceType';
+  import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore';
 
   // 属性
   const props = defineProps<{
     basePoints: Point[];
     getDisasterIcon: (disasterType?: string) => string;
     prefix: string;
-    showPoints: boolean;
     isDefault?: boolean;
+    loadingResourceField?: LoadingResource;
   }>();
 
   // 点处理钩子
@@ -30,10 +31,11 @@
       props.isDefault
     );
 
-    // 显示隐藏点
-    if (!props.showPoints) {
-      CesiumUtilsSingleton.batchTogglePrimitives(ids, props.showPoints);
-    }
+    // 记录id
+    useLoadingResourceStore().addLoadingResource(
+      props.loadingResourceField!,
+      ids
+    );
   });
 </script>
 

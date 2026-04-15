@@ -2,7 +2,7 @@
   <div class="map_container" id="map-container"></div>
 
   <!-- 行政区划 -->
-  <AdministrativeDivision v-if="useStatusStore().getAppLoadingCompleted()" />
+  <AdministrativeDivision v-if="useStatusStore().appLoadingCompleted" />
 </template>
 
 <script lang="ts" setup>
@@ -21,7 +21,7 @@
 
   onBeforeMount(() => {
     // 初始化为false
-    useStatusStore().setAppLoadingCompleted(false);
+    useStatusStore().appLoadingCompleted = false;
 
     // 重置状态
     useLoadingInformationStore().resetStatue();
@@ -42,7 +42,7 @@
     });
 
     // 设置状态
-    useStatusStore().setAppLoadingCompleted(true);
+    useStatusStore().appLoadingCompleted = true;
 
     // 注册全局点击监听器
     useMap().registerAndClickOnTheListener();

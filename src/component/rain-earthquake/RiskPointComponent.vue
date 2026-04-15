@@ -3,12 +3,12 @@
   <div>
     <!-- 加载风险点 -->
     <LoadingPoints
-      v-if="useStatusStore().getAppLoadingCompleted() && riskPoints.length > 0"
+      v-if="useStatusStore().appLoadingCompleted && riskPoints.length > 0"
       :base-points="riskPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.riskPointId"
-      :show-points="useStatusStore().getRiskPointShow()"
       :is-default="true"
+      :loading-resource-field="LoadingResource.RISK_POINT"
     />
 
     <!-- 显示信息框 -->
@@ -35,6 +35,7 @@
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { useRiskPoint } from '@/hooks/rain-earthquake/useRiskPoint';
+  import { LoadingResource } from '@/types/common/LoadingResourceType';
 
   const riskPoints = ref<Point[]>([]);
 

@@ -3,14 +3,12 @@
   <div>
     <!-- 加载基础隐患点 -->
     <LoadingPoints
-      v-if="
-        useStatusStore().getAppLoadingCompleted() && baseHiddenPoints.length > 0
-      "
+      v-if="useStatusStore().appLoadingCompleted && baseHiddenPoints.length > 0"
       :base-points="baseHiddenPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.hiddenDangerPointId"
-      :show-points="useStatusStore().getHiddenDangerPointShow()"
       :is-default="true"
+      :loading-resource-field="LoadingResource.HIDDEN_DANGER_POINT"
     />
 
     <!-- 显示信息框 -->
@@ -36,10 +34,11 @@
   import LoadingPoints from '@/component/rain-earthquake/LoadingPoints.vue';
   import config from '@/config/config.json';
   import InformationBox from '@/component/common/InformationBox.vue';
-  import { useStatusStore } from '@/stores/useStatusStore';
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { useHiddenPoint } from '@/hooks/rain-earthquake/useHiddenPoint';
+  import { useStatusStore } from '@/stores/useStatusStore';
+  import { LoadingResource } from '@/types/common/LoadingResourceType';
 
   // 接收父组件传递的参数
   const props = defineProps<{

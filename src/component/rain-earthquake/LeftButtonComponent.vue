@@ -2,7 +2,7 @@
   <div
     class="left-button-box"
     :style="{
-      left: `${useStatusStore().getDisasterChainPointShow() ? 575 : 100}px`,
+      left: `${useStatusStore().uiComponents.disasterChainPointShow ? 575 : 100}px`,
     }"
   >
     <ul class="left-button-ul">

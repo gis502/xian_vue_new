@@ -16,7 +16,7 @@
   let loadingInstanve = ElLoading.service(loadingOption);
 
   watch(
-    () => useStatusStore().getAppLoadingCompleted(),
+    () => useStatusStore().appLoadingCompleted,
     (val) => {
       if (val) {
         loadingInstanve.close();

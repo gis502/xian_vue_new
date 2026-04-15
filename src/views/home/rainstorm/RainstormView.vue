@@ -24,11 +24,15 @@
 
     <!-- 右侧按钮组件 -->
     <RightButtonComponent :button-list="rightButtonInfo" />
+
+    <!-- 控制显示组件 -->
+    <ControlShowComponent :constrol-show-list="controlPanel" />
   </div>
 </template>
 
 <script setup lang="ts">
   import BasicComponent from '@/component/rain-earthquake/BasicComponent.vue';
+  import ControlShowComponent from '@/component/rain-earthquake/ControlShowComponent.vue';
   import DisasterChainPointComponent from '@/component/rain-earthquake/DisasterChainPointComponent.vue';
   import LeftButtonComponent from '@/component/rain-earthquake/LeftButtonComponent.vue';
   import LegendComponent from '@/component/rain-earthquake/LegendComponent.vue';
@@ -49,6 +53,7 @@
     paginationConfig,
     leftButtonInfo,
     rightButtonInfo,
+    controlPanel,
     changeConditions,
     changeCurrentPage,
   } = useRainDisasterChain();

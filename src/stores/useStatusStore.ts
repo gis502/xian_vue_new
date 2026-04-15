@@ -1,131 +1,89 @@
 import { defineStore } from 'pinia';
-import { type Ref, ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 /**
  * 全局状态管理
  * @returns 应用状态及相关方法
  */
 export const useStatusStore = defineStore('status', () => {
+  // ============================ 应用级状态 ================================
+
   /**
    * 应用加载完成状态
    */
-  const appLoadingCompleted: Ref<boolean> = ref(false);
+  const appLoadingCompleted = ref(false);
+
+  // ============================ UI 组件显示状态 ================================
 
   /**
-   * 显示行政区划
+   * UI 组件显示状态集合
    */
-  const showAdministrativeDivision = ref(true);
+  const uiComponents = reactive({
+    /** 图例显示状态 */
+    legendShow: true,
+    /** 灾情链影响点表格显示状态 */
+    disasterChainPointShow: false,
+  });
+
+  // ============================ 地图图层显示状态 ================================
 
   /**
-   * 灾情链影响点表格显示状态
+   * 地图基础图层显示状态
    */
-  const disasterChainPointShow = ref(false);
+  const mapLayers = reactive({
+    /** 显示行政区划 */
+    showAdministrativeDivision: true,
+    /** 隐患点显示状态 */
+    hiddenDangerPointShow: true,
+    /** 风险点显示状态 */
+    riskPointShow: true,
+  });
 
   /**
-   * 图例显示状态
+   * POI图层显示状态
    */
-  const legendShow = ref(true);
+  const poiLayers = reactive({
+    /** 显示医院 */
+    showHospital: false,
+    /** 显示危险源 */
+    showDangerSource: false,
+    /** 显示避难所 */
+    showRefugeeShelter: false,
+    /** 显示消防站 */
+    showFireStation: false,
+    /** 显示储备点 */
+    showReservePoint: false,
+    /** 显示学校 */
+    showSchool: false,
+    /** 显示人口网格 */
+    showPopulationGrid: false,
+    /** 显示地铁站 */
+    showSubwayStation: false,
+  });
 
   /**
-   * 隐患点显示状态
+   * 基础设施图层显示状态
    */
-  const hiddenDangerPointShow = ref(true);
-
-  /**
-   * 风险点显示状态
-   */
-  const riskPointShow = ref(true);
-
-  /**
-   * 获取应用加载完成状态
-   * @returns 加载完成状态
-   */
-  const getAppLoadingCompleted = () => appLoadingCompleted.value;
-  /**
-   * 设置应用加载完成状态
-   * @param value - 加载完成状态
-   */
-  const setAppLoadingCompleted = (value: boolean) => {
-    appLoadingCompleted.value = value;
-  };
-
-  /**
-   * 获取显示行政区划
-   * @returns 显示行政区划
-   */
-  const getShowAdministrativeDivision = () => showAdministrativeDivision.value;
-  /**
-   * 设置显示行政区划
-   * @param value - 显示行政区划
-   */
-  const setShowAdministrativeDivision = (value: boolean) => {
-    showAdministrativeDivision.value = value;
-  };
-
-  /**
-   * 获取灾情链影响点表格显示状态
-   * @returns 灾情链影像点表格显示状态
-   */
-  const getDisasterChainPointShow = () => disasterChainPointShow.value;
-  /**
-   * 设置灾情链影响点表格显示状态
-   * @param value - 灾情链影像点表格显示状态
-   */
-  const setDisasterChainPointShow = (value: boolean) => {
-    disasterChainPointShow.value = value;
-  };
-
-  /**
-   * 获取图例显示状态
-   * @returns 图例显示状态
-   */
-  const getLegendShow = () => legendShow.value;
-  /**
-   * 设置图例显示状态
-   * @param value - 图例显示状态
-   */
-  const setLegendShow = (value: boolean) => {
-    legendShow.value = value;
-  };
-
-  /**
-   * 获取隐患点显示状态
-   * @returns 隐患点显示状态
-   */
-  const getHiddenDangerPointShow = () => hiddenDangerPointShow.value;
-  /**
-   * 设置隐患点显示状态
-   * @param value - 隐患点显示状态
-   */
-  const setHiddenDangerPointShow = (value: boolean) => {
-    hiddenDangerPointShow.value = value;
-  };
-
-  /**
-   * 获取风险点显示状态
-   * @returns 风险点显示状态
-   */
-  const getRiskPointShow = () => riskPointShow.value;
-  /**
-   * 设置风险点显示状态
-   * @param value - 风险点显示状态
-   */
-  const setRiskPointShow = (value: boolean) => {
-    riskPointShow.value = value;
-  };
+  const infrastructureLayers = reactive({
+    /** 显示管网系统 */
+    showNetworkSystem: false,
+    /** 显示交通道路 */
+    showTrafficRoad: false,
+    /** 显示桥梁 */
+    showBridge: false,
+    /** 显示高速 */
+    showHighway: false,
+    /** 显示国道 */
+    showMainRoad: false,
+    /** 显示水库 */
+    showReservoir: false,
+  });
 
   return {
-    getAppLoadingCompleted,
-    setAppLoadingCompleted,
-    getShowAdministrativeDivision,
-    setShowAdministrativeDivision,
-    getDisasterChainPointShow,
-    setDisasterChainPointShow,
-    getLegendShow,
-    setLegendShow,
-    getHiddenDangerPointShow,
-    setHiddenDangerPointShow,
-    getRiskPointShow,
-    setRiskPointShow,
+    appLoadingCompleted,
+    uiComponents,
+    mapLayers,
+    poiLayers,
+    infrastructureLayers,
   };
 });

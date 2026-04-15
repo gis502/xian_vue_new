@@ -5,7 +5,8 @@
 
 <script lang="ts" setup>
   import { useAdministrativeDivision } from '@/hooks/map/useAdministrativeDivision';
-  import { useStatusStore } from '@/stores/useStatusStore';
+  import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore';
+  import { LoadingResource } from '@/types/common/LoadingResourceType';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { Color } from 'cesium';
   import { onMounted } from 'vue';
@@ -42,10 +43,11 @@
 
     await CesiumUtilsSingleton.batchAddGeoJsonLayers(layerConfigs);
 
-    // 根据状态显示隐藏行政区划
-    if (!useStatusStore().getShowAdministrativeDivision()) {
-      CesiumUtilsSingleton.batchHideGeoJsonLayers(areasId);
-    }
+    // 记录行政区划id
+    useLoadingResourceStore().addLoadingResource(
+      LoadingResource.ADMINISTRATIVE_DIVISION,
+      areasId
+    );
   });
 </script>
 

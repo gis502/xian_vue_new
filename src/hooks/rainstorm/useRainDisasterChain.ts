@@ -4,6 +4,7 @@ import type { PaginationType } from '@/types/common/PaginationType';
 import { PointType } from '@/types/common/DisasterType';
 import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
 import config from '@/config/config.json';
+import { useStatusStore } from '@/stores/useStatusStore';
 
 /**
  * 暴雨灾害链影响点列表钩子函数
@@ -143,9 +144,9 @@ export const useRainDisasterChain = () => {
    */
   const rightButtonInfo = [
     {
-      name: '暴雨下载',
+      name: '暴雨触发',
       callback: () => {
-        console.log('暴雨下载');
+        console.log('暴雨触发');
       },
     },
     {
@@ -184,6 +185,107 @@ export const useRainDisasterChain = () => {
     },
   ];
 
+  const controlPanel = [
+    {
+      name: '显示医院',
+      selected: useStatusStore().poiLayers.showHospital,
+      callback: () => {
+        console.log('显示医院');
+      },
+    },
+    {
+      name: '显示危险源',
+      selected: useStatusStore().poiLayers.showDangerSource,
+      callback: () => {
+        console.log('显示危险源');
+      },
+    },
+    {
+      name: '显示避难所',
+      selected: useStatusStore().poiLayers.showRefugeeShelter,
+      callback: () => {
+        console.log('显示避难所');
+      },
+    },
+    {
+      name: '显示消防站',
+      selected: useStatusStore().poiLayers.showFireStation,
+      callback: () => {
+        console.log('显示消防站');
+      },
+    },
+    {
+      name: '显示储备点',
+      selected: useStatusStore().poiLayers.showReservePoint,
+      callback: () => {
+        console.log('显示储备点');
+      },
+    },
+    {
+      name: '显示学校',
+      selected: useStatusStore().poiLayers.showSchool,
+      callback: () => {
+        console.log('显示学校');
+      },
+    },
+    {
+      name: '显示人口网格',
+      selected: useStatusStore().poiLayers.showPopulationGrid,
+      callback: () => {
+        console.log('显示人口网格');
+      },
+    },
+    {
+      name: '显示管网系统',
+      selected: useStatusStore().infrastructureLayers.showNetworkSystem,
+      callback: () => {
+        console.log('显示管网系统');
+      },
+    },
+    {
+      name: '显示交通道路',
+      selected: useStatusStore().infrastructureLayers.showTrafficRoad,
+      callback: () => {
+        console.log('显示交通道路');
+      },
+    },
+    {
+      name: '显示桥梁',
+      selected: useStatusStore().infrastructureLayers.showBridge,
+      callback: () => {
+        console.log('显示桥梁');
+      },
+    },
+    {
+      name: '显示高速',
+      selected: useStatusStore().infrastructureLayers.showHighway,
+      callback: () => {
+        console.log('显示高速');
+      },
+    },
+    {
+      name: '显示国道',
+      selected: useStatusStore().infrastructureLayers.showMainRoad,
+      callback: () => {
+        console.log('显示国道');
+      },
+    },
+    {
+      name: '显示水库',
+      selected: useStatusStore().infrastructureLayers.showReservoir,
+      callback: () => {
+        console.log('显示水库');
+      },
+    },
+    {
+      name: '显示地铁站',
+      selected: useStatusStore().infrastructureLayers.showReservoir,
+      callback: () => {
+        console.log('显示地铁站');
+      },
+    },
+  ];
+
   // 把所有需要用到的数据/方法 return 出去
   return {
     conditions,
@@ -193,6 +295,7 @@ export const useRainDisasterChain = () => {
     paginationConfig,
     leftButtonInfo,
     rightButtonInfo,
+    controlPanel,
     changeConditions,
     changeCurrentPage,
   };
