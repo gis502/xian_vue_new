@@ -37,6 +37,8 @@ export const useStatusStore = defineStore('status', () => {
     hiddenDangerPointShow: true,
     /** 风险点显示状态 */
     riskPointShow: true,
+    /** 断裂带显示状态 */
+    faultShow: true,
   });
 
   /**
