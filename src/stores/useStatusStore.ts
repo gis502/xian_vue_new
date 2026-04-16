@@ -79,11 +79,47 @@ export const useStatusStore = defineStore('status', () => {
     showReservoir: false,
   });
 
+  /**
+   * 恢复默认值
+   */
+  const reset = () => {
+    // 应用加载状态重置
+    appLoadingCompleted.value = false;
+
+    // UI 组件显示状态重置
+    uiComponents.legendShow = true;
+    uiComponents.disasterChainPointShow = false;
+
+    // 地图基础图层显示状态重置
+    mapLayers.showAdministrativeDivision = true;
+    mapLayers.hiddenDangerPointShow = true;
+    mapLayers.riskPointShow = true;
+
+    // POI图层显示状态重置
+    poiLayers.showHospital = false;
+    poiLayers.showDangerSource = false;
+    poiLayers.showRefugeeShelter = false;
+    poiLayers.showFireStation = false;
+    poiLayers.showReservePoint = false;
+    poiLayers.showSchool = false;
+    poiLayers.showPopulationGrid = false;
+    poiLayers.showSubwayStation = false;
+
+    // 基础设施图层显示状态重置
+    infrastructureLayers.showNetworkSystem = false;
+    infrastructureLayers.showTrafficRoad = false;
+    infrastructureLayers.showBridge = false;
+    infrastructureLayers.showHighway = false;
+    infrastructureLayers.showMainRoad = false;
+    infrastructureLayers.showReservoir = false;
+  };
+
   return {
     appLoadingCompleted,
     uiComponents,
     mapLayers,
     poiLayers,
     infrastructureLayers,
+    reset,
   };
 });

@@ -20,8 +20,8 @@
   import { useMap } from '@/hooks/map/useMap';
 
   onBeforeMount(() => {
-    // 初始化为false
-    useStatusStore().appLoadingCompleted = false;
+    // 重置所有状态
+    useStatusStore().reset();
 
     // 重置状态
     useLoadingInformationStore().resetStatue();
