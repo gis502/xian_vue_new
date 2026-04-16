@@ -5,14 +5,15 @@ import { PointType } from '@/types/common/DisasterType';
 import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
 import config from '@/config/config.json';
 import { useStatusStore } from '@/stores/useStatusStore';
-import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore';
-import { LoadingResource } from '@/types/common/LoadingResourceType';
+import { useLayerControl } from '../useLayerControl';
+import { debrisFlowIcon, landslideIcon, riskAreaIcon } from '@/assets';
 
 /**
- * 暴雨灾害链影响点列表钩子函数
- * @returns 搜索条件、表格数据、分页配置及相关方法
+ * 暴雨灾害链
+ * @returns
  */
 export const useEarthquakeDisasterChain = () => {
+  // ================灾害链影响点列表================================
   /**
    * 搜索条件
    */
@@ -74,6 +75,17 @@ export const useEarthquakeDisasterChain = () => {
     paginationConfig.value.currentPage = value;
   };
 
+  // ================图例================================
+  /**
+   * 图例数据
+   */
+  const legendList = [
+    { name: '滑坡隐患点', link: landslideIcon },
+    { name: '泥石流隐患点', link: debrisFlowIcon },
+    { name: '风险区域', link: riskAreaIcon },
+  ];
+
+  // ================左侧按钮================================
   /**
    * 左侧按钮信息
    */
@@ -128,6 +140,7 @@ export const useEarthquakeDisasterChain = () => {
     },
   ];
 
+  // ================右侧按钮================================
   /**
    * 右侧按钮信息
    */
@@ -162,41 +175,12 @@ export const useEarthquakeDisasterChain = () => {
     },
   ];
 
+  // ================控制面板================================
   const controlPanel = ref([
     {
       name: '显示隐患点',
       selected: useStatusStore().mapLayers.hiddenDangerPointShow,
-      callback: (status: unknown) => {
-        if (status as boolean) {
-          // 显示隐患点
-          CesiumUtilsSingleton.batchShowPrimitives(
-            useLoadingResourceStore().getLoadingResource(
-              LoadingResource.HIDDEN_DANGER_POINT
-            )
-          );
-
-          // 显示风险点
-          CesiumUtilsSingleton.batchShowPrimitives(
-            useLoadingResourceStore().getLoadingResource(
-              LoadingResource.RISK_POINT
-            )
-          );
-        } else {
-          // 隐藏隐患点
-          CesiumUtilsSingleton.batchHidePrimitives(
-            useLoadingResourceStore().getLoadingResource(
-              LoadingResource.HIDDEN_DANGER_POINT
-            )
-          );
-
-          // 隐藏风险点
-          CesiumUtilsSingleton.batchHidePrimitives(
-            useLoadingResourceStore().getLoadingResource(
-              LoadingResource.RISK_POINT
-            )
-          );
-        }
-      },
+      callback: useLayerControl().clickHiddenDangerPoint,
     },
     {
       name: '显示医院',
@@ -305,6 +289,7 @@ export const useEarthquakeDisasterChain = () => {
     tableDatas,
     tableColumns,
     paginationConfig,
+    legendList,
     leftButtonInfo,
     rightButtonInfo,
     controlPanel,

@@ -38,7 +38,6 @@
   import LegendComponent from '@/component/rain-earthquake/LegendComponent.vue';
   import RightButtonComponent from '@/component/rain-earthquake/RightButtonComponent.vue';
   import { useRainDisasterChain } from '@/hooks/rainstorm/useRainDisasterChain';
-  import { useRainLegend } from '@/hooks/rainstorm/useRainLegend';
   import { DisasterType } from '@/types/common/DisasterType.ts';
   import { watch } from 'vue';
   import { useRoute } from 'vue-router';
@@ -51,14 +50,13 @@
     tableDatas,
     tableColumns,
     paginationConfig,
+    legendList,
     leftButtonInfo,
     rightButtonInfo,
     controlPanel,
     changeConditions,
     changeCurrentPage,
   } = useRainDisasterChain();
-
-  const { legendList } = useRainLegend();
 
   // 监听条件变化
   watch(
