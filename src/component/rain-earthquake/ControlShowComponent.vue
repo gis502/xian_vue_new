@@ -62,4 +62,7 @@
     height: auto;
     color: #fff;
   }
+  :deep(.el-checkbox__input.is-checked + .el-checkbox__label) {
+    color: #fff;
+  }
 </style>

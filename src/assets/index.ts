@@ -31,3 +31,4 @@ export { default as yanLiang } from '@/assets/json/YanLiang.json';
 export { default as yanTa } from '@/assets/json/YanTa.json';
 export { default as zhouZhi } from '@/assets/json/ZhouZhi.json';
 export { default as xiAn } from '@/assets/json/XiAn.json';
+export { default as xianFaultData } from '@/assets/json/西安断层数据.json';

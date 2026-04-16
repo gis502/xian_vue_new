@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+  import { xianFaultData } from '@/assets';
   import BasicComponent from '@/component/rain-earthquake/BasicComponent.vue';
   import ControlShowComponent from '@/component/rain-earthquake/ControlShowComponent.vue';
   import DisasterChainPointComponent from '@/component/rain-earthquake/DisasterChainPointComponent.vue';
@@ -38,8 +39,11 @@
   import LegendComponent from '@/component/rain-earthquake/LegendComponent.vue';
   import RightButtonComponent from '@/component/rain-earthquake/RightButtonComponent.vue';
   import { useEarthquakeDisasterChain } from '@/hooks/earthquake/useEarthquakeDisasterChain';
+  import { useStatusStore } from '@/stores/useStatusStore';
   import { DisasterType } from '@/types/common/DisasterType.ts';
-  import { watch } from 'vue';
+  import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
+  import { Color } from 'cesium';
+  import { onMounted, watch } from 'vue';
   import { useRoute } from 'vue-router';
 
   const route = useRoute();
@@ -57,6 +61,35 @@
     changeConditions,
     changeCurrentPage,
   } = useEarthquakeDisasterChain();
+
+  /**
+   * 组件挂载
+   */
+  onMounted(() => {
+    /**
+     * 加载西安断层数据
+     */
+    watch(
+      () => useStatusStore().appLoadingCompleted,
+      (newStatue: boolean) => {
+        if (newStatue) {
+          CesiumUtilsSingleton.addGeoJsonLayer(
+            'xian-earthque-fault-data',
+            xianFaultData,
+            {
+              showName: false,
+              isDefault: true,
+              polylineStyle: {
+                width: 2,
+                material: Color.RED,
+                clampToGround: true,
+              },
+            }
+          );
+        }
+      }
+    );
+  });
 
   // 监听条件变化
   watch(
