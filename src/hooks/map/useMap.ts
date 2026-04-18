@@ -57,6 +57,13 @@ export const useMap = () => {
           useLoadingInformationStore().dangerousSource.id = id;
         }
 
+        // 避难所
+        else if (
+          pickedObject.id.startsWith(config.prefix.emergencyShelterPointId)
+        ) {
+          useLoadingInformationStore().emergencyShelter.id = id;
+        }
+
         // 其他
         else {
           // 重置状态

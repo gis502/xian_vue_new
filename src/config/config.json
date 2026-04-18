@@ -37,6 +37,7 @@
     "hiddenDangerPointId": "hidden-danger-point-",
     "riskPointId": "risk-point-",
     "hospitalPointId": "hospital-point-",
-    "dangerousSourcePointId": "dangerous-source-point-"
+    "dangerousSourcePointId": "dangerous-source-point-",
+    "emergencyShelterPointId": "emergency-shelter-point-"
   }
 }

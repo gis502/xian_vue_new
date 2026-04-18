@@ -229,9 +229,7 @@ export const useRainDisasterChain = () => {
         name: '显示避难所',
         statusStore: statusStore.poiLayers,
         statusKey: 'showRefugeeShelter' as const,
-        callback: (status: unknown) => {
-          console.log('显示避难所', status);
-        },
+        callback: layerControl.clickEmergencyShelter,
       },
       {
         name: '显示消防站',

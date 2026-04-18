@@ -60,6 +60,14 @@ export const useLoadingInformationStore = defineStore(
       id: -1,
     });
 
+    // ============================== 避难所状态 ================================
+    const emergencyShelter = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 避难所ID */
+      id: -1,
+    });
+
     /**
      * 重置所有状态
      */
@@ -83,6 +91,10 @@ export const useLoadingInformationStore = defineStore(
       // 危险源状态重置
       dangerousSource.loading = false;
       dangerousSource.id = -1;
+
+      // 避难所状态重置
+      emergencyShelter.loading = false;
+      emergencyShelter.id = -1;
     };
 
     return {
@@ -91,6 +103,7 @@ export const useLoadingInformationStore = defineStore(
       riskPoint,
       hospital,
       dangerousSource,
+      emergencyShelter,
       resetStatue,
     };
   }

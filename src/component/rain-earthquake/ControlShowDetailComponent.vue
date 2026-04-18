@@ -14,12 +14,21 @@
       useStatusStore().poiLayers.showDangerSource.loading
     "
   />
+
+  <!-- 避难所 -->
+  <EmergencyShelterComponent
+    v-if="
+      useStatusStore().appLoadingCompleted &&
+      useStatusStore().poiLayers.showRefugeeShelter.loading
+    "
+  />
 </template>
 
 <script lang="ts" setup>
   import { useStatusStore } from '@/stores/useStatusStore';
   import HospitalComponent from './HospitalComponent.vue';
   import DangerousSourceComponent from './DangerousSourceComponent.vue';
+  import EmergencyShelterComponent from './EmergencyShelterComponent.vue';
 </script>
 
 <style scoped lang="less"></style>

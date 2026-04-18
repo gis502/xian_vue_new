@@ -29,5 +29,18 @@ export const useLayerControl = () => {
     useStatusStore().poiLayers.showDangerSource.loading = true;
   };
 
-  return { clickHiddenDangerPoint, clickHospital, clickDangerousSource };
+  /**
+   * 点击显示避难所
+   */
+  const clickEmergencyShelter = () => {
+    // 加载状态为true
+    useStatusStore().poiLayers.showRefugeeShelter.loading = true;
+  };
+
+  return {
+    clickHiddenDangerPoint,
+    clickHospital,
+    clickDangerousSource,
+    clickEmergencyShelter,
+  };
 };

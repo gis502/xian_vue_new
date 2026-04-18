@@ -8,6 +8,7 @@ export { default as flashFloodIcon } from '@/assets/images/icon/flash-flood.png'
 export { default as riskAreaIcon } from '@/assets/images/icon/risk-area.png';
 export { default as hospitalIcon } from '@/assets/images/icon/hospital.png';
 export { default as dangerousSourceIcon } from '@/assets/images/icon/dangerous-source.png';
+export { default as emergencyShelterIcon } from '@/assets/images/icon/emergency-shelter.png';
 
 // 图片
 export { default as backgroundImage } from '@/assets/images/background-image.png';

@@ -4,11 +4,13 @@ import { getBasePoins as getHiddenDangerBasePoints, getPointDetailById as getHid
 import { getBasePoins as getRiskBasePoints, getPointDetailById as getRiskPointDetailById} from './risk-spots'
 import { getBasePoins as getHospitalsBasePoints, getPointDetailById as getHospitalsPointDetailById} from './hospitals'
 import { getBasePoints as getDangerousSourceBasePoints, getPointDetailById as getDangerousSourcePointDetailById} from './dangerous-source'
+import { getBasePoints as getEmergencyShelterBasePoints, getPointDetailById as getEmergencyShelterPointDetailById} from './emergency-shelter'
 import type { ApiResponse } from '@/types/ApiResponse'
 import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots'
 import type { XianRiskSpots } from '@/types/base/XianRiskSpots'
 import type { XianHospitals } from '@/types/base/XianHospitals'
 import type { XianDangerousSource } from '@/types/base/XianDangerousSource'
+import type { XianEmergencyShelter } from '@/types/base/XianEmergencyShelter'
 
 /**
  * API接口统一导出对象
@@ -87,5 +89,21 @@ export const $api = {
      * @returns 危险源详情
      */
     getPointDetailById: (id: number): Promise<ApiResponse<XianDangerousSource>> => getDangerousSourcePointDetailById(id),
+  },
+
+  // 避难所信息
+  emergencyShelter: {
+    /**
+     * 获取所有基础避难所
+     * @returns 避难所数据数组
+     */
+    getBasePoints: (): Promise<ApiResponse<XianEmergencyShelter[]>> => getEmergencyShelterBasePoints(),
+
+    /**
+     * 根据id获取避难所详情
+     * @param id - 避难所id
+     * @returns 避难所详情
+     */
+    getPointDetailById: (id: number): Promise<ApiResponse<XianEmergencyShelter>> => getEmergencyShelterPointDetailById(id),
   },
 }
