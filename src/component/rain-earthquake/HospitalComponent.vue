@@ -7,7 +7,7 @@
       :base-points="hospitalPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.hospitalPointId"
-      :is-default="true"
+      :is-default="false"
       :loading-resource-field="LoadingResource.HOSPITAL"
     />
 
@@ -36,6 +36,7 @@
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { LoadingResource } from '@/types/common/LoadingResourceType';
   import { useHospitalPoint } from '@/hooks/rain-earthquake/useHospitalPoint';
+  import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore';
 
   const hospitalPoints = ref<Point[]>([]);
 
@@ -87,6 +88,24 @@
         useLoadingInformationStore().hospital.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
+      }
+    }
+  );
+
+  // 监听显示隐藏
+  watch(
+    () => useStatusStore().poiLayers.showHospital.show,
+    (newValue: boolean) => {
+      if (newValue) {
+        // 显示医院
+        CesiumUtilsSingleton.batchShowPrimitives(
+          useLoadingResourceStore().getLoadingResource(LoadingResource.HOSPITAL)
+        );
+      } else {
+        // 隐藏医院
+        CesiumUtilsSingleton.batchHidePrimitives(
+          useLoadingResourceStore().getLoadingResource(LoadingResource.HOSPITAL)
+        );
       }
     }
   );

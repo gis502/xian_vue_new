@@ -36,6 +36,7 @@
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { useRiskPoint } from '@/hooks/rain-earthquake/useRiskPoint';
   import { LoadingResource } from '@/types/common/LoadingResourceType';
+  import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore';
 
   const riskPoints = ref<Point[]>([]);
 
@@ -85,6 +86,26 @@
         useLoadingInformationStore().riskPoint.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
+      }
+    }
+  );
+
+  // 监听显示隐藏风险点
+  watch(
+    () => useStatusStore().mapLayers.riskPointShow.show,
+    (newValue: boolean) => {
+      if (newValue) {
+        CesiumUtilsSingleton.batchShowPrimitives(
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.RISK_POINT
+          )
+        );
+      } else {
+        CesiumUtilsSingleton.batchHidePrimitives(
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.RISK_POINT
+          )
+        );
       }
     }
   );

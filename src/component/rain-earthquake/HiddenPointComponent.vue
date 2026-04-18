@@ -37,6 +37,7 @@
   import { useHiddenPoint } from '@/hooks/rain-earthquake/useHiddenPoint';
   import { useStatusStore } from '@/stores/useStatusStore';
   import { LoadingResource } from '@/types/common/LoadingResourceType';
+  import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore';
 
   // 接收父组件传递的参数
   const props = defineProps<{
@@ -94,6 +95,28 @@
         useLoadingInformationStore().hiddenPoint.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
+      }
+    }
+  );
+
+  // 监听显示隐藏
+  watch(
+    () => useStatusStore().mapLayers.hiddenDangerPointShow.show,
+    (newValue: boolean) => {
+      if (newValue) {
+        // 显示隐患点
+        CesiumUtilsSingleton.batchShowPrimitives(
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.HIDDEN_DANGER_POINT
+          )
+        );
+      } else {
+        // 隐藏隐患点
+        CesiumUtilsSingleton.batchHidePrimitives(
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.HIDDEN_DANGER_POINT
+          )
+        );
       }
     }
   );

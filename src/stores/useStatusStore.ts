@@ -160,6 +160,13 @@ export const useStatusStore = defineStore('status', () => {
     // 应用加载状态重置
     appLoadingCompleted.value = false;
 
+    resetScene();
+  };
+
+  /**
+   * 重置场景
+   */
+  const resetScene = () => {
     // UI 组件显示状态重置
     uiComponents.legendShow = {
       show: true,
@@ -264,5 +271,6 @@ export const useStatusStore = defineStore('status', () => {
     poiLayers,
     infrastructureLayers,
     reset,
+    resetScene,
   };
 });

@@ -2,8 +2,6 @@ import { ref } from 'vue';
 import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots';
 import type { PaginationType } from '@/types/common/PaginationType';
 import { PointType } from '@/types/common/DisasterType';
-import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
-import config from '@/config/config.json';
 import { useStatusStore } from '@/stores/useStatusStore';
 import {
   debrisFlowIcon,
@@ -13,6 +11,7 @@ import {
   waterLoggingIcon,
 } from '@/assets';
 import { useLayerControl } from '../useLayerControl';
+import { useRightHandle } from '../useRightHandle';
 
 /**
  * 暴雨灾害链
@@ -192,18 +191,12 @@ export const useRainDisasterChain = () => {
     },
     {
       name: '场景重置',
-      callback: () => {
-        CesiumUtilsSingleton.clearAllResources('custom');
-      },
+      callback: () => useRightHandle().resetScene(),
       executeOnce: true,
     },
     {
       name: '视角重置',
-      callback: () => {
-        CesiumUtilsSingleton.flyToTarget(
-          config.defaultPosition as [number, number, number]
-        );
-      },
+      callback: () => useRightHandle().resetView(),
       executeOnce: true,
     },
   ];
