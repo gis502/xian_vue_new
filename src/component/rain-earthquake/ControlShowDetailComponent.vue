@@ -30,6 +30,14 @@
       useStatusStore().poiLayers.showFireStation.loading
     "
   />
+
+  <!-- 物资储备点 -->
+  <StorePointsComponent
+    v-if="
+      useStatusStore().appLoadingCompleted &&
+      useStatusStore().poiLayers.showReservePoint.loading
+    "
+  />
 </template>
 
 <script lang="ts" setup>
@@ -38,6 +46,7 @@
   import DangerousSourceComponent from './DangerousSourceComponent.vue';
   import EmergencyShelterComponent from './EmergencyShelterComponent.vue';
   import FireStationComponent from './FireStationComponent.vue';
+  import StorePointsComponent from './StorePointsComponent.vue';
 </script>
 
 <style scoped lang="less"></style>

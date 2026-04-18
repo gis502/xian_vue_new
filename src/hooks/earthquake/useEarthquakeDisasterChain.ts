@@ -211,9 +211,7 @@ export const useEarthquakeDisasterChain = () => {
         name: '显示储备点',
         statusStore: statusStore.poiLayers,
         statusKey: 'showReservePoint' as const,
-        callback: (status: unknown) => {
-          console.log('显示储备点', status);
-        },
+        callback: layerControl.clickStorePoints,
       },
       {
         name: '显示学校',

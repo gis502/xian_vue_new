@@ -76,6 +76,14 @@ export const useLoadingInformationStore = defineStore(
       id: -1,
     });
 
+    // ============================== 物资储备点状态 ================================
+    const storePoints = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 物资储备点ID */
+      id: -1,
+    });
+
     /**
      * 重置所有状态
      */
@@ -107,6 +115,10 @@ export const useLoadingInformationStore = defineStore(
       // 消防站状态重置
       fireStation.loading = false;
       fireStation.id = -1;
+
+      // 物资储备点状态重置
+      storePoints.loading = false;
+      storePoints.id = -1;
     };
 
     return {
@@ -117,6 +129,7 @@ export const useLoadingInformationStore = defineStore(
       dangerousSource,
       emergencyShelter,
       fireStation,
+      storePoints,
       resetStatue,
     };
   }

@@ -69,6 +69,11 @@ export const useMap = () => {
           useLoadingInformationStore().fireStation.id = id;
         }
 
+        // 物资储备点
+        else if (pickedObject.id.startsWith(config.prefix.storePointsPointId)) {
+          useLoadingInformationStore().storePoints.id = id;
+        }
+
         // 其他
         else {
           // 重置状态

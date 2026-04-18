@@ -45,11 +45,20 @@ export const useLayerControl = () => {
     useStatusStore().poiLayers.showFireStation.loading = true;
   };
 
+  /**
+   * 点击显示物资储备点
+   */
+  const clickStorePoints = () => {
+    // 加载状态为true
+    useStatusStore().poiLayers.showReservePoint.loading = true;
+  };
+
   return {
     clickHiddenDangerPoint,
     clickHospital,
     clickDangerousSource,
     clickEmergencyShelter,
     clickFireStation,
+    clickStorePoints,
   };
 };
