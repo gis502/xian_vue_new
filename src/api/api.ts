@@ -3,10 +3,12 @@ import { getSm2PublicKey } from './crypto'
 import { getBasePoins as getHiddenDangerBasePoints, getPointDetailById as getHiddenDangerPointDetailById} from './hidden-danger-spots'
 import { getBasePoins as getRiskBasePoints, getPointDetailById as getRiskPointDetailById} from './risk-spots'
 import { getBasePoins as getHospitalsBasePoints, getPointDetailById as getHospitalsPointDetailById} from './hospitals'
+import { getBasePoints as getDangerousSourceBasePoints, getPointDetailById as getDangerousSourcePointDetailById} from './dangerous-source'
 import type { ApiResponse } from '@/types/ApiResponse'
 import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots'
 import type { XianRiskSpots } from '@/types/base/XianRiskSpots'
 import type { XianHospitals } from '@/types/base/XianHospitals'
+import type { XianDangerousSource } from '@/types/base/XianDangerousSource'
 
 /**
  * API接口统一导出对象
@@ -69,5 +71,21 @@ export const $api = {
      * @returns 医院详情
      */
     getPointDetailById: (id: number): Promise<ApiResponse<XianHospitals>> => getHospitalsPointDetailById(id),
+  },
+
+  // 危险源信息
+  dangerousSource: {
+    /**
+     * 获取所有基础危险源
+     * @returns 危险源数据数组
+     */
+    getBasePoints: (): Promise<ApiResponse<XianDangerousSource[]>> => getDangerousSourceBasePoints(),
+
+    /**
+     * 根据id获取危险源详情
+     * @param id - 危险源id
+     * @returns 危险源详情
+     */
+    getPointDetailById: (id: number): Promise<ApiResponse<XianDangerousSource>> => getDangerousSourcePointDetailById(id),
   },
 }

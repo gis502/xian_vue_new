@@ -52,6 +52,14 @@ export const useLoadingInformationStore = defineStore(
       id: -1,
     });
 
+    // ============================== 危险源加载状态 ================================
+    const dangerousSource = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 危险源ID */
+      id: -1,
+    });
+
     /**
      * 重置所有状态
      */
@@ -71,6 +79,10 @@ export const useLoadingInformationStore = defineStore(
       // 医院状态重置
       hospital.loading = false;
       hospital.id = -1;
+
+      // 危险源状态重置
+      dangerousSource.loading = false;
+      dangerousSource.id = -1;
     };
 
     return {
@@ -78,6 +90,7 @@ export const useLoadingInformationStore = defineStore(
       hiddenPoint,
       riskPoint,
       hospital,
+      dangerousSource,
       resetStatue,
     };
   }

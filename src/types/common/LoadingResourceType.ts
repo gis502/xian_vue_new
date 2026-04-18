@@ -16,4 +16,7 @@ export enum LoadingResource {
 
   /** 医院 */
   HOSPITAL = 'HOSPITAL',
+
+  /** 危险源 */
+  DANGEROUS_SOURCE = 'DANGEROUS_SOURCE',
 }

@@ -50,6 +50,13 @@ export const useMap = () => {
           useLoadingInformationStore().hospital.id = id;
         }
 
+        // 危险源
+        else if (
+          pickedObject.id.startsWith(config.prefix.dangerousSourcePointId)
+        ) {
+          useLoadingInformationStore().dangerousSource.id = id;
+        }
+
         // 其他
         else {
           // 重置状态

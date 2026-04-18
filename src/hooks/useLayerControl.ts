@@ -21,5 +21,13 @@ export const useLayerControl = () => {
     useStatusStore().poiLayers.showHospital.loading = true;
   };
 
-  return { clickHiddenDangerPoint, clickHospital };
+  /**
+   * 点击显示危险源
+   */
+  const clickDangerousSource = () => {
+    // 加载状态为true
+    useStatusStore().poiLayers.showDangerSource.loading = true;
+  };
+
+  return { clickHiddenDangerPoint, clickHospital, clickDangerousSource };
 };
