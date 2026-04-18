@@ -9,7 +9,9 @@
         <el-checkbox
           v-model="item.statusStore[item.statusKey].show"
           :label="item.name"
-          @change="item.callback(item.statusStore[item.statusKey].show)"
+          @change="
+            changeStatus(item.statusStore[item.statusKey].show, item.callback)
+          "
         />
       </div>
     </div>
@@ -17,6 +19,8 @@
 </template>
 
 <script lang="ts" setup>
+  import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
+
   defineProps<{
     constrolShowList: {
       name: string;
@@ -25,6 +29,18 @@
       callback: (...args: unknown[]) => unknown;
     }[];
   }>();
+
+  // 状态改变执行
+  const changeStatus = (
+    status: boolean,
+    callback: (...args: unknown[]) => unknown
+  ) => {
+    // 重置信息框状态，隐藏显示
+    useLoadingInformationStore().resetStatue();
+
+    // 调用回调函数
+    callback(status);
+  };
 </script>
 
 <style scoped>
