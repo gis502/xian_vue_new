@@ -64,6 +64,11 @@ export const useMap = () => {
           useLoadingInformationStore().emergencyShelter.id = id;
         }
 
+        // 消防站
+        else if (pickedObject.id.startsWith(config.prefix.fireStationPointId)) {
+          useLoadingInformationStore().fireStation.id = id;
+        }
+
         // 其他
         else {
           // 重置状态

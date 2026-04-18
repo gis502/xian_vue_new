@@ -68,6 +68,14 @@ export const useLoadingInformationStore = defineStore(
       id: -1,
     });
 
+    // ============================== 消防站状态 ================================
+    const fireStation = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 消防站ID */
+      id: -1,
+    });
+
     /**
      * 重置所有状态
      */
@@ -95,6 +103,10 @@ export const useLoadingInformationStore = defineStore(
       // 避难所状态重置
       emergencyShelter.loading = false;
       emergencyShelter.id = -1;
+
+      // 消防站状态重置
+      fireStation.loading = false;
+      fireStation.id = -1;
     };
 
     return {
@@ -104,6 +116,7 @@ export const useLoadingInformationStore = defineStore(
       hospital,
       dangerousSource,
       emergencyShelter,
+      fireStation,
       resetStatue,
     };
   }

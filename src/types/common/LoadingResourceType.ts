@@ -22,4 +22,7 @@ export enum LoadingResource {
 
   /** 避难所 */
   EMERGENCY_SHELTER = 'EMERGENCY_SHELTER',
+
+  /** 消防站 */
+  FIRE_STATION = 'FIRE_STATION',
 }

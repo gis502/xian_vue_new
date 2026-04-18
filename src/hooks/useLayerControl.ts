@@ -37,10 +37,19 @@ export const useLayerControl = () => {
     useStatusStore().poiLayers.showRefugeeShelter.loading = true;
   };
 
+  /**
+   * 点击显示消防站
+   */
+  const clickFireStation = () => {
+    // 加载状态为true
+    useStatusStore().poiLayers.showFireStation.loading = true;
+  };
+
   return {
     clickHiddenDangerPoint,
     clickHospital,
     clickDangerousSource,
     clickEmergencyShelter,
+    clickFireStation,
   };
 };

@@ -235,9 +235,7 @@ export const useRainDisasterChain = () => {
         name: '显示消防站',
         statusStore: statusStore.poiLayers,
         statusKey: 'showFireStation' as const,
-        callback: (status: unknown) => {
-          console.log('显示消防站', status);
-        },
+        callback: layerControl.clickFireStation,
       },
       {
         name: '显示储备点',
