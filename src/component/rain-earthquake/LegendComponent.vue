@@ -4,17 +4,22 @@
   <div
     class="control-box"
     :style="{
-      bottom: `${useStatusStore().uiComponents.legendShow ? 248 : 25}px`,
+      bottom: `${useStatusStore().uiComponents.legendShow.show ? 248 : 25}px`,
     }"
   >
     <el-button
       @click="changeStatus"
       circle
-      :title="`${useStatusStore().uiComponents.legendShow ? '关闭' : '打开'}图例`"
-      >{{ useStatusStore().uiComponents.legendShow ? '-' : '+' }}</el-button
+      :title="`${useStatusStore().uiComponents.legendShow.show ? '关闭' : '打开'}图例`"
+      >{{
+        useStatusStore().uiComponents.legendShow.show ? '-' : '+'
+      }}</el-button
     >
   </div>
-  <div class="legend-box" v-show="useStatusStore().uiComponents.legendShow">
+  <div
+    class="legend-box"
+    v-show="useStatusStore().uiComponents.legendShow.show"
+  >
     <div class="title-box">
       <header>图例</header>
     </div>
@@ -55,8 +60,8 @@
 
   // 切换图例显示状态
   const changeStatus = () => {
-    useStatusStore().uiComponents.legendShow =
-      !useStatusStore().uiComponents.legendShow;
+    useStatusStore().uiComponents.legendShow.show =
+      !useStatusStore().uiComponents.legendShow.show;
   };
 
   onMounted(() => {

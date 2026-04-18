@@ -1,25 +1,25 @@
-<!-- 风险点组件 -->
+<!-- 医院组件 -->
 <template>
   <div>
-    <!-- 加载风险点 -->
+    <!-- 加载医院 -->
     <LoadingPoints
-      v-if="useStatusStore().appLoadingCompleted && riskPoints.length > 0"
-      :base-points="riskPoints"
+      v-if="useStatusStore().appLoadingCompleted && hospitalPoints.length > 0"
+      :base-points="hospitalPoints"
       :get-disaster-icon="getDisasterIcon"
-      :prefix="config.prefix.riskPointId"
+      :prefix="config.prefix.hospitalPointId"
       :is-default="true"
-      :loading-resource-field="LoadingResource.RISK_POINT"
+      :loading-resource-field="LoadingResource.HOSPITAL"
     />
 
     <!-- 显示信息框 -->
     <InformationBox
-      :data="riskPointDetail as Record<string, any>"
+      :data="hospitalPointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformationStore().riskPoint.loading"
+      v-if="useLoadingInformationStore().hospital.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformationStore().riskPoint.id"
+      :key="useLoadingInformationStore().hospital.id"
     />
   </div>
 </template>
@@ -34,31 +34,32 @@
   import { useStatusStore } from '@/stores/useStatusStore';
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
-  import { useRiskPoint } from '@/hooks/rain-earthquake/useRiskPoint';
   import { LoadingResource } from '@/types/common/LoadingResourceType';
+  import { useHospitalPoint } from '@/hooks/rain-earthquake/useHospitalPoint';
 
-  const riskPoints = ref<Point[]>([]);
+  const hospitalPoints = ref<Point[]>([]);
 
   // 信息框相关配置
   const offsetX = ref(0);
   const offsetY = ref(0);
-  const riskPointDetail = ref<Point>();
+  const hospitalPointDetail = ref<Point>();
+  const informationBoxTitle = ref('');
 
   // 获取钩子函数
-  const { informationBoxTitle, field, getDisasterIcon } = useRiskPoint();
+  const { field, getDisasterIcon } = useHospitalPoint();
 
-  $api.riskSpots.getBasePoins().then((res) => {
-    riskPoints.value = res.data;
+  $api.hospitals.getBasePoins().then((res) => {
+    hospitalPoints.value = res.data;
   });
 
   // 监听id变化
   watch(
-    () => useLoadingInformationStore().riskPoint.id,
+    () => useLoadingInformationStore().hospital.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
-      // 获取风险点数据
+      // 获取医院数据
       const clickObject = useLoadingInformationStore().clickObject;
 
       if (!clickObject || !clickObject.primitive) {
@@ -66,12 +67,13 @@
         return;
       }
 
-      const res = await $api.riskSpots.getPointDetailById(
-        useLoadingInformationStore().riskPoint.id
+      const res = await $api.hospitals.getPointDetailById(
+        useLoadingInformationStore().hospital.id
       );
 
       // 更新数据
-      riskPointDetail.value = res.data;
+      hospitalPointDetail.value = res.data;
+      informationBoxTitle.value = res.data.name || '医院信息';
 
       try {
         // 将坐标转换为偏移量
@@ -82,7 +84,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformationStore().riskPoint.loading = true;
+        useLoadingInformationStore().hospital.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }

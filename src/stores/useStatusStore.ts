@@ -20,9 +20,27 @@ export const useStatusStore = defineStore('status', () => {
    */
   const uiComponents = reactive({
     /** 图例显示状态 */
-    legendShow: true,
+    legendShow: {
+      show: true,
+      loading: true,
+    },
     /** 灾情链影响点表格显示状态 */
-    disasterChainPointShow: false,
+    disasterChainPointShow: {
+      show: false,
+      loading: true,
+    },
+    leftButton: {
+      show: true,
+      loading: true,
+    },
+    rightButton: {
+      show: true,
+      loading: true,
+    },
+    controlPanel: {
+      show: true,
+      loading: true,
+    },
   });
 
   // ============================ 地图图层显示状态 ================================
@@ -32,13 +50,25 @@ export const useStatusStore = defineStore('status', () => {
    */
   const mapLayers = reactive({
     /** 显示行政区划 */
-    showAdministrativeDivision: true,
+    showAdministrativeDivision: {
+      show: true,
+      loading: true,
+    },
     /** 隐患点显示状态 */
-    hiddenDangerPointShow: true,
+    hiddenDangerPointShow: {
+      show: true,
+      loading: true,
+    },
     /** 风险点显示状态 */
-    riskPointShow: true,
+    riskPointShow: {
+      show: true,
+      loading: true,
+    },
     /** 断裂带显示状态 */
-    faultShow: true,
+    faultShow: {
+      show: true,
+      loading: true,
+    },
   });
 
   /**
@@ -46,21 +76,45 @@ export const useStatusStore = defineStore('status', () => {
    */
   const poiLayers = reactive({
     /** 显示医院 */
-    showHospital: false,
+    showHospital: {
+      show: false,
+      loading: false,
+    },
     /** 显示危险源 */
-    showDangerSource: false,
+    showDangerSource: {
+      show: false,
+      loading: false,
+    },
     /** 显示避难所 */
-    showRefugeeShelter: false,
+    showRefugeeShelter: {
+      show: false,
+      loading: false,
+    },
     /** 显示消防站 */
-    showFireStation: false,
+    showFireStation: {
+      show: false,
+      loading: false,
+    },
     /** 显示储备点 */
-    showReservePoint: false,
+    showReservePoint: {
+      show: false,
+      loading: false,
+    },
     /** 显示学校 */
-    showSchool: false,
+    showSchool: {
+      show: false,
+      loading: false,
+    },
     /** 显示人口网格 */
-    showPopulationGrid: false,
+    showPopulationGrid: {
+      show: false,
+      loading: false,
+    },
     /** 显示地铁站 */
-    showSubwayStation: false,
+    showSubwayStation: {
+      show: false,
+      loading: false,
+    },
   });
 
   /**
@@ -68,17 +122,35 @@ export const useStatusStore = defineStore('status', () => {
    */
   const infrastructureLayers = reactive({
     /** 显示管网系统 */
-    showNetworkSystem: false,
+    showNetworkSystem: {
+      show: false,
+      loading: false,
+    },
     /** 显示交通道路 */
-    showTrafficRoad: false,
+    showTrafficRoad: {
+      show: false,
+      loading: false,
+    },
     /** 显示桥梁 */
-    showBridge: false,
+    showBridge: {
+      show: false,
+      loading: false,
+    },
     /** 显示高速 */
-    showHighway: false,
+    showHighway: {
+      show: false,
+      loading: false,
+    },
     /** 显示国道 */
-    showMainRoad: false,
+    showMainRoad: {
+      show: false,
+      loading: false,
+    },
     /** 显示水库 */
-    showReservoir: false,
+    showReservoir: {
+      show: false,
+      loading: false,
+    },
   });
 
   /**
@@ -89,31 +161,100 @@ export const useStatusStore = defineStore('status', () => {
     appLoadingCompleted.value = false;
 
     // UI 组件显示状态重置
-    uiComponents.legendShow = true;
-    uiComponents.disasterChainPointShow = false;
+    uiComponents.legendShow = {
+      show: true,
+      loading: true,
+    };
+    uiComponents.disasterChainPointShow = {
+      show: false,
+      loading: true,
+    };
+    uiComponents.leftButton = {
+      show: true,
+      loading: true,
+    };
+    uiComponents.rightButton = {
+      show: true,
+      loading: true,
+    };
+    uiComponents.controlPanel = {
+      show: true,
+      loading: true,
+    };
 
     // 地图基础图层显示状态重置
-    mapLayers.showAdministrativeDivision = true;
-    mapLayers.hiddenDangerPointShow = true;
-    mapLayers.riskPointShow = true;
+    mapLayers.showAdministrativeDivision = {
+      show: true,
+      loading: true,
+    };
+    mapLayers.hiddenDangerPointShow = {
+      show: true,
+      loading: true,
+    };
+    mapLayers.riskPointShow = {
+      show: true,
+      loading: true,
+    };
 
     // POI图层显示状态重置
-    poiLayers.showHospital = false;
-    poiLayers.showDangerSource = false;
-    poiLayers.showRefugeeShelter = false;
-    poiLayers.showFireStation = false;
-    poiLayers.showReservePoint = false;
-    poiLayers.showSchool = false;
-    poiLayers.showPopulationGrid = false;
-    poiLayers.showSubwayStation = false;
+    poiLayers.showHospital = {
+      show: false,
+      loading: false,
+    };
+    poiLayers.showDangerSource = {
+      show: false,
+      loading: false,
+    };
+    poiLayers.showRefugeeShelter = {
+      show: false,
+      loading: false,
+    };
+    poiLayers.showFireStation = {
+      show: false,
+      loading: false,
+    };
+    poiLayers.showReservePoint = {
+      show: false,
+      loading: false,
+    };
+    poiLayers.showSchool = {
+      show: false,
+      loading: false,
+    };
+    poiLayers.showPopulationGrid = {
+      show: false,
+      loading: false,
+    };
+    poiLayers.showSubwayStation = {
+      show: false,
+      loading: false,
+    };
 
     // 基础设施图层显示状态重置
-    infrastructureLayers.showNetworkSystem = false;
-    infrastructureLayers.showTrafficRoad = false;
-    infrastructureLayers.showBridge = false;
-    infrastructureLayers.showHighway = false;
-    infrastructureLayers.showMainRoad = false;
-    infrastructureLayers.showReservoir = false;
+    infrastructureLayers.showNetworkSystem = {
+      show: false,
+      loading: false,
+    };
+    infrastructureLayers.showTrafficRoad = {
+      show: false,
+      loading: false,
+    };
+    infrastructureLayers.showBridge = {
+      show: false,
+      loading: false,
+    };
+    infrastructureLayers.showHighway = {
+      show: false,
+      loading: false,
+    };
+    infrastructureLayers.showMainRoad = {
+      show: false,
+      loading: false,
+    };
+    infrastructureLayers.showReservoir = {
+      show: false,
+      loading: false,
+    };
   };
 
   return {

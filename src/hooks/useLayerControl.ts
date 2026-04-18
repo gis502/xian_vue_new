@@ -1,4 +1,5 @@
 import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore';
+import { useStatusStore } from '@/stores/useStatusStore';
 import { LoadingResource } from '@/types/common/LoadingResourceType';
 import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
 
@@ -38,5 +39,23 @@ export const useLayerControl = () => {
     }
   };
 
-  return { clickHiddenDangerPoint };
+  /**
+   * 点击显示医院
+   */
+  const clickHospital = (status: unknown) => {
+    if (status as boolean) {
+      useStatusStore().poiLayers.showHospital.loading = true;
+      // 显示医院
+      CesiumUtilsSingleton.batchShowPrimitives(
+        useLoadingResourceStore().getLoadingResource(LoadingResource.HOSPITAL)
+      );
+    } else {
+      // 隐藏医院
+      CesiumUtilsSingleton.batchHidePrimitives(
+        useLoadingResourceStore().getLoadingResource(LoadingResource.HOSPITAL)
+      );
+    }
+  };
+
+  return { clickHiddenDangerPoint, clickHospital };
 };

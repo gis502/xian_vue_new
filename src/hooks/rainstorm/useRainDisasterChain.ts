@@ -12,6 +12,7 @@ import {
   riskAreaIcon,
   waterLoggingIcon,
 } from '@/assets';
+import { useLayerControl } from '../useLayerControl';
 
 /**
  * 暴雨灾害链
@@ -211,108 +212,127 @@ export const useRainDisasterChain = () => {
   /**
    * 控制面板信息
    */
-  const controlPanel = [
-    {
-      name: '显示医院',
-      selected: useStatusStore().poiLayers.showHospital,
-      callback: () => {
-        console.log('显示医院');
-      },
-    },
-    {
-      name: '显示危险源',
-      selected: useStatusStore().poiLayers.showDangerSource,
-      callback: () => {
-        console.log('显示危险源');
-      },
-    },
-    {
-      name: '显示避难所',
-      selected: useStatusStore().poiLayers.showRefugeeShelter,
-      callback: () => {
-        console.log('显示避难所');
-      },
-    },
-    {
-      name: '显示消防站',
-      selected: useStatusStore().poiLayers.showFireStation,
-      callback: () => {
-        console.log('显示消防站');
-      },
-    },
-    {
-      name: '显示储备点',
-      selected: useStatusStore().poiLayers.showReservePoint,
-      callback: () => {
-        console.log('显示储备点');
-      },
-    },
-    {
-      name: '显示学校',
-      selected: useStatusStore().poiLayers.showSchool,
-      callback: () => {
-        console.log('显示学校');
-      },
-    },
-    {
-      name: '显示人口网格',
-      selected: useStatusStore().poiLayers.showPopulationGrid,
-      callback: () => {
-        console.log('显示人口网格');
-      },
-    },
-    {
-      name: '显示管网系统',
-      selected: useStatusStore().infrastructureLayers.showNetworkSystem,
-      callback: () => {
-        console.log('显示管网系统');
-      },
-    },
-    {
-      name: '显示交通道路',
-      selected: useStatusStore().infrastructureLayers.showTrafficRoad,
-      callback: () => {
-        console.log('显示交通道路');
-      },
-    },
-    {
-      name: '显示桥梁',
-      selected: useStatusStore().infrastructureLayers.showBridge,
-      callback: () => {
-        console.log('显示桥梁');
-      },
-    },
-    {
-      name: '显示高速',
-      selected: useStatusStore().infrastructureLayers.showHighway,
-      callback: () => {
-        console.log('显示高速');
-      },
-    },
-    {
-      name: '显示国道',
-      selected: useStatusStore().infrastructureLayers.showMainRoad,
-      callback: () => {
-        console.log('显示国道');
-      },
-    },
-    {
-      name: '显示水库',
-      selected: useStatusStore().infrastructureLayers.showReservoir,
-      callback: () => {
-        console.log('显示水库');
-      },
-    },
-    {
-      name: '显示地铁站',
-      selected: useStatusStore().infrastructureLayers.showReservoir,
-      callback: () => {
-        console.log('显示地铁站');
-      },
-    },
-  ];
+  /**
+   * 控制面板信息
+   */
+  const getControlPanel = () => {
+    const statusStore = useStatusStore();
+    const layerControl = useLayerControl();
 
-  // 把所有需要用到的数据/方法 return 出去
+    return [
+      {
+        name: '显示医院',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showHospital' as const,
+        callback: layerControl.clickHospital,
+      },
+      {
+        name: '显示危险源',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showDangerSource' as const,
+        callback: (status: unknown) => {
+          console.log('显示危险源', status);
+        },
+      },
+      {
+        name: '显示避难所',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showRefugeeShelter' as const,
+        callback: (status: unknown) => {
+          console.log('显示避难所', status);
+        },
+      },
+      {
+        name: '显示消防站',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showFireStation' as const,
+        callback: (status: unknown) => {
+          console.log('显示消防站', status);
+        },
+      },
+      {
+        name: '显示储备点',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showReservePoint' as const,
+        callback: (status: unknown) => {
+          console.log('显示储备点', status);
+        },
+      },
+      {
+        name: '显示学校',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showSchool' as const,
+        callback: (status: unknown) => {
+          console.log('显示学校', status);
+        },
+      },
+      {
+        name: '显示人口网格',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showPopulationGrid' as const,
+        callback: (status: unknown) => {
+          console.log('显示人口网格', status);
+        },
+      },
+      {
+        name: '显示管网系统',
+        statusStore: statusStore.infrastructureLayers,
+        statusKey: 'showNetworkSystem' as const,
+        callback: (status: unknown) => {
+          console.log('显示管网系统', status);
+        },
+      },
+      {
+        name: '显示交通道路',
+        statusStore: statusStore.infrastructureLayers,
+        statusKey: 'showTrafficRoad' as const,
+        callback: (status: unknown) => {
+          console.log('显示交通道路', status);
+        },
+      },
+      {
+        name: '显示桥梁',
+        statusStore: statusStore.infrastructureLayers,
+        statusKey: 'showBridge' as const,
+        callback: (status: unknown) => {
+          console.log('显示桥梁', status);
+        },
+      },
+      {
+        name: '显示高速',
+        statusStore: statusStore.infrastructureLayers,
+        statusKey: 'showHighway' as const,
+        callback: (status: unknown) => {
+          console.log('显示高速', status);
+        },
+      },
+      {
+        name: '显示国道',
+        statusStore: statusStore.infrastructureLayers,
+        statusKey: 'showMainRoad' as const,
+        callback: (status: unknown) => {
+          console.log('显示国道', status);
+        },
+      },
+      {
+        name: '显示水库',
+        statusStore: statusStore.infrastructureLayers,
+        statusKey: 'showReservoir' as const,
+        callback: (status: unknown) => {
+          console.log('显示水库', status);
+        },
+      },
+      {
+        name: '显示地铁站',
+        statusStore: statusStore.infrastructureLayers,
+        statusKey: 'showReservoir' as const,
+        callback: (status: unknown) => {
+          console.log('显示地铁站', status);
+        },
+      },
+    ];
+  };
+
   return {
     conditions,
     selectOptions,
@@ -322,8 +342,8 @@ export const useRainDisasterChain = () => {
     legendList,
     leftButtonInfo,
     rightButtonInfo,
-    controlPanel,
     changeConditions,
     changeCurrentPage,
+    controlPanel: getControlPanel(),
   };
 };

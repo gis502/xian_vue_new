@@ -7,9 +7,9 @@
     <div class="control-show-list">
       <div v-for="(item, index) in constrolShowList" :key="index">
         <el-checkbox
-          v-model="item.selected"
+          v-model="item.statusStore[item.statusKey].show"
           :label="item.name"
-          @change="item.callback(item.selected)"
+          @change="item.callback(item.statusStore[item.statusKey].show)"
         />
       </div>
     </div>
@@ -20,7 +20,8 @@
   defineProps<{
     constrolShowList: {
       name: string;
-      selected: boolean;
+      statusStore: Record<string, { show: boolean; loading: boolean }>;
+      statusKey: string;
       callback: (...args: unknown[]) => unknown;
     }[];
   }>();

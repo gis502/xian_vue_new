@@ -35,6 +35,7 @@
   },
   "prefix": {
     "hiddenDangerPointId": "hidden-danger-point-",
-    "riskPointId": "risk-point-"
+    "riskPointId": "risk-point-",
+    "hospitalPointId": "hospital-point-"
   }
 }

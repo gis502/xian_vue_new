@@ -23,24 +23,35 @@ export const useMap = () => {
 
         // 当id改变时候，重置状态
         if (
-          useLoadingInformationStore().getHiddenPointId() !== id &&
-          useLoadingInformationStore().getRiskPointId() !== id
+          useLoadingInformationStore().hiddenPoint.id !== id &&
+          useLoadingInformationStore().riskPoint.id !== id &&
+          useLoadingInformationStore().hospital.id !== id
         ) {
           useLoadingInformationStore().resetStatue();
         }
 
         // 点击对象
-        useLoadingInformationStore().setClickObject(pickedObject);
+        useLoadingInformationStore().clickObject.id = pickedObject.id;
+        useLoadingInformationStore().clickObject.primitive =
+          pickedObject.primitive;
 
         // 隐患点
         if (pickedObject.id.startsWith(config.prefix.hiddenDangerPointId)) {
-          useLoadingInformationStore().setHiddenPointId(id);
+          useLoadingInformationStore().hiddenPoint.id = id;
         }
 
         // 风险点
         else if (pickedObject.id.startsWith(config.prefix.riskPointId)) {
-          useLoadingInformationStore().setRiskPointId(id);
-        } else {
+          useLoadingInformationStore().riskPoint.id = id;
+        }
+
+        // 医院
+        else if (pickedObject.id.startsWith(config.prefix.hospitalPointId)) {
+          useLoadingInformationStore().hospital.id = id;
+        }
+
+        // 其他
+        else {
           // 重置状态
           useLoadingInformationStore().resetStatue();
         }

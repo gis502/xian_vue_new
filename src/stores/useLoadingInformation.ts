@@ -1,122 +1,84 @@
 import type { ClickObject } from '@/types/cesium/ClickObject';
 import { defineStore } from 'pinia';
-import { type Ref, ref } from 'vue';
+import { reactive } from 'vue';
 
 /**
  * 加载信息弹窗相关状态管理
- * @returns 点击对象、隐患点/风险点状态及相关方法
+ * @returns 点击对象、隐患点/风险点/医院状态及相关方法
  */
 export const useLoadingInformationStore = defineStore(
   'loadingInformation',
   () => {
+    // ============================ 点击对象状态 ================================
+
     /**
      * 点击的对象
      */
-    const clickObject: Ref<ClickObject> = ref({ id: '', primitive: null });
+    const clickObject = reactive<ClickObject>({ id: '', primitive: null });
+
+    // ============================ 隐患点加载状态 ================================
 
     /**
-     * 隐患点加载状态
+     * 隐患点加载信息状态
      */
-    const loadingHiddenPointInformationStatus: Ref<boolean> = ref(false);
-    /**
-     * 隐患点ID
-     */
-    const hiddenPointId: Ref<number> = ref(-1);
+    const hiddenPoint = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 隐患点ID */
+      id: -1,
+    });
+
+    // ============================ 风险点加载状态 ================================
 
     /**
-     * 风险点加载状态
+     * 风险点加载信息状态
      */
-    const loadingRiskPointInformationStatus: Ref<boolean> = ref(false);
-    /**
-     * 风险点ID
-     */
-    const riskPointId: Ref<number> = ref(-1);
+    const riskPoint = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 风险点ID */
+      id: -1,
+    });
+
+    // ============================ 医院加载状态 ================================
 
     /**
-     * 重置状态
+     * 医院加载信息状态
+     */
+    const hospital = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 医院ID */
+      id: -1,
+    });
+
+    /**
+     * 重置所有状态
      */
     const resetStatue = () => {
-      loadingHiddenPointInformationStatus.value = false;
-      hiddenPointId.value = -1;
-      loadingRiskPointInformationStatus.value = false;
-      riskPointId.value = -1;
-    };
+      // 点击对象重置
+      clickObject.id = '';
+      clickObject.primitive = null;
 
-    /**
-     * 获取点击对象
-     * @returns 点击对象
-     */
-    const getClickObject = () => clickObject.value;
-    /**
-     * 设置点击对象
-     * @param value - 点击对象
-     */
-    const setClickObject = (value: ClickObject) => {
-      clickObject.value = value;
-    };
-    /**
-     * 获取隐患点加载状态
-     * @returns 加载状态
-     */
-    const getLoadingHiddenPointInformationStatus = () =>
-      loadingHiddenPointInformationStatus.value;
-    /**
-     * 设置隐患点加载状态
-     * @param value - 加载状态
-     */
-    const setLoadingHiddenPointInformationStatus = (value: boolean) => {
-      loadingHiddenPointInformationStatus.value = value;
-    };
-    /**
-     * 获取风险点加载状态
-     * @returns 加载状态
-     */
-    const getLoadingRiskPointInformationStatus = () =>
-      loadingRiskPointInformationStatus.value;
-    /**
-     * 设置风险点加载状态
-     * @param value - 加载状态
-     */
-    const setLoadingRiskPointInformationStatus = (value: boolean) => {
-      loadingRiskPointInformationStatus.value = value;
-    };
-    /**
-     * 获取隐患点ID
-     * @returns 隐患点ID
-     */
-    const getHiddenPointId = () => hiddenPointId.value;
-    /**
-     * 设置隐患点ID
-     * @param value - 隐患点ID
-     */
-    const setHiddenPointId = (value: number) => {
-      hiddenPointId.value = value;
-    };
-    /**
-     * 获取风险点ID
-     * @returns 风险点ID
-     */
-    const getRiskPointId = () => riskPointId.value;
-    /**
-     * 设置风险点ID
-     * @param value - 风险点ID
-     */
-    const setRiskPointId = (value: number) => {
-      riskPointId.value = value;
+      // 隐患点状态重置
+      hiddenPoint.loading = false;
+      hiddenPoint.id = -1;
+
+      // 风险点状态重置
+      riskPoint.loading = false;
+      riskPoint.id = -1;
+
+      // 医院状态重置
+      hospital.loading = false;
+      hospital.id = -1;
     };
 
     return {
+      clickObject,
+      hiddenPoint,
+      riskPoint,
+      hospital,
       resetStatue,
-      getClickObject,
-      setClickObject,
-      getLoadingHiddenPointInformationStatus,
-      setLoadingHiddenPointInformationStatus,
-      getLoadingRiskPointInformationStatus,
-      setLoadingRiskPointInformationStatus,
-      getHiddenPointId,
-      setHiddenPointId,
-      getRiskPointId,
-      setRiskPointId,
     };
   }
 );

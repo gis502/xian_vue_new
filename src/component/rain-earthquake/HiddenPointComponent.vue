@@ -15,13 +15,11 @@
     <InformationBox
       :data="hiddenDangerPointDetail as Record<string, any>"
       :field="field"
-      v-if="
-        useLoadingInformationStore().getLoadingHiddenPointInformationStatus()
-      "
+      v-if="useLoadingInformationStore().hiddenPoint.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformationStore().getHiddenPointId()"
+      :key="useLoadingInformationStore().hiddenPoint.id"
     />
   </div>
 </template>
@@ -62,14 +60,14 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformationStore().getHiddenPointId(),
+    () => useLoadingInformationStore().hiddenPoint.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
 
       // 获取隐患点数据
-      const clickObject = useLoadingInformationStore().getClickObject();
+      const clickObject = useLoadingInformationStore().clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -77,7 +75,7 @@
       }
 
       const res = await $api.hiddenDangerSpots.getPointDetailById(
-        useLoadingInformationStore().getHiddenPointId()
+        useLoadingInformationStore().hiddenPoint.id
       );
 
       // 更新数据
@@ -93,9 +91,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformationStore().setLoadingHiddenPointInformationStatus(
-          true
-        );
+        useLoadingInformationStore().hiddenPoint.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }

@@ -6,15 +6,15 @@
       type="primary"
       @click="changeStatus"
       circle
-      :title="`${useStatusStore().uiComponents.disasterChainPointShow ? '关闭' : '打开'}灾害链影响点列表`"
+      :title="`${useStatusStore().uiComponents.disasterChainPointShow.show ? '关闭' : '打开'}灾害链影响点列表`"
       >{{
-        useStatusStore().uiComponents.disasterChainPointShow ? '-' : '+'
+        useStatusStore().uiComponents.disasterChainPointShow.show ? '-' : '+'
       }}</el-button
     >
   </div>
   <div
     class="disaster-list-box"
-    v-show="useStatusStore().uiComponents.disasterChainPointShow"
+    v-show="useStatusStore().uiComponents.disasterChainPointShow.show"
   >
     <header class="table-title">
       <span>灾害链影响点列表</span>
@@ -124,8 +124,8 @@
 
   // 切换面板显示状态
   const changeStatus = () => {
-    useStatusStore().uiComponents.disasterChainPointShow =
-      !useStatusStore().uiComponents.disasterChainPointShow;
+    useStatusStore().uiComponents.disasterChainPointShow.show =
+      !useStatusStore().uiComponents.disasterChainPointShow.show;
   };
 
   // 上一页

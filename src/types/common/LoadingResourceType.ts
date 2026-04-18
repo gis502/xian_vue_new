@@ -13,4 +13,7 @@ export enum LoadingResource {
    * 行政区划
    */
   ADMINISTRATIVE_DIVISION = 'ADMINISTRATIVE_DIVISION',
+
+  /** 医院 */
+  HOSPITAL = 'HOSPITAL',
 }

@@ -2,9 +2,11 @@ import type { DisasterType } from '@/types/common/DisasterType.ts'
 import { getSm2PublicKey } from './crypto'
 import { getBasePoins as getHiddenDangerBasePoints, getPointDetailById as getHiddenDangerPointDetailById} from './hidden-danger-spots'
 import { getBasePoins as getRiskBasePoints, getPointDetailById as getRiskPointDetailById} from './risk-spots'
+import { getBasePoins as getHospitalsBasePoints, getPointDetailById as getHospitalsPointDetailById} from './hospitals'
 import type { ApiResponse } from '@/types/ApiResponse'
 import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots'
 import type { XianRiskSpots } from '@/types/base/XianRiskSpots'
+import type { XianHospitals } from '@/types/base/XianHospitals'
 
 /**
  * API接口统一导出对象
@@ -51,5 +53,21 @@ export const $api = {
      * @returns 风险点详情
      */
     getPointDetailById: (id: number): Promise<ApiResponse<XianRiskSpots>> => getRiskPointDetailById(id),
+  },
+
+  // 医院信息
+  hospitals: {
+    /**
+     * 获取所有基础医院
+     * @returns 医院数据数组
+     */
+    getBasePoins: (): Promise<ApiResponse<XianHospitals[]>> => getHospitalsBasePoints(),
+
+    /**
+     * 根据id获取医院详情
+     * @param id - 医院id
+     * @returns 医院详情
+     */
+    getPointDetailById: (id: number): Promise<ApiResponse<XianHospitals>> => getHospitalsPointDetailById(id),
   },
 }

@@ -2,7 +2,12 @@
   <div class="map_container" id="map-container"></div>
 
   <!-- 行政区划 -->
-  <AdministrativeDivision v-if="useStatusStore().appLoadingCompleted" />
+  <AdministrativeDivision
+    v-if="
+      useStatusStore().appLoadingCompleted &&
+      useStatusStore().mapLayers.showAdministrativeDivision.loading
+    "
+  />
 </template>
 
 <script lang="ts" setup>
