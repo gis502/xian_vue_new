@@ -19,7 +19,7 @@
 
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { xiAn } from '@/assets';
-  import { Color } from 'cesium';
+  import { Color, UrlTemplateImageryProvider } from 'cesium';
   import type { GeoJsonFileType } from '@/types/cesium/GeoJsonFileType';
   import config from '@/config/config.json';
   import { useMap } from '@/hooks/map/useMap';
@@ -37,7 +37,7 @@
     await CesiumUtilsSingleton.initCesiumViewer({
       containerId: 'map-container',
       mark: {
-        include: true,
+        include: false,
         geoJson: xiAn as GeoJsonFileType,
         color: Color.BLACK.withAlpha(0.8),
         border: {
@@ -64,6 +64,13 @@
     // 默认视角
     CesiumUtilsSingleton.viewToTarget(
       config.defaultPosition as [number, number, number]
+    );
+
+    const mvtProvider = new UrlTemplateImageryProvider({
+      url: 'http://localhost:8081/people/{z}/{x}/{y}.mvt',
+    });
+    CesiumUtilsSingleton.getViewer()!.imageryLayers.addImageryProvider(
+      mvtProvider
     );
   });
 </script>
