@@ -61,6 +61,13 @@ export const useLayerControl = () => {
     useStatusStore().poiLayers.showPopulationGrid.loading = true;
   };
 
+  /**
+   * 显示管网
+   */
+  const clickWaterPipe = () => {
+    useStatusStore().infrastructureLayers.showNetworkSystem.loading = true;
+  };
+
   return {
     clickHiddenDangerPoint,
     clickHospital,
@@ -69,5 +76,6 @@ export const useLayerControl = () => {
     clickFireStation,
     clickStorePoints,
     clickPopulationGrid,
+    clickWaterPipe,
   };
 };

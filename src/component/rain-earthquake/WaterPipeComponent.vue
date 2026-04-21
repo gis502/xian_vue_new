@@ -1,8 +1,8 @@
+<!-- 供水管网 -->
 <template>
-  <!-- 加载人口网格 -->
   <LoadingGeoserverLayer
-    :id="`people`"
-    :layers="`xian:xian_people`"
+    :id="`waterPipe`"
+    :layers="`xian:xian_water_pipe`"
     @provide-layers="provideLayers"
   />
 </template>
@@ -14,14 +14,14 @@
   import LoadingGeoserverLayer from './LoadingGeoserverLayer.vue';
 
   // 保存图层引用
-  let populationLayer: ImageryLayer | null = null;
+  let waterPipeLayer: ImageryLayer | null = null;
 
   onMounted(() => {
-    // 监听显示
+    // 监听显示隐藏
     watch(
-      () => useStatusStore().poiLayers.showPopulationGrid.show,
+      () => useStatusStore().infrastructureLayers.showNetworkSystem.show,
       (newValue: boolean) => {
-        populationLayer!.show = newValue;
+        waterPipeLayer!.show = newValue;
       }
     );
   });
@@ -31,7 +31,7 @@
    * @param layer 图层
    */
   function provideLayers(layer: ImageryLayer) {
-    populationLayer = layer;
+    waterPipeLayer = layer;
   }
 </script>
 

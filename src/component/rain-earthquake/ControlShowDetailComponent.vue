@@ -46,6 +46,14 @@
       useStatusStore().poiLayers.showPopulationGrid.loading
     "
   />
+
+  <!-- 管网系统 -->
+  <WaterPipeComponent
+    v-if="
+      useStatusStore().appLoadingCompleted &&
+      useStatusStore().infrastructureLayers.showNetworkSystem.loading
+    "
+  />
 </template>
 
 <script lang="ts" setup>
@@ -56,6 +64,7 @@
   import FireStationComponent from './FireStationComponent.vue';
   import StorePointsComponent from './StorePointsComponent.vue';
   import PopulationGridComponent from './PopulationGridComponent.vue';
+  import WaterPipeComponent from './WaterPipeComponent.vue';
 </script>
 
 <style scoped lang="less"></style>

@@ -231,9 +231,7 @@ export const useEarthquakeDisasterChain = () => {
         name: '显示管网系统',
         statusStore: statusStore.infrastructureLayers,
         statusKey: 'showNetworkSystem' as const,
-        callback: (status: unknown) => {
-          console.log('显示管网系统', status);
-        },
+        callback: layerControl.clickWaterPipe,
       },
       {
         name: '显示交通道路',
