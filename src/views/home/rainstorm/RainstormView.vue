@@ -53,6 +53,9 @@
 
     <!-- 控制显示详情组件 -->
     <ControlShowDetailComponent />
+
+    <!-- 功能组件 -->
+    <FunctionComponent />
   </div>
 </template>
 
@@ -61,6 +64,7 @@
   import ControlShowComponent from '@/component/rain-earthquake/ControlShowComponent.vue';
   import ControlShowDetailComponent from '@/component/rain-earthquake/ControlShowDetailComponent.vue';
   import DisasterChainPointComponent from '@/component/rain-earthquake/DisasterChainPointComponent.vue';
+  import FunctionComponent from '@/component/rain-earthquake/FunctionComponent.vue';
   import LeftButtonComponent from '@/component/rain-earthquake/LeftButtonComponent.vue';
   import LegendComponent from '@/component/rain-earthquake/LegendComponent.vue';
   import RightButtonComponent from '@/component/rain-earthquake/RightButtonComponent.vue';

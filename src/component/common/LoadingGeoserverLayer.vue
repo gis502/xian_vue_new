@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
+  import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils.ts';
   import type { ImageryLayer } from 'cesium';
   import { onMounted } from 'vue';
 

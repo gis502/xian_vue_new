@@ -10,7 +10,7 @@
         <button
           @click="handelButton(index, buttonItem.callback)"
           :style="{
-            'background-image': `url(${selectedButtonId == index ? leftOrangeButton : leftBlueButton})`,
+            'background-image': `url(${useButtonSelectedIdStore().leftButtonSelectedId == index ? leftOrangeButton : leftBlueButton})`,
           }"
         >
           {{ buttonItem.name }}
@@ -22,11 +22,8 @@
 
 <script setup lang="ts">
   import { leftBlueButton, leftOrangeButton } from '@/assets';
-  import { useStatusStore } from '@/stores/useStatusStore';
-  import { ref, type Ref } from 'vue';
-
-  // 记录选中按钮id
-  const selectedButtonId: Ref<number> = ref(-1);
+  import { useButtonSelectedIdStore } from '@/stores/useButtonSelectedIdStore.ts';
+  import { useStatusStore } from '@/stores/useStatusStore.ts';
 
   // 接收父组件传递的参数
   const props = defineProps<{
@@ -42,20 +39,24 @@
     index: number,
     callback: (...args: unknown[]) => unknown
   ) => {
-    if (index == selectedButtonId.value) {
-      selectedButtonId.value = -1;
+    // 取消选中
+    if (index == useButtonSelectedIdStore().leftButtonSelectedId) {
+      callback(false);
+      useButtonSelectedIdStore().leftButtonSelectedId = -1;
       return;
     } else if (
-      selectedButtonId.value != -1 &&
-      selectedButtonId.value != index
+      useButtonSelectedIdStore().leftButtonSelectedId != -1 &&
+      useButtonSelectedIdStore().leftButtonSelectedId != index
     ) {
+      console.error('当前按钮选中有误，请选择正确的按钮。');
       return;
     }
-    selectedButtonId.value = index;
-    callback();
+    useButtonSelectedIdStore().leftButtonSelectedId = index;
+    callback(true);
 
+    // 如果该按钮只执行一次，则取消选中
     if (props.buttonList[index].executeOnce) {
-      selectedButtonId.value = -1;
+      useButtonSelectedIdStore().leftButtonSelectedId = -1;
     }
   };
 </script>

@@ -153,6 +153,14 @@ export const useStatusStore = defineStore('status', () => {
     },
   });
 
+  // ============================ 地图功能显示状态 ================================
+  const functionStatus = reactive({
+    aroundAnalysis: {
+      show: false,
+      loading: false,
+    },
+  });
+
   /**
    * 恢复默认值
    */
@@ -262,6 +270,12 @@ export const useStatusStore = defineStore('status', () => {
       show: false,
       loading: false,
     };
+
+    // 功能显示状态重置
+    functionStatus.aroundAnalysis = {
+      show: false,
+      loading: false,
+    };
   };
 
   return {
@@ -270,6 +284,7 @@ export const useStatusStore = defineStore('status', () => {
     mapLayers,
     poiLayers,
     infrastructureLayers,
+    functionStatus,
     reset,
     resetScene,
   };

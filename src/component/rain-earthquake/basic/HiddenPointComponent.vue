@@ -28,16 +28,16 @@
   import { DisasterType } from '@/types/common/DisasterType.ts';
   import { ref, watch } from 'vue';
   import { $api } from '@/api/api.ts';
-  import type { Point } from '@/types/base/Point';
-  import LoadingPoints from '@/component/rain-earthquake/LoadingPoints.vue';
+  import type { Point } from '@/types/base/Point.ts';
+  import LoadingPoints from '@/component/common/LoadingPoints.vue';
   import config from '@/config/config.json';
   import InformationBox from '@/component/common/InformationBox.vue';
-  import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
-  import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
-  import { useHiddenPoint } from '@/hooks/rain-earthquake/useHiddenPoint';
-  import { useStatusStore } from '@/stores/useStatusStore';
-  import { LoadingResource } from '@/types/common/LoadingResourceType';
-  import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore';
+  import { useLoadingInformationStore } from '@/stores/useLoadingInformation.ts';
+  import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils.ts';
+  import { useHiddenPoint } from '@/hooks/rain-earthquake/useHiddenPoint.ts';
+  import { useStatusStore } from '@/stores/useStatusStore.ts';
+  import { LoadingResource } from '@/types/common/LoadingResourceType.ts';
+  import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore.ts';
 
   // 接收父组件传递的参数
   const props = defineProps<{

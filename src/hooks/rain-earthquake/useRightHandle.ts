@@ -1,6 +1,7 @@
-import { useStatusStore } from '@/stores/useStatusStore';
-import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
+import { useStatusStore } from '@/stores/useStatusStore.ts';
+import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils.ts';
 import config from '@/config/config.json';
+import { useButtonSelectedIdStore } from '@/stores/useButtonSelectedIdStore';
 
 export const useRightHandle = () => {
   /**
@@ -9,6 +10,7 @@ export const useRightHandle = () => {
   const resetScene = () => {
     CesiumUtilsSingleton.clearAllResources('custom');
     useStatusStore().resetScene();
+    useButtonSelectedIdStore().resetId();
   };
 
   /**

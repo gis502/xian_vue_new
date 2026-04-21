@@ -8,10 +8,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { useStatusStore } from '@/stores/useStatusStore';
+  import { useStatusStore } from '@/stores/useStatusStore.ts';
   import type { ImageryLayer } from 'cesium';
   import { onMounted, watch } from 'vue';
-  import LoadingGeoserverLayer from './LoadingGeoserverLayer.vue';
+  import LoadingGeoserverLayer from '../../common/LoadingGeoserverLayer.vue';
 
   // 保存图层引用
   let waterPipeLayer: ImageryLayer | null = null;

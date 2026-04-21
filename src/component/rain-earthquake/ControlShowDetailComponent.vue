@@ -57,14 +57,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { useStatusStore } from '@/stores/useStatusStore';
-  import HospitalComponent from './HospitalComponent.vue';
-  import DangerousSourceComponent from './DangerousSourceComponent.vue';
-  import EmergencyShelterComponent from './EmergencyShelterComponent.vue';
-  import FireStationComponent from './FireStationComponent.vue';
-  import StorePointsComponent from './StorePointsComponent.vue';
-  import PopulationGridComponent from './PopulationGridComponent.vue';
-  import WaterPipeComponent from './WaterPipeComponent.vue';
+  import { useStatusStore } from '@/stores/useStatusStore.ts';
+  import HospitalComponent from './detail-panels/HospitalComponent.vue';
+  import DangerousSourceComponent from './detail-panels/DangerousSourceComponent.vue';
+  import EmergencyShelterComponent from './detail-panels/EmergencyShelterComponent.vue';
+  import FireStationComponent from './detail-panels/FireStationComponent.vue';
+  import StorePointsComponent from './detail-panels/StorePointsComponent.vue';
+  import PopulationGridComponent from './detail-panels/PopulationGridComponent.vue';
+  import WaterPipeComponent from './detail-panels/WaterPipeComponent.vue';
 </script>
 
 <style scoped lang="less"></style>

@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
+  import { useLoadingInformationStore } from '@/stores/useLoadingInformation.ts';
 
   defineProps<{
     constrolShowList: {

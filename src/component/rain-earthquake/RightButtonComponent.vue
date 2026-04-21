@@ -1,11 +1,14 @@
 <template>
-  <div class="right-button-box">
+  <div
+    class="right-button-box"
+    v-show="useStatusStore().uiComponents.rightButton.show"
+  >
     <ul class="right-button-ul">
       <li v-for="(buttonItem, index) in buttonList" :key="index">
         <button
           @click="handelButton(index, buttonItem.callback)"
           :style="{
-            'background-image': `url(${selectedButtonId == index ? rightOrangeButton : rightBlueButton})`,
+            'background-image': `url(${useButtonSelectedIdStore().rightButtonSelectedId == index ? rightOrangeButton : rightBlueButton})`,
           }"
         >
           {{ buttonItem.name }}
@@ -17,10 +20,8 @@
 
 <script setup lang="ts">
   import { rightBlueButton, rightOrangeButton } from '@/assets';
-  import { ref, type Ref } from 'vue';
-
-  // 记录选中按钮id
-  const selectedButtonId: Ref<number> = ref(-1);
+  import { useButtonSelectedIdStore } from '@/stores/useButtonSelectedIdStore.ts';
+  import { useStatusStore } from '@/stores/useStatusStore.ts';
 
   // 接收父组件传递的参数
   const props = defineProps<{
@@ -36,19 +37,19 @@
     index: number,
     callback: (...args: unknown[]) => unknown
   ) => {
-    if (index == selectedButtonId.value) {
-      selectedButtonId.value = -1;
+    if (index == useButtonSelectedIdStore().rightButtonSelectedId) {
+      useButtonSelectedIdStore().rightButtonSelectedId = -1;
       return;
     } else if (
-      selectedButtonId.value != -1 &&
-      selectedButtonId.value != index
+      useButtonSelectedIdStore().rightButtonSelectedId != -1 &&
+      useButtonSelectedIdStore().rightButtonSelectedId != index
     ) {
       return;
     }
-    selectedButtonId.value = index;
+    useButtonSelectedIdStore().rightButtonSelectedId = index;
     callback();
     if (props.buttonList[index].executeOnce) {
-      selectedButtonId.value = -1;
+      useButtonSelectedIdStore().rightButtonSelectedId = -1;
     }
   };
 </script>

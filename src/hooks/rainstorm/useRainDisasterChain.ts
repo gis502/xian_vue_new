@@ -10,8 +10,9 @@ import {
   riskAreaIcon,
   waterLoggingIcon,
 } from '@/assets';
-import { useLayerControl } from '../useLayerControl';
-import { useRightHandle } from '../useRightHandle';
+import { useLayerControl } from '../rain-earthquake/useLayerControl.ts';
+import { useRightHandle } from '../rain-earthquake/useRightHandle.ts';
+import { useLeftHandle } from '../rain-earthquake/useLeftHandle.ts';
 
 /**
  * 暴雨灾害链
@@ -100,9 +101,7 @@ export const useRainDisasterChain = () => {
   const leftButtonInfo = [
     {
       name: '周边分析',
-      callback: () => {
-        console.log('周边分析');
-      },
+      callback: useLeftHandle().clickAroundAnalysis,
     },
     {
       name: '关联分析',

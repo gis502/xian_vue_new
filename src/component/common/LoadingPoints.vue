@@ -5,10 +5,10 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue';
-  import { usePointsHandle } from '@/hooks/usePointsHandle';
-  import type { Point } from '@/types/base/Point';
-  import type { LoadingResource } from '@/types/common/LoadingResourceType';
-  import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore';
+  import { usePointsHandle } from '@/hooks/usePointsHandle.ts';
+  import type { Point } from '@/types/base/Point.ts';
+  import type { LoadingResource } from '@/types/common/LoadingResourceType.ts';
+  import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore.ts';
 
   // 属性
   const props = defineProps<{

@@ -1,4 +1,4 @@
-import { useStatusStore } from '@/stores/useStatusStore';
+import { useStatusStore } from '@/stores/useStatusStore.ts';
 
 /**
  * 控制面板显示隐藏逻辑

@@ -3,9 +3,9 @@ import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots';
 import type { PaginationType } from '@/types/common/PaginationType';
 import { PointType } from '@/types/common/DisasterType';
 import { useStatusStore } from '@/stores/useStatusStore';
-import { useLayerControl } from '../useLayerControl';
+import { useLayerControl } from '../rain-earthquake/useLayerControl.ts';
 import { debrisFlowIcon, landslideIcon, riskAreaIcon } from '@/assets';
-import { useRightHandle } from '../useRightHandle';
+import { useRightHandle } from '../rain-earthquake/useRightHandle.ts';
 
 /**
  * 暴雨灾害链

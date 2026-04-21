@@ -26,8 +26,8 @@
 <script setup lang="ts">
   import MapComponent from '@/component/map/MapComponent.vue';
   import type { DisasterType } from '@/types/common/DisasterType.ts';
-  import HiddenPointComponent from './HiddenPointComponent.vue';
-  import RiskPointComponent from './RiskPointComponent.vue';
+  import HiddenPointComponent from '@/component/rain-earthquake/basic/HiddenPointComponent.vue';
+  import RiskPointComponent from '@/component/rain-earthquake/basic/RiskPointComponent.vue';
   import { useStatusStore } from '@/stores/useStatusStore';
 
   // 获取父组件传递德数据

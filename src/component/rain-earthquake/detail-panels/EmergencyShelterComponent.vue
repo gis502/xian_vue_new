@@ -30,16 +30,16 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue';
   import { $api } from '@/api/api.ts';
-  import type { Point } from '@/types/base/Point';
-  import LoadingPoints from '@/component/rain-earthquake/LoadingPoints.vue';
+  import type { Point } from '@/types/base/Point.ts';
+  import LoadingPoints from '@/component/common/LoadingPoints.vue';
   import config from '@/config/config.json';
   import InformationBox from '@/component/common/InformationBox.vue';
-  import { useStatusStore } from '@/stores/useStatusStore';
-  import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
-  import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
-  import { LoadingResource } from '@/types/common/LoadingResourceType';
-  import { useEmergencyShelterPoint } from '@/hooks/rain-earthquake/useEmergencyShelterPoint';
-  import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore';
+  import { useStatusStore } from '@/stores/useStatusStore.ts';
+  import { useLoadingInformationStore } from '@/stores/useLoadingInformation.ts';
+  import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils.ts';
+  import { LoadingResource } from '@/types/common/LoadingResourceType.ts';
+  import { useEmergencyShelterPoint } from '@/hooks/rain-earthquake/useEmergencyShelterPoint.ts';
+  import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore.ts';
 
   const emergencyShelterPoints = ref<Point[]>([]);
 
