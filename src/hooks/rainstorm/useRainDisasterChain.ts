@@ -184,12 +184,6 @@ export const useRainDisasterChain = () => {
       },
     },
     {
-      name: '信息表格',
-      callback: () => {
-        console.log('信息表格');
-      },
-    },
-    {
       name: '场景重置',
       callback: () => useRightHandle().resetScene(),
       executeOnce: true,
