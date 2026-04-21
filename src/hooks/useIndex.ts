@@ -15,7 +15,7 @@ export const useIndex = () => {
     { title: '地震灾害链', name: 'earthquake', query: { identification: 2 } },
     { title: '多灾种灾害链分析', name: 'index', query: { identification: 3 } },
     { title: '灾害链情景推演', name: 'index', query: { identification: 4 } },
-    { title: '数据管理', name: 'index', query: { identification: 5 } },
+    { title: '数据管理', name: 'fileManagement', query: { identification: 5 } },
     { title: '文件管理', name: 'index', query: { identification: 6 } },
   ];
 
