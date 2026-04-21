@@ -19,6 +19,12 @@ const router = createRouter({
           name: 'earthquake',
           component: () => import('@/views/home/earthquake/EarthquakeView.vue'),
         },
+        {
+          path: 'file-management',
+          name: 'fileManagement',
+          component: () =>
+            import('@/views/home/file-management/FileManagementView.vue'),
+        },
       ],
     },
   ],
