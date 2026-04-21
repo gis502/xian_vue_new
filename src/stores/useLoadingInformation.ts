@@ -84,6 +84,14 @@ export const useLoadingInformationStore = defineStore(
       id: -1,
     });
 
+    // ============================== 学校状态 ================================
+    const school = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 学校ID */
+      id: -1,
+    });
+
     /**
      * 重置所有状态
      */
@@ -119,6 +127,10 @@ export const useLoadingInformationStore = defineStore(
       // 物资储备点状态重置
       storePoints.loading = false;
       storePoints.id = -1;
+
+      // 学校状态重置
+      school.loading = false;
+      school.id = -1;
     };
 
     return {
@@ -130,6 +142,7 @@ export const useLoadingInformationStore = defineStore(
       emergencyShelter,
       fireStation,
       storePoints,
+      school,
       resetStatue,
     };
   }

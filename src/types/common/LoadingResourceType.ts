@@ -28,4 +28,7 @@ export enum LoadingResource {
 
   /** 物资储备点 */
   STORE_POINTS = 'STORE_POINTS',
+
+  /** 学校 */
+  SCHOOL = 'SCHOOL',
 }

@@ -10,6 +10,8 @@ export { default as hospitalIcon } from '@/assets/images/icon/hospital.png';
 export { default as dangerousSourceIcon } from '@/assets/images/icon/dangerous-source.png';
 export { default as emergencyShelterIcon } from '@/assets/images/icon/emergency-shelter.png';
 export { default as firefighterIcon } from '@/assets/images/icon/firefighter.png';
+export { default as storePointsIcon } from '@/assets/images/icon/store-points.jpg';
+export { default as schoolIcon } from '@/assets/images/icon/school.png';
 
 // 图片
 export { default as backgroundImage } from '@/assets/images/background-image.png';

@@ -39,6 +39,14 @@
     "
   />
 
+  <!-- 学校 -->
+  <SchoolComponent
+    v-if="
+      useStatusStore().appLoadingCompleted &&
+      useStatusStore().poiLayers.showSchool.loading
+    "
+  />
+
   <!-- 人口网格 -->
   <PopulationGridComponent
     v-if="
@@ -65,6 +73,7 @@
   import StorePointsComponent from './detail-panels/StorePointsComponent.vue';
   import PopulationGridComponent from './detail-panels/PopulationGridComponent.vue';
   import WaterPipeComponent from './detail-panels/WaterPipeComponent.vue';
+  import SchoolComponent from './detail-panels/SchoolComponent.vue';
 </script>
 
 <style scoped lang="less"></style>

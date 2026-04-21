@@ -54,6 +54,14 @@ export const useLayerControl = () => {
   };
 
   /**
+   *  点击显示学校
+   */
+  const clickSchool = () => {
+    // 加载状态为true
+    useStatusStore().poiLayers.showSchool.loading = true;
+  };
+
+  /**
    * 点击显示人口网格
    */
   const clickPopulationGrid = () => {
@@ -75,6 +83,7 @@ export const useLayerControl = () => {
     clickEmergencyShelter,
     clickFireStation,
     clickStorePoints,
+    clickSchool,
     clickPopulationGrid,
     clickWaterPipe,
   };

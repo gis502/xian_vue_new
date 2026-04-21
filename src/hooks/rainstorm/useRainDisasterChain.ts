@@ -240,9 +240,7 @@ export const useRainDisasterChain = () => {
         name: '显示学校',
         statusStore: statusStore.poiLayers,
         statusKey: 'showSchool' as const,
-        callback: (status: unknown) => {
-          console.log('显示学校', status);
-        },
+        callback: layerControl.clickSchool,
       },
       {
         name: '显示人口网格',

@@ -1,4 +1,4 @@
-import storePointsIcon from '@/assets/images/icon/store-points.jpg';
+import { storePointsIcon } from '@/assets';
 
 /**
  * 物资储备点相关钩子函数

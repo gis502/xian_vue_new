@@ -7,6 +7,7 @@ import { getBasePoints as getDangerousSourceBasePoints, getPointDetailById as ge
 import { getBasePoints as getEmergencyShelterBasePoints, getPointDetailById as getEmergencyShelterPointDetailById} from './emergency-shelter'
 import { getBasePoints as getFirefighterBasePoints, getPointDetailById as getFirefighterPointDetailById} from './firefighter'
 import { getBasePoints as getStorePointsBasePoints, getPointDetailById as getStorePointsPointDetailById} from './store-points'
+import { getBasePoints as getSchoolsBasePoints, getPointDetailById as getSchoolsPointDetailById} from './schools'
 import type { ApiResponse } from '@/types/ApiResponse'
 import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots'
 import type { XianRiskSpots } from '@/types/base/XianRiskSpots'
@@ -15,6 +16,7 @@ import type { XianDangerousSource } from '@/types/base/XianDangerousSource'
 import type { XianEmergencyShelter } from '@/types/base/XianEmergencyShelter'
 import type { XianFirefighter } from '@/types/base/XianFirefighter'
 import type { XianStorePoints } from '@/types/base/XianStorePoints'
+import type { XianSchool } from '@/types/base/XianSchool'
 
 /**
  * API接口统一导出对象
@@ -141,5 +143,21 @@ export const $api = {
      * @returns 物资储备点详情
      */
     getPointDetailById: (id: number): Promise<ApiResponse<XianStorePoints>> => getStorePointsPointDetailById(id),
+  },
+
+  // 学校信息
+  schools: {
+    /**
+     * 获取所有基础学校
+     * @returns 学校数据数组
+     */
+    getBasePoints: (): Promise<ApiResponse<XianSchool[]>> => getSchoolsBasePoints(),
+
+    /**
+     * 根据id获取学校详情
+     * @param id - 学校id
+     * @returns 学校详情
+     */
+    getPointDetailById: (id: number): Promise<ApiResponse<XianSchool>> => getSchoolsPointDetailById(id),
   },
 }

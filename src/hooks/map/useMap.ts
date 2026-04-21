@@ -74,6 +74,11 @@ export const useMap = () => {
           useLoadingInformationStore().storePoints.id = id;
         }
 
+        // 学校
+        else if (pickedObject.id.startsWith(config.prefix.schoolPointId)) {
+          useLoadingInformationStore().school.id = id;
+        }
+
         // 其他
         else {
           // 重置状态
