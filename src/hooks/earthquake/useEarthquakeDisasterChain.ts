@@ -225,9 +225,7 @@ export const useEarthquakeDisasterChain = () => {
         name: '显示人口网格',
         statusStore: statusStore.poiLayers,
         statusKey: 'showPopulationGrid' as const,
-        callback: (status: unknown) => {
-          console.log('显示人口网格', status);
-        },
+        callback: layerControl.clickPopulationGrid,
       },
       {
         name: '显示管网系统',

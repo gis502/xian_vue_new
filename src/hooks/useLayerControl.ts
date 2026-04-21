@@ -53,6 +53,14 @@ export const useLayerControl = () => {
     useStatusStore().poiLayers.showReservePoint.loading = true;
   };
 
+  /**
+   * 点击显示人口网格
+   */
+  const clickPopulationGrid = () => {
+    // 加载状态为true
+    useStatusStore().poiLayers.showPopulationGrid.loading = true;
+  };
+
   return {
     clickHiddenDangerPoint,
     clickHospital,
@@ -60,5 +68,6 @@ export const useLayerControl = () => {
     clickEmergencyShelter,
     clickFireStation,
     clickStorePoints,
+    clickPopulationGrid,
   };
 };

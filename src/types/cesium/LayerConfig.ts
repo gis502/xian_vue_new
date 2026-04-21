@@ -27,5 +27,5 @@ export interface LayerConfig {
   credit?: string;
 
   /** 图层参数 */
-  parameters?: Record<string, string>;
+  parameters?: Record<string, unknown>;
 }

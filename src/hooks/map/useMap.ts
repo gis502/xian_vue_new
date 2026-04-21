@@ -80,6 +80,7 @@ export const useMap = () => {
           useLoadingInformationStore().resetStatue();
         }
       } else {
+        console.log(pickedObject);
         // 重置状态
         useLoadingInformationStore().resetStatue();
       }

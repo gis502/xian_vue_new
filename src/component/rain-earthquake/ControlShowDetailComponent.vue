@@ -38,6 +38,14 @@
       useStatusStore().poiLayers.showReservePoint.loading
     "
   />
+
+  <!-- 人口网格 -->
+  <PopulationGridComponent
+    v-if="
+      useStatusStore().appLoadingCompleted &&
+      useStatusStore().poiLayers.showPopulationGrid.loading
+    "
+  />
 </template>
 
 <script lang="ts" setup>
@@ -47,6 +55,7 @@
   import EmergencyShelterComponent from './EmergencyShelterComponent.vue';
   import FireStationComponent from './FireStationComponent.vue';
   import StorePointsComponent from './StorePointsComponent.vue';
+  import PopulationGridComponent from './PopulationGridComponent.vue';
 </script>
 
 <style scoped lang="less"></style>
