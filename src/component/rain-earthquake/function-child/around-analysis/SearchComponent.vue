@@ -1,6 +1,8 @@
 <!-- 搜索组件 -->
 <template>
-  <div></div>
+  <div>
+    搜索
+  </div>
 </template>
 
 <script lang="ts"></script>
