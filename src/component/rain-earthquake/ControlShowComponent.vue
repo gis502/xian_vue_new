@@ -1,5 +1,8 @@
 <template>
-  <div class="control-show-panel-box">
+  <div
+    class="control-show-panel-box"
+    v-show="useStatusStore().uiComponents.controlPanel.show"
+  >
     <div class="title-box">
       <header>控制显示</header>
     </div>
@@ -20,6 +23,7 @@
 
 <script lang="ts" setup>
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation.ts';
+  import { useStatusStore } from '@/stores/useStatusStore';
 
   defineProps<{
     constrolShowList: {

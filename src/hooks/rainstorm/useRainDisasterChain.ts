@@ -31,12 +31,12 @@ export const useRainDisasterChain = () => {
   /**
    * 下拉选项
    */
-  const selectOptions = [
+  const selectOptions = ref([
     { value: PointType.LANDSLIDE, label: '滑坡' },
     { value: PointType.DEBRIS_FLOW, label: '泥石流' },
     { value: PointType.FLASH_FLOOD, label: '山洪' },
     { value: PointType.WATER_LOGGING, label: '内涝' },
-  ];
+  ]);
 
   /**
    * 表格数据
@@ -46,12 +46,12 @@ export const useRainDisasterChain = () => {
   /**
    * 表头配置
    */
-  const tableColumns = [
+  const tableColumns = ref([
     { title: '名称', key: 'disasterName' },
     { title: '位置', key: 'position' },
     { title: '规模等级', key: 'scaleGrade' },
     { title: '险情等级', key: 'riskGrade' },
-  ];
+  ]);
 
   /**
    * 分页配置
