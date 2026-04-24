@@ -258,9 +258,7 @@ export const useRainDisasterChain = () => {
         name: '显示交通道路',
         statusStore: statusStore.infrastructureLayers,
         statusKey: 'showTrafficRoad' as const,
-        callback: (status: unknown) => {
-          console.log('显示交通道路', status);
-        },
+        callback: layerControl.clickTrafficRoad,
       },
       {
         name: '显示桥梁',

@@ -62,6 +62,14 @@
       useStatusStore().infrastructureLayers.showNetworkSystem.loading
     "
   />
+
+  <!-- 交通道路 -->
+  <TrafficRoadComponent
+    v-if="
+      useStatusStore().appLoadingCompleted &&
+      useStatusStore().infrastructureLayers.showTrafficRoad.loading
+    "
+  />
 </template>
 
 <script lang="ts" setup>
@@ -74,6 +82,7 @@
   import PopulationGridComponent from './detail-panels/PopulationGridComponent.vue';
   import WaterPipeComponent from './detail-panels/WaterPipeComponent.vue';
   import SchoolComponent from './detail-panels/SchoolComponent.vue';
+  import TrafficRoadComponent from '@/component/rain-earthquake/detail-panels/TrafficRoadComponent.vue';
 </script>
 
 <style scoped lang="less"></style>

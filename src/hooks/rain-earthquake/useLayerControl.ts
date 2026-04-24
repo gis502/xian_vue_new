@@ -76,6 +76,13 @@ export const useLayerControl = () => {
     useStatusStore().infrastructureLayers.showNetworkSystem.loading = true;
   };
 
+  /**
+   * 显示交通道路
+   */
+  const clickTrafficRoad = () => {
+    useStatusStore().infrastructureLayers.showTrafficRoad.loading = true;
+  };
+
   return {
     clickHiddenDangerPoint,
     clickHospital,
@@ -86,5 +93,6 @@ export const useLayerControl = () => {
     clickSchool,
     clickPopulationGrid,
     clickWaterPipe,
+    clickTrafficRoad
   };
 };
