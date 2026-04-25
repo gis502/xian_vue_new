@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots';
 import type { PaginationType } from '@/types/common/PaginationType';
 import { PointType } from '@/types/common/DisasterType';
@@ -31,12 +31,12 @@ export const useRainDisasterChain = () => {
   /**
    * 下拉选项
    */
-  const selectOptions = [
+  const selectOptions = ref([
     { value: PointType.LANDSLIDE, label: '滑坡' },
     { value: PointType.DEBRIS_FLOW, label: '泥石流' },
     { value: PointType.FLASH_FLOOD, label: '山洪' },
     { value: PointType.WATER_LOGGING, label: '内涝' },
-  ];
+  ]);
 
   /**
    * 表格数据
@@ -46,12 +46,12 @@ export const useRainDisasterChain = () => {
   /**
    * 表头配置
    */
-  const tableColumns = [
+  const tableColumns = ref([
     { title: '名称', key: 'disasterName' },
     { title: '位置', key: 'position' },
     { title: '规模等级', key: 'scaleGrade' },
     { title: '险情等级', key: 'riskGrade' },
-  ];
+  ]);
 
   /**
    * 分页配置
@@ -302,6 +302,15 @@ export const useRainDisasterChain = () => {
       },
     ];
   };
+
+  // 监听条件变化
+  watch(
+    conditions,
+    () => {
+      console.log('条件改变');
+    },
+    { deep: true }
+  );
 
   return {
     conditions,

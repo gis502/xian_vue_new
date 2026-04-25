@@ -1,5 +1,6 @@
 <template>
   <div
+    v-show="useStatusStore().uiComponents.leftButton.show"
     class="left-button-box"
     :style="{
       left: `${useStatusStore().uiComponents.disasterChainPointShow.show ? 575 : 100}px`,

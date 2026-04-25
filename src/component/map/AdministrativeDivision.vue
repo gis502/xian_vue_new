@@ -6,10 +6,11 @@
 <script lang="ts" setup>
   import { useAdministrativeDivision } from '@/hooks/map/useAdministrativeDivision';
   import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore';
+  import { useStatusStore } from '@/stores/useStatusStore';
   import { LoadingResource } from '@/types/common/LoadingResourceType';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { Color } from 'cesium';
-  import { onMounted } from 'vue';
+  import { onMounted, watch } from 'vue';
 
   // 配置参数
   const { areas, areasId, areasColor, areaTransparency, labelTransparency } =
@@ -49,6 +50,18 @@
       areasId
     );
   });
+
+  // 监听显示状态改变
+  watch(
+    () => useStatusStore().mapLayers.showAdministrativeDivision.show,
+    (newValue: boolean) => {
+      if (newValue) {
+        CesiumUtilsSingleton.batchShowGeoJsonLayers(areasId);
+      } else {
+        CesiumUtilsSingleton.batchHideGeoJsonLayers(areasId);
+      }
+    }
+  );
 </script>
 
 <style scoped></style>
