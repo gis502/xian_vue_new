@@ -249,17 +249,13 @@ export const useEarthquakeDisasterChain = () => {
         name: '显示高速',
         statusStore: statusStore.infrastructureLayers,
         statusKey: 'showHighway' as const,
-        callback: (status: unknown) => {
-          console.log('显示高速', status);
-        },
+        callback: layerControl.clickHighway,
       },
       {
         name: '显示国道',
         statusStore: statusStore.infrastructureLayers,
         statusKey: 'showMainRoad' as const,
-        callback: (status: unknown) => {
-          console.log('显示国道', status);
-        },
+        callback: layerControl.clickNationRoad,
       },
       {
         name: '显示水库',

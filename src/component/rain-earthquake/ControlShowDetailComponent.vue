@@ -70,6 +70,20 @@
       useStatusStore().infrastructureLayers.showTrafficRoad.loading
     "
   />
+  <!-- 高速 -->
+  <HighwayComponent
+    v-if="
+      useStatusStore().appLoadingCompleted &&
+      useStatusStore().infrastructureLayers.showHighway.loading
+    "
+  />
+  <!-- 国道 -->
+  <NationRoadComponent
+    v-if="
+      useStatusStore().appLoadingCompleted &&
+      useStatusStore().infrastructureLayers.showMainRoad.loading
+    "
+  />
 </template>
 
 <script lang="ts" setup>
@@ -83,6 +97,8 @@
   import WaterPipeComponent from './detail-panels/WaterPipeComponent.vue';
   import SchoolComponent from './detail-panels/SchoolComponent.vue';
   import TrafficRoadComponent from '@/component/rain-earthquake/detail-panels/TrafficRoadComponent.vue';
+  import HighwayComponent from '@/component/rain-earthquake/detail-panels/HighwayComponent.vue';
+  import NationRoadComponent from '@/component/rain-earthquake/detail-panels/NationRoadComponent.vue';
 </script>
 
 <style scoped lang="less"></style>
