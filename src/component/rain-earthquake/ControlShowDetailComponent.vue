@@ -91,6 +91,14 @@
       useStatusStore().infrastructureLayers.showBridge.loading
     "
   />
+
+  <!-- 水库 -->
+  <ReservoirComponent
+    v-if="
+      useStatusStore().appLoadingCompleted &&
+      useStatusStore().infrastructureLayers.showReservoir.loading
+    "
+  />
 </template>
 
 <script lang="ts" setup>
@@ -107,6 +115,7 @@
   import HighwayComponent from '@/component/rain-earthquake/detail-panels/HighwayComponent.vue';
   import NationRoadComponent from '@/component/rain-earthquake/detail-panels/NationRoadComponent.vue';
   import BridgeComponent from '@/component/rain-earthquake/detail-panels/BridgeComponent.vue';
+  import ReservoirComponent from '@/component/rain-earthquake/detail-panels/ReservoirComponent.vue';
 </script>
 
 <style scoped lang="less"></style>

@@ -100,6 +100,14 @@ export const useLoadingInformationStore = defineStore(
       id: -1,
     });
 
+    // ============================== 水库状态 ================================
+    const reservoir = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 水库ID */
+      id: -1,
+    });
+
     /**
      * 重置所有状态
      */
@@ -143,6 +151,10 @@ export const useLoadingInformationStore = defineStore(
       // 桥梁状态重置
       bridge.loading = false;
       bridge.id = -1;
+
+      // 水库状态重置
+      reservoir.loading = false;
+      reservoir.id = -1;
     };
 
     return {
@@ -156,6 +168,7 @@ export const useLoadingInformationStore = defineStore(
       storePoints,
       school,
       bridge,
+      reservoir,
       resetStatue,
 
     };

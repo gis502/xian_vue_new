@@ -84,6 +84,11 @@ export const useMap = () => {
           useLoadingInformationStore().bridge.id = id;
         }
 
+        // 水库
+        else if (pickedObject.id.startsWith(config.prefix.reservoirPointId)) {
+          useLoadingInformationStore().reservoir.id = id;
+        }
+
         // 其他
         else {
           // 重置状态

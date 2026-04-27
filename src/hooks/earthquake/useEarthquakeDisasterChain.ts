@@ -259,9 +259,7 @@ export const useEarthquakeDisasterChain = () => {
         name: '显示水库',
         statusStore: statusStore.infrastructureLayers,
         statusKey: 'showReservoir' as const,
-        callback: (status: unknown) => {
-          console.log('显示水库', status);
-        },
+        callback: layerControl.clickReservoir,
       },
       {
         name: '显示地铁站',

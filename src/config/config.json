@@ -42,6 +42,7 @@
     "fireStationPointId": "fire-station-point-",
     "storePointsPointId": "store-points-point-",
     "schoolPointId": "school-point-",
-    "bridgePointId": "bridge-point-"
+    "bridgePointId": "bridge-point-",
+    "reservoirPointId": "reservoir-point-"
   }
 }

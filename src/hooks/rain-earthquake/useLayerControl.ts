@@ -102,6 +102,13 @@ export const useLayerControl = () => {
     useStatusStore().infrastructureLayers.showBridge.loading = true;
   };
 
+  /**
+   * 显示水库
+   */
+  const clickReservoir = () => {
+    useStatusStore().infrastructureLayers.showReservoir.loading = true;
+  };
+
   return {
     clickHiddenDangerPoint,
     clickHospital,
@@ -116,5 +123,6 @@ export const useLayerControl = () => {
     clickHighway,
     clickNationRoad,
     clickBridge,
+    clickReservoir,
   };
 };

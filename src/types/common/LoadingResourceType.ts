@@ -37,5 +37,10 @@ export enum LoadingResource {
    */
   BRIDGE = 'BRIDGE',
 
+  /**
+   * 水库
+   */
+  RESERVOIR = 'RESERVOIR',
+
 
 }
