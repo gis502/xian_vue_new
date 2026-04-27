@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots';
 import type { PaginationType } from '@/types/common/PaginationType';
 import { PointType } from '@/types/common/DisasterType';
@@ -304,6 +304,15 @@ export const useRainDisasterChain = () => {
       },
     ];
   };
+
+  // 监听条件变化
+  watch(
+    conditions,
+    () => {
+      console.log('条件改变');
+    },
+    { deep: true }
+  );
 
   return {
     conditions,

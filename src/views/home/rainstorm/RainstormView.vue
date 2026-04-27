@@ -71,13 +71,11 @@
   import { useRainDisasterChain } from '@/hooks/rainstorm/useRainDisasterChain';
   import { useStatusStore } from '@/stores/useStatusStore';
   import { DisasterType } from '@/types/common/DisasterType.ts';
-  import { watch } from 'vue';
   import { useRoute } from 'vue-router';
 
   const route = useRoute();
 
   const {
-    conditions,
     selectOptions,
     tableDatas,
     tableColumns,
@@ -89,15 +87,6 @@
     changeConditions,
     changeCurrentPage,
   } = useRainDisasterChain();
-
-  // 监听条件变化
-  watch(
-    conditions,
-    () => {
-      console.log('条件改变');
-    },
-    { deep: true }
-  );
 </script>
 
 <style scoped></style>
