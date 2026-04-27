@@ -8,7 +8,7 @@ import httpInstance from "@/utils/request/http"
  * @param disasterType - 灾害类型
  * @returns 隐患点数据数组
  */
-export const getBasePoins = (disasterType: DisasterType): Promise<ApiResponse<XianHiddenDangerSpots[]>> => {
+export const getBasePoints = (disasterType: DisasterType): Promise<ApiResponse<XianHiddenDangerSpots[]>> => {
     return httpInstance.get('/hidden-danger-spots/base-points', {
         params: {
             disasterType

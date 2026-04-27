@@ -55,7 +55,7 @@
   // 获取钩子函数
   const { field, getDisasterIcon } = useHiddenPoint();
 
-  $api.hiddenDangerSpots.getBasePoins(props.disasterType).then((res) => {
+  $api.hiddenDangerSpots.getBasePoints(props.disasterType).then((res) => {
     baseHiddenPoints.value = res.data;
   });
 

@@ -6,7 +6,7 @@ import httpInstance from "@/utils/request/http"
  * 获取风险点基础数据
  * @returns 风险点数据数组
  */
-export const getBasePoins = (): Promise<ApiResponse<XianRiskSpots[]>> => {
+export const getBasePoints = (): Promise<ApiResponse<XianRiskSpots[]>> => {
     return httpInstance.get('/risk-spots/base-points')
 }
 

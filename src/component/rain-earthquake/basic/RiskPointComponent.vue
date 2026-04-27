@@ -48,7 +48,7 @@
   // 获取钩子函数
   const { informationBoxTitle, field, getDisasterIcon } = useRiskPoint();
 
-  $api.riskSpots.getBasePoins().then((res) => {
+  $api.riskSpots.getBasePoints().then((res) => {
     riskPoints.value = res.data;
   });
 

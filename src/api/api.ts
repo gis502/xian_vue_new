@@ -1,7 +1,7 @@
 import type { DisasterType } from '@/types/common/DisasterType.ts'
 import { getSm2PublicKey } from './crypto'
-import { getBasePoins as getHiddenDangerBasePoints, getPointDetailById as getHiddenDangerPointDetailById} from './hidden-danger-spots'
-import { getBasePoins as getRiskBasePoints, getPointDetailById as getRiskPointDetailById} from './risk-spots'
+import { getBasePoints as getHiddenDangerBasePoints, getPointDetailById as getHiddenDangerPointDetailById} from './hidden-danger-spots'
+import { getBasePoints as getRiskBasePoints, getPointDetailById as getRiskPointDetailById} from './risk-spots'
 import { getBasePoints as getHospitalsBasePoints, getPointDetailById as getHospitalsPointDetailById} from './hospitals'
 import { getBasePoints as getDangerousSourceBasePoints, getPointDetailById as getDangerousSourcePointDetailById} from './dangerous-source'
 import { getBasePoints as getEmergencyShelterBasePoints, getPointDetailById as getEmergencyShelterPointDetailById} from './emergency-shelter'
@@ -45,7 +45,7 @@ export const $api = {
      * @param disasterType - 灾害类型
      * @returns 隐患点数据数组
      */
-    getBasePoins: (disasterType: DisasterType): Promise<ApiResponse<XianHiddenDangerSpots[]>> => getHiddenDangerBasePoints(disasterType),
+    getBasePoints: (disasterType: DisasterType): Promise<ApiResponse<XianHiddenDangerSpots[]>> => getHiddenDangerBasePoints(disasterType),
 
     /**
      * 根据id获取隐患点详情
@@ -61,7 +61,7 @@ export const $api = {
      * 获取所有基础风险点
      * @returns 风险点数据数组
      */
-    getBasePoins: (): Promise<ApiResponse<XianRiskSpots[]>> => getRiskBasePoints(),
+    getBasePoints: (): Promise<ApiResponse<XianRiskSpots[]>> => getRiskBasePoints(),
 
     /**
      * 根据id获取风险点详情
