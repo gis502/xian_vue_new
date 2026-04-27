@@ -10,6 +10,7 @@ import { getBasePoints as getStorePointsBasePoints, getPointDetailById as getSto
 import { getBasePoints as getSchoolsBasePoints, getPointDetailById as getSchoolsPointDetailById} from './schools'
 import { getBasePoints as getBridgesBasePoints, getPointDetailById as getBridgesPointDetailById} from './bridges'
 import { getBasePoints as getReservoirsBasePoints, getPointDetailById as getReservoirsPointDetailById} from './reservoirs'
+import { getBasePoints as getSubwayStationsBasePoints, getPointDetailById as getSubwayStationsPointDetailById} from './subway-stations'
 import type { ApiResponse } from '@/types/ApiResponse'
 import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots'
 import type { XianRiskSpots } from '@/types/base/XianRiskSpots'
@@ -21,6 +22,7 @@ import type { XianStorePoints } from '@/types/base/XianStorePoints'
 import type { XianSchool } from '@/types/base/XianSchool'
 import type { XianBridge } from '@/types/base/XianBridge.ts';
 import type { XianReservoirList } from '@/types/base/XianReservoirList';
+import type { XianSubwayStations } from '@/types/base/XianSubwayStations';
 
 /**
  * API接口统一导出对象
@@ -195,5 +197,21 @@ export const $api = {
      * @returns 水库详情
      */
     getPointDetailById: (id: number): Promise<ApiResponse<XianReservoirList>> => getReservoirsPointDetailById(id),
+  },
+
+  // 地铁站点信息
+  subwayStations: {
+    /**
+     * 获取所有基础地铁站点
+     * @returns 地铁站点数据数组
+     */
+    getBasePoints: (): Promise<ApiResponse<XianSubwayStations[]>> => getSubwayStationsBasePoints(),
+
+    /**
+     * 根据id获取地铁站点详情
+     * @param id - 地铁站点id
+     * @returns 地铁站点详情
+     */
+    getPointDetailById: (id: number): Promise<ApiResponse<XianSubwayStations>> => getSubwayStationsPointDetailById(id),
   },
 }

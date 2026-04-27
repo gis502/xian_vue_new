@@ -286,11 +286,9 @@ export const useRainDisasterChain = () => {
       },
       {
         name: '显示地铁站',
-        statusStore: statusStore.infrastructureLayers,
-        statusKey: 'showSubway' as const,
-        callback: (status: unknown) => {
-          console.log('显示地铁站', status);
-        },
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showSubwayStation' as const,
+        callback: layerControl.clickSubwayStation,
       },
     ];
   };

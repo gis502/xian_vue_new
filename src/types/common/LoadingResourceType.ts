@@ -42,5 +42,10 @@ export enum LoadingResource {
    */
   RESERVOIR = 'RESERVOIR',
 
+  /**
+   * 地铁站点
+   */
+  SUBWAY_STATION = 'SUBWAY_STATION',
+
 
 }

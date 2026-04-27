@@ -109,6 +109,13 @@ export const useLayerControl = () => {
     useStatusStore().infrastructureLayers.showReservoir.loading = true;
   };
 
+  /**
+   * 显示地铁站点
+   */
+  const clickSubwayStation = () => {
+    useStatusStore().poiLayers.showSubwayStation.loading = true;
+  };
+
   return {
     clickHiddenDangerPoint,
     clickHospital,
@@ -124,5 +131,6 @@ export const useLayerControl = () => {
     clickNationRoad,
     clickBridge,
     clickReservoir,
+    clickSubwayStation,
   };
 };

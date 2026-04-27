@@ -108,6 +108,14 @@ export const useLoadingInformationStore = defineStore(
       id: -1,
     });
 
+    // ============================== 地铁站点状态 ================================
+    const subwayStation = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 地铁站点ID */
+      id: -1,
+    });
+
     /**
      * 重置所有状态
      */
@@ -155,6 +163,10 @@ export const useLoadingInformationStore = defineStore(
       // 水库状态重置
       reservoir.loading = false;
       reservoir.id = -1;
+
+      // 地铁站点状态重置
+      subwayStation.loading = false;
+      subwayStation.id = -1;
     };
 
     return {
@@ -169,6 +181,7 @@ export const useLoadingInformationStore = defineStore(
       school,
       bridge,
       reservoir,
+      subwayStation,
       resetStatue,
 
     };

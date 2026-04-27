@@ -43,6 +43,7 @@
     "storePointsPointId": "store-points-point-",
     "schoolPointId": "school-point-",
     "bridgePointId": "bridge-point-",
-    "reservoirPointId": "reservoir-point-"
+    "reservoirPointId": "reservoir-point-",
+    "subwayStationPointId": "subway-station-point-"
   }
 }

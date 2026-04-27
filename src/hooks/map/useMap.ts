@@ -89,6 +89,11 @@ export const useMap = () => {
           useLoadingInformationStore().reservoir.id = id;
         }
 
+        // 地铁站点
+        else if (pickedObject.id.startsWith(config.prefix.subwayStationPointId)) {
+          useLoadingInformationStore().subwayStation.id = id;
+        }
+
         // 其他
         else {
           // 重置状态

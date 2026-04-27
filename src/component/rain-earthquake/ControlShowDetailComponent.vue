@@ -99,6 +99,14 @@
       useStatusStore().infrastructureLayers.showReservoir.loading
     "
   />
+
+  <!-- 地铁站点 -->
+  <SubwayStationComponent
+    v-if="
+      useStatusStore().appLoadingCompleted &&
+      useStatusStore().poiLayers.showSubwayStation.loading
+    "
+  />
 </template>
 
 <script lang="ts" setup>
@@ -116,6 +124,7 @@
   import NationRoadComponent from '@/component/rain-earthquake/detail-panels/NationRoadComponent.vue';
   import BridgeComponent from '@/component/rain-earthquake/detail-panels/BridgeComponent.vue';
   import ReservoirComponent from '@/component/rain-earthquake/detail-panels/ReservoirComponent.vue';
+  import SubwayStationComponent from '@/component/rain-earthquake/detail-panels/SubwayStationComponent.vue';
 </script>
 
 <style scoped lang="less"></style>
