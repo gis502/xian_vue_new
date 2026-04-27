@@ -241,9 +241,7 @@ export const useEarthquakeDisasterChain = () => {
         name: '显示桥梁',
         statusStore: statusStore.infrastructureLayers,
         statusKey: 'showBridge' as const,
-        callback: (status: unknown) => {
-          console.log('显示桥梁', status);
-        },
+        callback: layerControl.clickBridge,
       },
       {
         name: '显示高速',
@@ -268,7 +266,7 @@ export const useEarthquakeDisasterChain = () => {
       {
         name: '显示地铁站',
         statusStore: statusStore.infrastructureLayers,
-        statusKey: 'showReservoir' as const,
+        statusKey: 'showSubway' as const,
         callback: (status: unknown) => {
           console.log('显示地铁站', status);
         },

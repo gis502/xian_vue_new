@@ -12,6 +12,7 @@ export { default as emergencyShelterIcon } from '@/assets/images/icon/emergency-
 export { default as firefighterIcon } from '@/assets/images/icon/firefighter.png';
 export { default as storePointsIcon } from '@/assets/images/icon/store-points.jpg';
 export { default as schoolIcon } from '@/assets/images/icon/school.png';
+export { default as bridgeIcon } from '@/assets/images/icon/bridge.png';
 
 // 图片
 export { default as backgroundImage } from '@/assets/images/background-image.png';

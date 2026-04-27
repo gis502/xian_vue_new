@@ -31,4 +31,11 @@ export enum LoadingResource {
 
   /** 学校 */
   SCHOOL = 'SCHOOL',
+
+  /**
+   * 桥梁
+   */
+  BRIDGE = 'BRIDGE',
+
+
 }

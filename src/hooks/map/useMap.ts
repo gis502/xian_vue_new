@@ -79,13 +79,17 @@ export const useMap = () => {
           useLoadingInformationStore().school.id = id;
         }
 
+        // 桥梁
+        else if (pickedObject.id.startsWith(config.prefix.bridgePointId)) {
+          useLoadingInformationStore().bridge.id = id;
+        }
+
         // 其他
         else {
           // 重置状态
           useLoadingInformationStore().resetStatue();
         }
       } else {
-        console.log(pickedObject);
         // 重置状态
         useLoadingInformationStore().resetStatue();
       }

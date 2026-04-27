@@ -95,7 +95,12 @@ export const useLayerControl = () => {
   const clickNationRoad = () => {
     useStatusStore().infrastructureLayers.showMainRoad.loading = true;
   };
-
+  /**
+   * 显示桥梁
+   */
+  const clickBridge = () => {
+    useStatusStore().infrastructureLayers.showBridge.loading = true;
+  };
 
   return {
     clickHiddenDangerPoint,
@@ -109,6 +114,7 @@ export const useLayerControl = () => {
     clickWaterPipe,
     clickTrafficRoad,
     clickHighway,
-    clickNationRoad
+    clickNationRoad,
+    clickBridge,
   };
 };

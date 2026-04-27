@@ -41,6 +41,7 @@
     "emergencyShelterPointId": "emergency-shelter-point-",
     "fireStationPointId": "fire-station-point-",
     "storePointsPointId": "store-points-point-",
-    "schoolPointId": "school-point-"
+    "schoolPointId": "school-point-",
+    "bridgePointId": "bridge-point-"
   }
 }

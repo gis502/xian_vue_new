@@ -151,6 +151,11 @@ export const useStatusStore = defineStore('status', () => {
       show: false,
       loading: false,
     },
+    /** 显示地铁 */
+    showSubway: {
+      show: false,
+      loading: false,
+    },
   });
 
   // ============================ 地图功能显示状态 ================================

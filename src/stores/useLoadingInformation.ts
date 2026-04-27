@@ -92,6 +92,14 @@ export const useLoadingInformationStore = defineStore(
       id: -1,
     });
 
+    // ============================== 桥梁状态 ================================
+    const bridge = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 桥梁ID */
+      id: -1,
+    });
+
     /**
      * 重置所有状态
      */
@@ -131,6 +139,10 @@ export const useLoadingInformationStore = defineStore(
       // 学校状态重置
       school.loading = false;
       school.id = -1;
+
+      // 桥梁状态重置
+      bridge.loading = false;
+      bridge.id = -1;
     };
 
     return {
@@ -143,7 +155,9 @@ export const useLoadingInformationStore = defineStore(
       fireStation,
       storePoints,
       school,
+      bridge,
       resetStatue,
+
     };
   }
 );
