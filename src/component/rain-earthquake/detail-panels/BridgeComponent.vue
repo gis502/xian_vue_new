@@ -3,9 +3,7 @@
   <div>
     <!-- 加载桥梁点 -->
     <LoadingPoints
-      v-if="
-        useStatusStore().appLoadingCompleted && bridgeList.length > 0
-      "
+      v-if="useStatusStore().appLoadingCompleted && bridgeList.length > 0"
       :base-points="bridgeList"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.bridgePointId"
@@ -101,16 +99,14 @@
       if (newValue) {
         // 显示桥梁点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(
-            LoadingResource.BRIDGE
-          )
+          useLoadingResourceStore().getLoadingResource(LoadingResource.BRIDGE)
+            .ids
         );
       } else {
         // 隐藏桥梁点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(
-            LoadingResource.BRIDGE
-          )
+          useLoadingResourceStore().getLoadingResource(LoadingResource.BRIDGE)
+            .ids
         );
       }
     }

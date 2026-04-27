@@ -100,11 +100,13 @@
         // 显示医院
         CesiumUtilsSingleton.batchShowPrimitives(
           useLoadingResourceStore().getLoadingResource(LoadingResource.HOSPITAL)
+            .ids
         );
       } else {
         // 隐藏医院
         CesiumUtilsSingleton.batchHidePrimitives(
           useLoadingResourceStore().getLoadingResource(LoadingResource.HOSPITAL)
+            .ids
         );
       }
     }

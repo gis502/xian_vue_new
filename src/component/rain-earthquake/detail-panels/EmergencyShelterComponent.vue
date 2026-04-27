@@ -104,14 +104,14 @@
         CesiumUtilsSingleton.batchShowPrimitives(
           useLoadingResourceStore().getLoadingResource(
             LoadingResource.EMERGENCY_SHELTER
-          )
+          ).ids
         );
       } else {
         // 隐藏避难所
         CesiumUtilsSingleton.batchHidePrimitives(
           useLoadingResourceStore().getLoadingResource(
             LoadingResource.EMERGENCY_SHELTER
-          )
+          ).ids
         );
       }
     }

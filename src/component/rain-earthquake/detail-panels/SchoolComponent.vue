@@ -100,11 +100,13 @@
         // 显示学校
         CesiumUtilsSingleton.batchShowPrimitives(
           useLoadingResourceStore().getLoadingResource(LoadingResource.SCHOOL)
+            .ids
         );
       } else {
         // 隐藏学校
         CesiumUtilsSingleton.batchHidePrimitives(
           useLoadingResourceStore().getLoadingResource(LoadingResource.SCHOOL)
+            .ids
         );
       }
     }

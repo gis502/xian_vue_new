@@ -3,7 +3,9 @@
   <div>
     <!-- 加载地铁站点点位 -->
     <LoadingPoints
-      v-if="useStatusStore().appLoadingCompleted && subwayStationList.length > 0"
+      v-if="
+        useStatusStore().appLoadingCompleted && subwayStationList.length > 0
+      "
       :base-points="subwayStationList"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.subwayStationPointId"
@@ -99,12 +101,16 @@
       if (newValue) {
         // 显示地铁站点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(LoadingResource.SUBWAY_STATION)
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.SUBWAY_STATION
+          ).ids
         );
       } else {
         // 隐藏地铁站点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(LoadingResource.SUBWAY_STATION)
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.SUBWAY_STATION
+          ).ids
         );
       }
     }

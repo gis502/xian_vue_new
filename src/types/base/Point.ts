@@ -12,4 +12,6 @@ export interface Point {
   geom?: string;
   /** 灾害类型 */
   disasterType?: string;
+  /** 名称 */
+  name?: string;
 }

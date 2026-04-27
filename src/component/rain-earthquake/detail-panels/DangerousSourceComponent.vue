@@ -103,14 +103,14 @@
         CesiumUtilsSingleton.batchShowPrimitives(
           useLoadingResourceStore().getLoadingResource(
             LoadingResource.DANGEROUS_SOURCE
-          )
+          ).ids
         );
       } else {
         // 隐藏危险源
         CesiumUtilsSingleton.batchHidePrimitives(
           useLoadingResourceStore().getLoadingResource(
             LoadingResource.DANGEROUS_SOURCE
-          )
+          ).ids
         );
       }
     }

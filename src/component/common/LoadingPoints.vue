@@ -24,7 +24,7 @@
 
   onMounted(() => {
     // 加载点
-    const ids: string[] = pointsHandle.addPoints(
+    const result: { ids: string[]; names: string[] } = pointsHandle.addPoints(
       props.basePoints,
       props.getDisasterIcon,
       props.prefix,
@@ -34,7 +34,7 @@
     // 记录id
     useLoadingResourceStore().addLoadingResource(
       props.loadingResourceField!,
-      ids
+      result
     );
   });
 </script>

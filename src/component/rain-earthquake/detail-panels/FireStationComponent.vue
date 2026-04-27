@@ -103,14 +103,14 @@
         CesiumUtilsSingleton.batchShowPrimitives(
           useLoadingResourceStore().getLoadingResource(
             LoadingResource.FIRE_STATION
-          )
+          ).ids
         );
       } else {
         // 隐藏消防站
         CesiumUtilsSingleton.batchHidePrimitives(
           useLoadingResourceStore().getLoadingResource(
             LoadingResource.FIRE_STATION
-          )
+          ).ids
         );
       }
     }

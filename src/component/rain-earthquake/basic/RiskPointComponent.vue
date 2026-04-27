@@ -98,13 +98,13 @@
         CesiumUtilsSingleton.batchShowPrimitives(
           useLoadingResourceStore().getLoadingResource(
             LoadingResource.RISK_POINT
-          )
+          ).ids
         );
       } else {
         CesiumUtilsSingleton.batchHidePrimitives(
           useLoadingResourceStore().getLoadingResource(
             LoadingResource.RISK_POINT
-          )
+          ).ids
         );
       }
     }

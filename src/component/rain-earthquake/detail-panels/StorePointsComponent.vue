@@ -3,9 +3,7 @@
   <div>
     <!-- 加载物资储备点 -->
     <LoadingPoints
-      v-if="
-        useStatusStore().appLoadingCompleted && storePointsList.length > 0
-      "
+      v-if="useStatusStore().appLoadingCompleted && storePointsList.length > 0"
       :base-points="storePointsList"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.storePointsPointId"
@@ -103,14 +101,14 @@
         CesiumUtilsSingleton.batchShowPrimitives(
           useLoadingResourceStore().getLoadingResource(
             LoadingResource.STORE_POINTS
-          )
+          ).ids
         );
       } else {
         // 隐藏物资储备点
         CesiumUtilsSingleton.batchHidePrimitives(
           useLoadingResourceStore().getLoadingResource(
             LoadingResource.STORE_POINTS
-          )
+          ).ids
         );
       }
     }

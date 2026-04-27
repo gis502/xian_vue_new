@@ -99,12 +99,16 @@
       if (newValue) {
         // 显示水库
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(LoadingResource.RESERVOIR)
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.RESERVOIR
+          ).ids
         );
       } else {
         // 隐藏水库
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(LoadingResource.RESERVOIR)
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.RESERVOIR
+          ).ids
         );
       }
     }

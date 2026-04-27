@@ -47,7 +47,7 @@
     // 记录行政区划id
     useLoadingResourceStore().addLoadingResource(
       LoadingResource.ADMINISTRATIVE_DIVISION,
-      areasId
+      { ids: areasId, names: [] } // 此处name不进行记录
     );
   });
 
