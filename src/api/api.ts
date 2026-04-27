@@ -2,7 +2,7 @@ import type { DisasterType } from '@/types/common/DisasterType.ts'
 import { getSm2PublicKey } from './crypto'
 import { getBasePoins as getHiddenDangerBasePoints, getPointDetailById as getHiddenDangerPointDetailById} from './hidden-danger-spots'
 import { getBasePoins as getRiskBasePoints, getPointDetailById as getRiskPointDetailById} from './risk-spots'
-import { getBasePoins as getHospitalsBasePoints, getPointDetailById as getHospitalsPointDetailById} from './hospitals'
+import { getBasePoints as getHospitalsBasePoints, getPointDetailById as getHospitalsPointDetailById} from './hospitals'
 import { getBasePoints as getDangerousSourceBasePoints, getPointDetailById as getDangerousSourcePointDetailById} from './dangerous-source'
 import { getBasePoints as getEmergencyShelterBasePoints, getPointDetailById as getEmergencyShelterPointDetailById} from './emergency-shelter'
 import { getBasePoints as getFirefighterBasePoints, getPointDetailById as getFirefighterPointDetailById} from './firefighter'
@@ -71,7 +71,7 @@ export const $api = {
      * 获取所有基础医院
      * @returns 医院数据数组
      */
-    getBasePoins: (): Promise<ApiResponse<XianHospitals[]>> => getHospitalsBasePoints(),
+    getBasePoints: (): Promise<ApiResponse<XianHospitals[]>> => getHospitalsBasePoints(),
 
     /**
      * 根据id获取医院详情
