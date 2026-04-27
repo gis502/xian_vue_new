@@ -6,7 +6,7 @@ import httpInstance from "@/utils/request/http"
  * 获取医院基础数据
  * @returns 医院数据数组
  */
-export const getBasePoins = (): Promise<ApiResponse<XianHospitals[]>> => {
+export const getBasePoints = (): Promise<ApiResponse<XianHospitals[]>> => {
     return httpInstance.get('/hospitals/base-points')
 }
 

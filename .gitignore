@@ -25,3 +25,4 @@ dist-ssr
 /docs/
 auto-imports.d.ts
 components.d.ts
+pnpm-lock.yaml

@@ -49,7 +49,7 @@
   // 获取钩子函数
   const { field, getDisasterIcon } = useHospitalPoint();
 
-  $api.hospitals.getBasePoins().then((res) => {
+  $api.hospitals.getBasePoints().then((res) => {
     hospitalPoints.value = res.data;
   });
 
