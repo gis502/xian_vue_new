@@ -24,12 +24,13 @@
 
   onMounted(() => {
     // 加载点
-    const result: { ids: string[]; names: string[] } = pointsHandle.addPoints(
-      props.basePoints,
-      props.getDisasterIcon,
-      props.prefix,
-      props.isDefault
-    );
+    const result: { ids: string[]; info: Record<string, unknown>[] } =
+      pointsHandle.addPoints(
+        props.basePoints,
+        props.getDisasterIcon,
+        props.prefix,
+        props.isDefault
+      );
 
     // 记录id
     useLoadingResourceStore().addLoadingResource(

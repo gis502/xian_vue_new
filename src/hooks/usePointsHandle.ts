@@ -26,13 +26,13 @@ export const usePointsHandle = () => {
     getDisasterIcon: (disasterType?: string) => string,
     prefix: string,
     isDefault: boolean = false
-  ): { ids: string[]; names: string[] } {
+  ): { ids: string[]; info: Record<string, unknown>[] } {
     // 设置加载配置
     const options: PrimitiveOptions[] = [];
 
-    // 存放id、name
+    // 存放id、name、经纬度
     const ids: string[] = [];
-    const names: string[] = [];
+    const info: Record<string, unknown>[] = [];
 
     points.forEach((point) => {
       try {
@@ -43,9 +43,8 @@ export const usePointsHandle = () => {
         const position = Cartesian3.fromDegrees(point.lon, point.lat, 10);
 
         const id = `${prefix}${point.id}`;
-        const name = point.name!;
         ids.push(id);
-        names.push(name);
+        info.push({ id, name: point.name!, lon: point.lon, lat: point.lat });
 
         options.push({
           id: id,
@@ -69,7 +68,7 @@ export const usePointsHandle = () => {
     // 批量创建图层
     CesiumUtilsSingleton.addPrimitivesBatch(options);
 
-    return { ids, names };
+    return { ids, info };
   }
 
   return { addPoints };

@@ -5,13 +5,18 @@ import { ref, type Ref } from 'vue';
 // 存储按需加载的数据
 export const useLoadingResourceStore = defineStore('loadingResource', () => {
   const loadingResource: Ref<
-    Partial<Record<LoadingResource, { ids: string[]; names: string[] }>>
+    Partial<
+      Record<
+        LoadingResource,
+        { ids: string[]; info: Record<string, unknown>[] }
+      >
+    >
   > = ref({});
 
   // 添加数据
   const addLoadingResource = (
     key: LoadingResource,
-    value: { ids: string[]; names: string[] }
+    value: { ids: string[]; info: Record<string, unknown>[] }
   ) => {
     loadingResource.value[key] = value;
   };
@@ -27,10 +32,11 @@ export const useLoadingResourceStore = defineStore('loadingResource', () => {
    * 获取数据
    */
   const getLoadingResource = (key: LoadingResource) => {
-    return loadingResource.value[key] || { ids: [], names: [] };
+    return loadingResource.value[key] || { ids: [], info: [] };
   };
 
   return {
+    loadingResource,
     getLoadingResource,
     addLoadingResource,
     removeLoadingResource,
