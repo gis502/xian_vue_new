@@ -3,11 +3,13 @@
   <div>
     <!-- 加载内涝隐患点 -->
     <LoadingPoints
-      v-if="useStatusStore().appLoadingCompleted && waterLoggingPoints.length > 0"
+      v-if="
+        useStatusStore().appLoadingCompleted && waterLoggingPoints.length > 0
+      "
       :base-points="waterLoggingPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.waterLoggingHiddenPointId"
-      :is-default="false"
+      :is-default="true"
       :loading-resource-field="LoadingResource.WATER_LOGGING_HIDDEN_POINT"
     />
 
@@ -37,7 +39,10 @@
   import { LoadingResource } from '@/types/common/LoadingResourceType.ts';
   import { useHiddenPoint } from '@/hooks/rain-earthquake/useHiddenPoint.ts';
   import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore.ts';
-  import { PointType, HiddenDangerPointTypeMap } from '@/types/common/DisasterType.ts';
+  import {
+    PointType,
+    HiddenDangerPointTypeMap,
+  } from '@/types/common/DisasterType.ts';
 
   const waterLoggingPoints = ref<Point[]>([]);
 
@@ -51,9 +56,11 @@
   const { field, getDisasterIcon } = useHiddenPoint();
 
   // 加载内涝隐患点数据
-  $api.hiddenDangerSpots.getBasePoints(HiddenDangerPointTypeMap[PointType.WATER_LOGGING]).then((res) => {
-    waterLoggingPoints.value = res.data;
-  });
+  $api.hiddenDangerSpots
+    .getBasePoints(HiddenDangerPointTypeMap[PointType.WATER_LOGGING])
+    .then((res) => {
+      waterLoggingPoints.value = res.data;
+    });
 
   // 监听id变化
   watch(
@@ -101,14 +108,16 @@
       if (newValue) {
         // 显示内涝隐患点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(LoadingResource.WATER_LOGGING_HIDDEN_POINT)
-            .ids
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.WATER_LOGGING_HIDDEN_POINT
+          ).ids
         );
       } else {
         // 隐藏内涝隐患点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(LoadingResource.WATER_LOGGING_HIDDEN_POINT)
-            .ids
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.WATER_LOGGING_HIDDEN_POINT
+          ).ids
         );
       }
     }

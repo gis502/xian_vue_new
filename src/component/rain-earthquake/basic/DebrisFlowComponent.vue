@@ -7,7 +7,7 @@
       :base-points="debrisFlowPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.debrisFlowHiddenPointId"
-      :is-default="false"
+      :is-default="true"
       :loading-resource-field="LoadingResource.DEBRIS_FLOW_HIDDEN_POINT"
     />
 
@@ -37,7 +37,10 @@
   import { LoadingResource } from '@/types/common/LoadingResourceType.ts';
   import { useHiddenPoint } from '@/hooks/rain-earthquake/useHiddenPoint.ts';
   import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore.ts';
-  import { PointType, HiddenDangerPointTypeMap } from '@/types/common/DisasterType.ts';
+  import {
+    PointType,
+    HiddenDangerPointTypeMap,
+  } from '@/types/common/DisasterType.ts';
 
   const debrisFlowPoints = ref<Point[]>([]);
 
@@ -51,9 +54,11 @@
   const { field, getDisasterIcon } = useHiddenPoint();
 
   // 加载泥石流隐患点数据
-  $api.hiddenDangerSpots.getBasePoints(HiddenDangerPointTypeMap[PointType.DEBRIS_FLOW]).then((res) => {
-    debrisFlowPoints.value = res.data;
-  });
+  $api.hiddenDangerSpots
+    .getBasePoints(HiddenDangerPointTypeMap[PointType.DEBRIS_FLOW])
+    .then((res) => {
+      debrisFlowPoints.value = res.data;
+    });
 
   // 监听id变化
   watch(
@@ -101,14 +106,16 @@
       if (newValue) {
         // 显示泥石流隐患点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(LoadingResource.DEBRIS_FLOW_HIDDEN_POINT)
-            .ids
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.DEBRIS_FLOW_HIDDEN_POINT
+          ).ids
         );
       } else {
         // 隐藏泥石流隐患点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(LoadingResource.DEBRIS_FLOW_HIDDEN_POINT)
-            .ids
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.DEBRIS_FLOW_HIDDEN_POINT
+          ).ids
         );
       }
     }

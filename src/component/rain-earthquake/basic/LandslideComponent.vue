@@ -7,7 +7,7 @@
       :base-points="landslidePoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.landslideHiddenPointId"
-      :is-default="false"
+      :is-default="true"
       :loading-resource-field="LoadingResource.LANDSLIDE_HIDDEN_POINT"
     />
 
@@ -37,7 +37,10 @@
   import { LoadingResource } from '@/types/common/LoadingResourceType.ts';
   import { useHiddenPoint } from '@/hooks/rain-earthquake/useHiddenPoint.ts';
   import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore.ts';
-  import { PointType, HiddenDangerPointTypeMap } from '@/types/common/DisasterType.ts';
+  import {
+    PointType,
+    HiddenDangerPointTypeMap,
+  } from '@/types/common/DisasterType.ts';
 
   const landslidePoints = ref<Point[]>([]);
 
@@ -51,9 +54,11 @@
   const { field, getDisasterIcon } = useHiddenPoint();
 
   // 加载滑坡隐患点数据
-  $api.hiddenDangerSpots.getBasePoints(HiddenDangerPointTypeMap[PointType.LANDSLIDE]).then((res) => {
-    landslidePoints.value = res.data;
-  });
+  $api.hiddenDangerSpots
+    .getBasePoints(HiddenDangerPointTypeMap[PointType.LANDSLIDE])
+    .then((res) => {
+      landslidePoints.value = res.data;
+    });
 
   // 监听id变化
   watch(
@@ -101,14 +106,16 @@
       if (newValue) {
         // 显示滑坡隐患点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(LoadingResource.LANDSLIDE_HIDDEN_POINT)
-            .ids
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.LANDSLIDE_HIDDEN_POINT
+          ).ids
         );
       } else {
         // 隐藏滑坡隐患点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(LoadingResource.LANDSLIDE_HIDDEN_POINT)
-            .ids
+          useLoadingResourceStore().getLoadingResource(
+            LoadingResource.LANDSLIDE_HIDDEN_POINT
+          ).ids
         );
       }
     }
