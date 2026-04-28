@@ -22,6 +22,7 @@
   import { rightBlueButton, rightOrangeButton } from '@/assets';
   import { useButtonSelectedIdStore } from '@/stores/useButtonSelectedIdStore.ts';
   import { useStatusStore } from '@/stores/useStatusStore.ts';
+  import { onMounted } from 'vue';
 
   // 接收父组件传递的参数
   const props = defineProps<{
@@ -29,8 +30,26 @@
       name: string;
       callback: (...args: unknown[]) => unknown;
       executeOnce?: boolean;
+      selected?: boolean;
     }[];
   }>();
+
+  // 组件挂载时初始化选中状态
+  onMounted(() => {
+    // 查找最后一个设置了 selected: true 的按钮
+    let lastSelectedIndex = -1;
+    for (let i = 0; i < props.buttonList.length; i++) {
+      if (props.buttonList[i].selected === true) {
+        lastSelectedIndex = i;
+      }
+    }
+
+    // 如果找到了选中的按钮，设置选中状态，同时执行回调函数
+    if (lastSelectedIndex !== -1) {
+      useButtonSelectedIdStore().rightButtonSelectedId = lastSelectedIndex;
+      props.buttonList[lastSelectedIndex].callback();
+    }
+  });
 
   // 点击按钮触发
   const handelButton = (
@@ -39,6 +58,7 @@
   ) => {
     if (index == useButtonSelectedIdStore().rightButtonSelectedId) {
       useButtonSelectedIdStore().rightButtonSelectedId = -1;
+      callback(false);
       return;
     } else if (
       useButtonSelectedIdStore().rightButtonSelectedId != -1 &&
@@ -47,7 +67,7 @@
       return;
     }
     useButtonSelectedIdStore().rightButtonSelectedId = index;
-    callback();
+    callback(true);
     if (props.buttonList[index].executeOnce) {
       useButtonSelectedIdStore().rightButtonSelectedId = -1;
     }

@@ -186,6 +186,13 @@ export const useRainDisasterChain = () => {
    */
   const rightButtonInfo = [
     {
+      name: '暴雨模拟',
+      callback: () => {
+        console.log('暴雨模拟');
+      },
+      selected: true,
+    },
+    {
       name: '暴雨触发',
       callback: () => {
         console.log('暴雨触发');
