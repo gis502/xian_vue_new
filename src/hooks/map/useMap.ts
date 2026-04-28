@@ -133,7 +133,8 @@ export const useMap = () => {
       () => {
         // 设置最小最大高度
         CesiumUtilsSingleton.setHeightLimits();
-      }
+      },
+      { passive: true } // 标记为 passive 以提升滚动性能
     );
   };
 
