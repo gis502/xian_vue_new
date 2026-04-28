@@ -15,6 +15,7 @@ export { default as schoolIcon } from '@/assets/images/icon/school.png';
 export { default as bridgeIcon } from '@/assets/images/icon/bridge.png';
 export { default as reservoirIcon } from '@/assets/images/icon/reservoir.png';
 export { default as subwayIcon } from '@/assets/images/icon/subway.png';
+export { default as earthquakeLineIcon } from '@/assets/images/icon/earthquake-line.png';
 
 // 图片
 export { default as backgroundImage } from '@/assets/images/background-image.png';

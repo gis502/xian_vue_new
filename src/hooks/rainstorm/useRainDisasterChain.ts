@@ -9,6 +9,15 @@ import {
   landslideIcon,
   riskAreaIcon,
   waterLoggingIcon,
+  hospitalIcon,
+  dangerousSourceIcon,
+  emergencyShelterIcon,
+  firefighterIcon,
+  storePointsIcon,
+  schoolIcon,
+  bridgeIcon,
+  reservoirIcon,
+  subwayIcon,
 } from '@/assets';
 import { useLayerControl } from '../rain-earthquake/useLayerControl.ts';
 import { useRightHandle } from '../rain-earthquake/useRightHandle.ts';
@@ -87,11 +96,23 @@ export const useRainDisasterChain = () => {
    * 图例数据
    */
   const legendList = [
+    // 隐患点
     { name: '滑坡隐患点', link: landslideIcon },
     { name: '泥石流隐患点', link: debrisFlowIcon },
     { name: '山洪隐患点', link: flashFloodIcon },
     { name: '内涝隐患点', link: waterLoggingIcon },
     { name: '风险区域', link: riskAreaIcon },
+    // 承灾体
+    { name: '医院', link: hospitalIcon },
+    { name: '危险源', link: dangerousSourceIcon },
+    { name: '避难所', link: emergencyShelterIcon },
+    { name: '消防站', link: firefighterIcon },
+    { name: '储备点', link: storePointsIcon },
+    { name: '学校', link: schoolIcon },
+    { name: '地铁站', link: subwayIcon },
+    // 基础设施
+    { name: '桥梁', link: bridgeIcon },
+    { name: '水库', link: reservoirIcon },
   ];
 
   // ================左侧按钮================================

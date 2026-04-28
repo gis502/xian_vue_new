@@ -35,7 +35,10 @@
           :key="`${index1}_${index2}`"
         >
           <div class="legend-item">
-            <img :src="item.link" :alt="item.name" class="legend-item-img" />
+            <!-- 支持图片链接 -->
+            <img v-if="item.link" :src="item.link" :alt="item.name" class="legend-item-img" />
+            <!-- 支持HTML+CSS样式 -->
+            <div v-else-if="item.html" v-html="item.html" class="legend-item-html"></div>
             <span class="legend-item-text">{{ item.name }}</span>
           </div>
         </el-col>
@@ -51,12 +54,12 @@
 
   // 接收父组件传递的属性
   const props = defineProps<{
-    legendList: { name: string; link: string }[];
+    legendList: { name: string; link?: string; html?: string }[];
     colsNum: 1 | 2 | 3 | 4 | 6 | 8 | 12 | 24;
   }>();
 
   // 处理后图例列表
-  const finalLegendList: Ref<{ name: string; link: string }[][]> = ref([]);
+  const finalLegendList: Ref<{ name: string; link?: string; html?: string }[][]> = ref([]);
 
   // 切换图例显示状态
   const changeStatus = () => {
@@ -131,6 +134,21 @@
     flex-shrink: 0;
     object-fit: contain;
     margin-right: 8px;
+  }
+
+  .legend-item-html {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .legend-item-html :deep(*) {
+    width: 100%;
+    height: 100%;
   }
 
   .legend-item-text {
