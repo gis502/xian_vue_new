@@ -23,7 +23,10 @@ export const useMap = () => {
 
         // 当id改变时候，重置状态
         if (
-          useLoadingInformationStore().hiddenPoint.id !== id &&
+          useLoadingInformationStore().landslideHiddenPoint.id !== id &&
+          useLoadingInformationStore().debrisFlowHiddenPoint.id !== id &&
+          useLoadingInformationStore().waterLoggingHiddenPoint.id !== id &&
+          useLoadingInformationStore().flashFloodHiddenPoint.id !== id &&
           useLoadingInformationStore().riskPoint.id !== id &&
           useLoadingInformationStore().hospital.id !== id
         ) {
@@ -35,9 +38,24 @@ export const useMap = () => {
         useLoadingInformationStore().clickObject.primitive =
           pickedObject.primitive;
 
-        // 隐患点
-        if (pickedObject.id.startsWith(config.prefix.hiddenDangerPointId)) {
-          useLoadingInformationStore().hiddenPoint.id = id;
+        // 滑坡隐患点
+        if (pickedObject.id.startsWith(config.prefix.landslideHiddenPointId)) {
+          useLoadingInformationStore().landslideHiddenPoint.id = id;
+        }
+
+        // 泥石流隐患点
+        else if (pickedObject.id.startsWith(config.prefix.debrisFlowHiddenPointId)) {
+          useLoadingInformationStore().debrisFlowHiddenPoint.id = id;
+        }
+
+        // 内涝隐患点
+        else if (pickedObject.id.startsWith(config.prefix.waterLoggingHiddenPointId)) {
+          useLoadingInformationStore().waterLoggingHiddenPoint.id = id;
+        }
+
+        // 山洪隐患点
+        else if (pickedObject.id.startsWith(config.prefix.flashFloodHiddenPointId)) {
+          useLoadingInformationStore().flashFloodHiddenPoint.id = id;
         }
 
         // 风险点

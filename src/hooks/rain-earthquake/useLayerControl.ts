@@ -5,15 +5,6 @@ import { useStatusStore } from '@/stores/useStatusStore.ts';
  */
 export const useLayerControl = () => {
   /**
-   * 点击显示隐藏隐患点
-   * @param status - 显示隐藏状态
-   */
-  const clickHiddenDangerPoint = (status: unknown) => {
-    // 改变风险点显示状态
-    useStatusStore().mapLayers.riskPointShow.show = status as boolean;
-  };
-
-  /**
    * 点击显示医院
    */
   const clickHospital = () => {
@@ -116,8 +107,43 @@ export const useLayerControl = () => {
     useStatusStore().poiLayers.showSubwayStation.loading = true;
   };
 
+  /**
+   * 显示滑坡隐患点
+   */
+  const clickLandslideHiddenPoint = () => {
+    useStatusStore().poiLayers.showLandslideHiddenPoint.loading = true;
+  };
+
+  /**
+   * 显示泥石流隐患点
+   */
+  const clickDebrisFlowHiddenPoint = () => {
+    useStatusStore().poiLayers.showDebrisFlowHiddenPoint.loading = true;
+  };
+
+  /**
+   * 显示内涝隐患点
+   */
+  const clickWaterLoggingHiddenPoint = () => {
+    useStatusStore().poiLayers.showWaterLoggingHiddenPoint.loading = true;
+  };
+
+  /**
+   * 显示山洪隐患点
+   */
+  const clickFlashFloodHiddenPoint = () => {
+    useStatusStore().poiLayers.showFlashFloodHiddenPoint.loading = true;
+  };
+
+  /**
+   * 显示风险点
+   */
+  const clickRiskPoint = () => {
+    useStatusStore().mapLayers.riskPointShow.loading = true;
+  };
+
   return {
-    clickHiddenDangerPoint,
+    clickRiskPoint,
     clickHospital,
     clickDangerousSource,
     clickEmergencyShelter,
@@ -132,5 +158,9 @@ export const useLayerControl = () => {
     clickBridge,
     clickReservoir,
     clickSubwayStation,
+    clickLandslideHiddenPoint,
+    clickDebrisFlowHiddenPoint,
+    clickWaterLoggingHiddenPoint,
+    clickFlashFloodHiddenPoint,
   };
 };

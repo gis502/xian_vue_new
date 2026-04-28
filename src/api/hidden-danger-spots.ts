@@ -1,14 +1,13 @@
 import type { ApiResponse } from "@/types/ApiResponse"
 import type { XianHiddenDangerSpots } from "@/types/base/XianHiddenDangerSpots"
-import type { DisasterType } from "@/types/common/DisasterType.ts"
 import httpInstance from "@/utils/request/http"
 
 /**
  * 获取隐患点基础数据
- * @param disasterType - 灾害类型
+ * @param disasterType - 灾害类型（landslide, debris_flow, water_logging, flash_flood）
  * @returns 隐患点数据数组
  */
-export const getBasePoints = (disasterType: DisasterType): Promise<ApiResponse<XianHiddenDangerSpots[]>> => {
+export const getBasePoints = (disasterType: string): Promise<ApiResponse<XianHiddenDangerSpots[]>> => {
     return httpInstance.get('/hidden-danger-spots/base-points', {
         params: {
             disasterType

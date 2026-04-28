@@ -9,7 +9,7 @@ export enum DisasterType {
 }
 
 /**
- * 点型枚举
+ * 点型枚举（用于UI显示）
  */
 export enum PointType {
   /** 滑坡 */
@@ -23,3 +23,14 @@ export enum PointType {
   /** 风险区 */
   RISK_AREA = '风险区',
 }
+
+/**
+ * 隐患点类型映射（中文 -> 后端英文参数）
+ */
+export const HiddenDangerPointTypeMap: Record<PointType, string> = {
+  [PointType.LANDSLIDE]: 'landslide',
+  [PointType.DEBRIS_FLOW]: 'debris_flow',
+  [PointType.WATER_LOGGING]: 'water_logging',
+  [PointType.FLASH_FLOOD]: 'flash_flood',
+  [PointType.RISK_AREA]: 'risk_area',
+};

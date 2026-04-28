@@ -1,10 +1,5 @@
 export enum LoadingResource {
   /**
-   * 隐患点
-   */
-  HIDDEN_DANGER_POINT = 'HIDDEN_DANGER_POINT',
-
-  /**
    * 风险点
    */
   RISK_POINT = 'RISK_POINT',
@@ -47,5 +42,24 @@ export enum LoadingResource {
    */
   SUBWAY_STATION = 'SUBWAY_STATION',
 
+  /**
+   * 滑坡隐患点
+   */
+  LANDSLIDE_HIDDEN_POINT = 'LANDSLIDE_HIDDEN_POINT',
+
+  /**
+   * 泥石流隐患点
+   */
+  DEBRIS_FLOW_HIDDEN_POINT = 'DEBRIS_FLOW_HIDDEN_POINT',
+
+  /**
+   * 内涝隐患点
+   */
+  WATER_LOGGING_HIDDEN_POINT = 'WATER_LOGGING_HIDDEN_POINT',
+
+  /**
+   * 山洪隐患点
+   */
+  FLASH_FLOOD_HIDDEN_POINT = 'FLASH_FLOOD_HIDDEN_POINT',
 
 }

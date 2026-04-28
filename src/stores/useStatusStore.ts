@@ -54,11 +54,6 @@ export const useStatusStore = defineStore('status', () => {
       show: true,
       loading: true,
     },
-    /** 隐患点显示状态 */
-    hiddenDangerPointShow: {
-      show: true,
-      loading: true,
-    },
     /** 风险点显示状态 */
     riskPointShow: {
       show: true,
@@ -114,6 +109,26 @@ export const useStatusStore = defineStore('status', () => {
     showSubwayStation: {
       show: false,
       loading: false,
+    },
+    /** 显示滑坡隐患点 */
+    showLandslideHiddenPoint: {
+      show: true,
+      loading: true,
+    },
+    /** 显示泥石流隐患点 */
+    showDebrisFlowHiddenPoint: {
+      show: true,
+      loading: true,
+    },
+    /** 显示内涝隐患点 */
+    showWaterLoggingHiddenPoint: {
+      show: true,
+      loading: true,
+    },
+    /** 显示山洪隐患点 */
+    showFlashFloodHiddenPoint: {
+      show: true,
+      loading: true,
     },
   });
 
@@ -207,10 +222,6 @@ export const useStatusStore = defineStore('status', () => {
       show: true,
       loading: true,
     };
-    mapLayers.hiddenDangerPointShow = {
-      show: true,
-      loading: true,
-    };
     mapLayers.riskPointShow = {
       show: true,
       loading: true,
@@ -248,6 +259,22 @@ export const useStatusStore = defineStore('status', () => {
     poiLayers.showSubwayStation = {
       show: false,
       loading: false,
+    };
+    poiLayers.showLandslideHiddenPoint = {
+      show: true,
+      loading: true,
+    };
+    poiLayers.showDebrisFlowHiddenPoint = {
+      show: true,
+      loading: true,
+    };
+    poiLayers.showWaterLoggingHiddenPoint = {
+      show: true,
+      loading: true,
+    };
+    poiLayers.showFlashFloodHiddenPoint = {
+      show: true,
+      loading: true,
     };
 
     // 基础设施图层显示状态重置

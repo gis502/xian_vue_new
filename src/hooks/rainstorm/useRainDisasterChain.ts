@@ -207,6 +207,36 @@ export const useRainDisasterChain = () => {
 
     return [
       {
+        name: '显示滑坡隐患点',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showLandslideHiddenPoint' as const,
+        callback: layerControl.clickLandslideHiddenPoint,
+      },
+      {
+        name: '显示泥石流隐患点',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showDebrisFlowHiddenPoint' as const,
+        callback: layerControl.clickDebrisFlowHiddenPoint,
+      },
+      {
+        name: '显示内涝隐患点',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showWaterLoggingHiddenPoint' as const,
+        callback: layerControl.clickWaterLoggingHiddenPoint,
+      },
+      {
+        name: '显示山洪隐患点',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showFlashFloodHiddenPoint' as const,
+        callback: layerControl.clickFlashFloodHiddenPoint,
+      },
+      {
+        name: '显示风险点',
+        statusStore: statusStore.mapLayers,
+        statusKey: 'riskPointShow' as const,
+        callback: layerControl.clickRiskPoint,
+      },
+      {
         name: '显示医院',
         statusStore: statusStore.poiLayers,
         statusKey: 'showHospital' as const,

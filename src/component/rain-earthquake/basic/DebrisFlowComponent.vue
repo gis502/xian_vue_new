@@ -1,73 +1,68 @@
-<!-- 隐患点组件 -->
+<!-- 泥石流隐患点组件 -->
 <template>
   <div>
-    <!-- 加载基础隐患点 -->
+    <!-- 加载泥石流隐患点 -->
     <LoadingPoints
-      v-if="useStatusStore().appLoadingCompleted && baseHiddenPoints.length > 0"
-      :base-points="baseHiddenPoints"
+      v-if="useStatusStore().appLoadingCompleted && debrisFlowPoints.length > 0"
+      :base-points="debrisFlowPoints"
       :get-disaster-icon="getDisasterIcon"
-      :prefix="config.prefix.hiddenDangerPointId"
-      :is-default="true"
-      :loading-resource-field="LoadingResource.HIDDEN_DANGER_POINT"
+      :prefix="config.prefix.debrisFlowHiddenPointId"
+      :is-default="false"
+      :loading-resource-field="LoadingResource.DEBRIS_FLOW_HIDDEN_POINT"
     />
 
     <!-- 显示信息框 -->
     <InformationBox
-      :data="hiddenDangerPointDetail as Record<string, any>"
+      :data="debrisFlowPointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformationStore().hiddenPoint.loading"
+      v-if="useLoadingInformationStore().debrisFlowHiddenPoint.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformationStore().hiddenPoint.id"
+      :key="useLoadingInformationStore().debrisFlowHiddenPoint.id"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-  import { DisasterType } from '@/types/common/DisasterType.ts';
   import { ref, watch } from 'vue';
   import { $api } from '@/api/api.ts';
   import type { Point } from '@/types/base/Point.ts';
   import LoadingPoints from '@/component/common/LoadingPoints.vue';
   import config from '@/config/config.json';
   import InformationBox from '@/component/common/InformationBox.vue';
+  import { useStatusStore } from '@/stores/useStatusStore.ts';
   import { useLoadingInformationStore } from '@/stores/useLoadingInformation.ts';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils.ts';
-  import { useHiddenPoint } from '@/hooks/rain-earthquake/useHiddenPoint.ts';
-  import { useStatusStore } from '@/stores/useStatusStore.ts';
   import { LoadingResource } from '@/types/common/LoadingResourceType.ts';
+  import { useHiddenPoint } from '@/hooks/rain-earthquake/useHiddenPoint.ts';
   import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore.ts';
+  import { PointType, HiddenDangerPointTypeMap } from '@/types/common/DisasterType.ts';
 
-  // 接收父组件传递的参数
-  const props = defineProps<{
-    disasterType: DisasterType;
-  }>();
+  const debrisFlowPoints = ref<Point[]>([]);
 
-  // 基本隐患点数据
-  const baseHiddenPoints = ref<Point[]>([]);
-  // 信息框相关字段
-  const informationBoxTitle = ref('');
+  // 信息框相关配置
   const offsetX = ref(0);
   const offsetY = ref(0);
-  const hiddenDangerPointDetail = ref<Point>();
+  const debrisFlowPointDetail = ref<Point>();
+  const informationBoxTitle = ref('');
 
   // 获取钩子函数
   const { field, getDisasterIcon } = useHiddenPoint();
 
-  $api.hiddenDangerSpots.getBasePoints(props.disasterType).then((res) => {
-    baseHiddenPoints.value = res.data;
+  // 加载泥石流隐患点数据
+  $api.hiddenDangerSpots.getBasePoints(HiddenDangerPointTypeMap[PointType.DEBRIS_FLOW]).then((res) => {
+    debrisFlowPoints.value = res.data;
   });
 
   // 监听id变化
   watch(
-    () => useLoadingInformationStore().hiddenPoint.id,
+    () => useLoadingInformationStore().debrisFlowHiddenPoint.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
-
-      // 获取隐患点数据
+      // 获取泥石流隐患点数据
       const clickObject = useLoadingInformationStore().clickObject;
 
       if (!clickObject || !clickObject.primitive) {
@@ -76,12 +71,12 @@
       }
 
       const res = await $api.hiddenDangerSpots.getPointDetailById(
-        useLoadingInformationStore().hiddenPoint.id
+        useLoadingInformationStore().debrisFlowHiddenPoint.id
       );
 
       // 更新数据
-      hiddenDangerPointDetail.value = res.data;
-      informationBoxTitle.value = res.data.disasterType + '隐患点';
+      debrisFlowPointDetail.value = res.data;
+      informationBoxTitle.value = res.data.disasterName || '泥石流隐患点信息';
 
       try {
         // 将坐标转换为偏移量
@@ -92,7 +87,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformationStore().hiddenPoint.loading = true;
+        useLoadingInformationStore().debrisFlowHiddenPoint.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -101,24 +96,23 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatusStore().mapLayers.hiddenDangerPointShow.show,
+    () => useStatusStore().poiLayers.showDebrisFlowHiddenPoint.show,
     (newValue: boolean) => {
       if (newValue) {
-        // 显示隐患点
+        // 显示泥石流隐患点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(
-            LoadingResource.HIDDEN_DANGER_POINT
-          ).ids
+          useLoadingResourceStore().getLoadingResource(LoadingResource.DEBRIS_FLOW_HIDDEN_POINT)
+            .ids
         );
       } else {
-        // 隐藏隐患点
+        // 隐藏泥石流隐患点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(
-            LoadingResource.HIDDEN_DANGER_POINT
-          ).ids
+          useLoadingResourceStore().getLoadingResource(LoadingResource.DEBRIS_FLOW_HIDDEN_POINT)
+            .ids
         );
       }
     }
   );
 </script>
+
 <style scoped></style>

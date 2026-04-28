@@ -18,16 +18,6 @@ export const useLoadingInformationStore = defineStore(
 
     // ============================ 隐患点加载状态 ================================
 
-    /**
-     * 隐患点加载信息状态
-     */
-    const hiddenPoint = reactive({
-      /** 加载状态 */
-      loading: false,
-      /** 隐患点ID */
-      id: -1,
-    });
-
     // ============================ 风险点加载状态 ================================
 
     /**
@@ -116,6 +106,38 @@ export const useLoadingInformationStore = defineStore(
       id: -1,
     });
 
+    // ============================== 滑坡隐患点状态 ================================
+    const landslideHiddenPoint = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 滑坡隐患点ID */
+      id: -1,
+    });
+
+    // ============================== 泥石流隐患点状态 ================================
+    const debrisFlowHiddenPoint = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 泥石流隐患点ID */
+      id: -1,
+    });
+
+    // ============================== 内涝隐患点状态 ================================
+    const waterLoggingHiddenPoint = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 内涝隐患点ID */
+      id: -1,
+    });
+
+    // ============================== 山洪隐患点状态 ================================
+    const flashFloodHiddenPoint = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 山洪隐患点ID */
+      id: -1,
+    });
+
     /**
      * 重置所有状态
      */
@@ -123,10 +145,6 @@ export const useLoadingInformationStore = defineStore(
       // 点击对象重置
       clickObject.id = '';
       clickObject.primitive = null;
-
-      // 隐患点状态重置
-      hiddenPoint.loading = false;
-      hiddenPoint.id = -1;
 
       // 风险点状态重置
       riskPoint.loading = false;
@@ -167,11 +185,26 @@ export const useLoadingInformationStore = defineStore(
       // 地铁站点状态重置
       subwayStation.loading = false;
       subwayStation.id = -1;
+
+      // 滑坡隐患点状态重置
+      landslideHiddenPoint.loading = false;
+      landslideHiddenPoint.id = -1;
+
+      // 泥石流隐患点状态重置
+      debrisFlowHiddenPoint.loading = false;
+      debrisFlowHiddenPoint.id = -1;
+
+      // 内涝隐患点状态重置
+      waterLoggingHiddenPoint.loading = false;
+      waterLoggingHiddenPoint.id = -1;
+
+      // 山洪隐患点状态重置
+      flashFloodHiddenPoint.loading = false;
+      flashFloodHiddenPoint.id = -1;
     };
 
     return {
       clickObject,
-      hiddenPoint,
       riskPoint,
       hospital,
       dangerousSource,
@@ -182,6 +215,10 @@ export const useLoadingInformationStore = defineStore(
       bridge,
       reservoir,
       subwayStation,
+      landslideHiddenPoint,
+      debrisFlowHiddenPoint,
+      waterLoggingHiddenPoint,
+      flashFloodHiddenPoint,
       resetStatue,
 
     };

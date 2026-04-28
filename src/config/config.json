@@ -34,7 +34,10 @@
     "min": 1000
   },
   "prefix": {
-    "hiddenDangerPointId": "hidden-danger-point-",
+    "landslideHiddenPointId": "landslide-hidden-point-",
+    "debrisFlowHiddenPointId": "debris-flow-hidden-point-",
+    "waterLoggingHiddenPointId": "water-logging-hidden-point-",
+    "flashFloodHiddenPointId": "flash-flood-hidden-point-",
     "riskPointId": "risk-point-",
     "hospitalPointId": "hospital-point-",
     "dangerousSourcePointId": "dangerous-source-point-",

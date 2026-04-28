@@ -178,10 +178,22 @@ export const useEarthquakeDisasterChain = () => {
 
     return [
       {
-        name: '显示隐患点',
+        name: '显示滑坡隐患点',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showLandslideHiddenPoint' as const,
+        callback: layerControl.clickLandslideHiddenPoint,
+      },
+      {
+        name: '显示泥石流隐患点',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showDebrisFlowHiddenPoint' as const,
+        callback: layerControl.clickDebrisFlowHiddenPoint,
+      },
+      {
+        name: '显示风险点',
         statusStore: statusStore.mapLayers,
-        statusKey: 'hiddenDangerPointShow' as const,
-        callback: layerControl.clickHiddenDangerPoint,
+        statusKey: 'riskPointShow' as const,
+        callback: layerControl.clickRiskPoint,
       },
       {
         name: '显示医院',
