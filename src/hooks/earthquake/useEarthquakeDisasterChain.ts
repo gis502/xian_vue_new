@@ -2,6 +2,7 @@ import { ref } from 'vue';
 import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots';
 import type { PaginationType } from '@/types/common/PaginationType';
 import { PointType } from '@/types/common/DisasterType';
+import { ControlPanelCategory } from '@/types/common/ControlPanelCategory';
 import { useStatusStore } from '@/stores/useStatusStore';
 import { useLayerControl } from '../rain-earthquake/useLayerControl.ts';
 import {
@@ -188,7 +189,7 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'showLandslideHiddenPoint' as const,
         callback: layerControl.clickLandslideHiddenPoint,
         link: landslideIcon,
-        category: '灾害隐患点',
+        category: ControlPanelCategory.DISASTER_HAZARD,
       },
       {
         name: '显示泥石流隐患点',
@@ -196,7 +197,7 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'showDebrisFlowHiddenPoint' as const,
         callback: layerControl.clickDebrisFlowHiddenPoint,
         link: debrisFlowIcon,
-        category: '灾害隐患点',
+        category: ControlPanelCategory.DISASTER_HAZARD,
       },
       {
         name: '显示风险点',
@@ -204,7 +205,7 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'riskPointShow' as const,
         callback: layerControl.clickRiskPoint,
         link: riskAreaIcon,
-        category: '灾害隐患点',
+        category: ControlPanelCategory.DISASTER_HAZARD,
       },
       {
         name: '显示断裂带',
@@ -212,7 +213,7 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'faultShow' as const,
         callback: layerControl.clickFault,
         link: earthquakeLineIcon,
-        category: '灾害隐患点',
+        category: ControlPanelCategory.DISASTER_HAZARD,
       },
       // 基础设施类别
       {
@@ -221,7 +222,7 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'showHospital' as const,
         callback: layerControl.clickHospital,
         link: hospitalIcon,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示危险源',
@@ -229,7 +230,7 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'showDangerSource' as const,
         callback: layerControl.clickDangerousSource,
         link: dangerousSourceIcon,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示避难所',
@@ -237,7 +238,7 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'showRefugeeShelter' as const,
         callback: layerControl.clickEmergencyShelter,
         link: emergencyShelterIcon,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示消防站',
@@ -245,7 +246,7 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'showFireStation' as const,
         callback: layerControl.clickFireStation,
         link: firefighterIcon,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示储备点',
@@ -253,7 +254,7 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'showReservePoint' as const,
         callback: layerControl.clickStorePoints,
         link: storePointsIcon,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示学校',
@@ -261,28 +262,28 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'showSchool' as const,
         callback: layerControl.clickSchool,
         link: schoolIcon,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示人口网格',
         statusStore: statusStore.poiLayers,
         statusKey: 'showPopulationGrid' as const,
         callback: layerControl.clickPopulationGrid,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示管网系统',
         statusStore: statusStore.infrastructureLayers,
         statusKey: 'showNetworkSystem' as const,
         callback: layerControl.clickWaterPipe,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示交通道路',
         statusStore: statusStore.infrastructureLayers,
         statusKey: 'showTrafficRoad' as const,
         callback: layerControl.clickTrafficRoad,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示桥梁',
@@ -290,21 +291,21 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'showBridge' as const,
         callback: layerControl.clickBridge,
         link: bridgeIcon,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示高速',
         statusStore: statusStore.infrastructureLayers,
         statusKey: 'showHighway' as const,
         callback: layerControl.clickHighway,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示国道',
         statusStore: statusStore.infrastructureLayers,
         statusKey: 'showMainRoad' as const,
         callback: layerControl.clickNationRoad,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示水库',
@@ -312,7 +313,7 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'showReservoir' as const,
         callback: layerControl.clickReservoir,
         link: reservoirIcon,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
       {
         name: '显示地铁站',
@@ -320,7 +321,7 @@ export const useEarthquakeDisasterChain = () => {
         statusKey: 'showSubwayStation' as const,
         callback: layerControl.clickSubwayStation,
         link: subwayIcon,
-        category: '基础设施',
+        category: ControlPanelCategory.INFRASTRUCTURE,
       },
     ];
   };
