@@ -110,16 +110,18 @@
     right: 20px;
     border-radius: 2px;
     z-index: 1000;
-    width: 200px;
-    overflow: auto;
+    width: 160px;
+    overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     color: white;
     border: 1px solid rgb(0, 225, 255);
-    max-height: 650px;
+    max-height: 50vh;
+    display: flex;
+    flex-direction: column;
   }
   .title-box {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     background: linear-gradient(
       180deg,
       rgb(86, 204, 242) 0%,
@@ -133,17 +135,52 @@
     padding: 8px;
     display: flex;
     flex-direction: column;
-    font-size: 14px;
+    font-size: 12px;
     gap: 6px;
-    max-height: 60vh;
     overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+  }
+
+  /* 自定义滚动条样式 */
+  .control-show-list::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .control-show-list::-webkit-scrollbar-track {
+    background: rgba(14, 52, 98, 0.5);
+    border-radius: 3px;
+  }
+
+  .control-show-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      rgba(86, 204, 242, 0.8) 0%,
+      rgba(47, 128, 237, 0.8) 100%
+    );
+    border-radius: 3px;
+    transition: background 0.3s ease;
+  }
+
+  .control-show-list::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      180deg,
+      rgba(86, 204, 242, 1) 0%,
+      rgba(47, 128, 237, 1) 100%
+    );
+  }
+
+  /* Firefox 滚动条样式 */
+  .control-show-list {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(86, 204, 242, 0.8) rgba(14, 52, 98, 0.5);
   }
   .category-section {
     margin-bottom: 8px;
   }
   .category-title {
     font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
     color: #00e1ff;
     padding: 4px 0;
     margin-bottom: 4px;
@@ -183,7 +220,7 @@
     flex: 1;
     text-align: justify;
     text-justify: inter-ideograph;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.5;
     letter-spacing: 0.5px;
     word-break: break-all;
