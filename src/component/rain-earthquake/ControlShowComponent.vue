@@ -45,7 +45,15 @@
             ></div>
           </div>
           <!-- 描述文字 -->
-          <span class="item-description">{{ item.name }}</span>
+          <span class="item-description">
+            {{ item.name }}
+            <span
+              v-if="item.count && item.count() !== null"
+              class="point-count"
+            >
+              ({{ item.count() }})
+            </span>
+          </span>
         </div>
       </div>
     </div>
@@ -66,6 +74,7 @@
       link?: string; // 图例图片链接
       html?: string; // 图例HTML内容
       category?: string; // 分类名称
+      count?: () => number | null; // 获取点数量的函数
     }[];
   }>();
 
@@ -110,7 +119,7 @@
     right: 20px;
     border-radius: 2px;
     z-index: 1000;
-    width: 160px;
+    width: 200px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     color: white;
@@ -224,6 +233,15 @@
     line-height: 1.5;
     letter-spacing: 0.5px;
     word-break: break-all;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .point-count {
+    color: #00e1ff;
+    font-weight: bold;
+    font-size: 13px;
+    white-space: nowrap;
   }
   :deep(.el-checkbox) {
     height: auto;

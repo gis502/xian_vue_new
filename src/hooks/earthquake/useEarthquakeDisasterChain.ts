@@ -21,6 +21,8 @@ import {
   subwayIcon,
 } from '@/assets';
 import { useRightHandle } from '../rain-earthquake/useRightHandle.ts';
+import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore.ts';
+import { LoadingResource } from '@/types/common/LoadingResourceType.ts';
 
 /**
  * 暴雨灾害链
@@ -180,6 +182,7 @@ export const useEarthquakeDisasterChain = () => {
   const getControlPanel = () => {
     const statusStore = useStatusStore();
     const layerControl = useLayerControl();
+    const resourceStore = useLoadingResourceStore();
 
     return [
       // 灾害隐患点类别
@@ -190,6 +193,10 @@ export const useEarthquakeDisasterChain = () => {
         callback: layerControl.clickLandslideHiddenPoint,
         link: landslideIcon,
         category: ControlPanelCategory.DISASTER_HAZARD,
+        count: () =>
+          resourceStore.getResourceCount(
+            LoadingResource.LANDSLIDE_HIDDEN_POINT
+          ),
       },
       {
         name: '泥石流隐患点',
@@ -198,6 +205,10 @@ export const useEarthquakeDisasterChain = () => {
         callback: layerControl.clickDebrisFlowHiddenPoint,
         link: debrisFlowIcon,
         category: ControlPanelCategory.DISASTER_HAZARD,
+        count: () =>
+          resourceStore.getResourceCount(
+            LoadingResource.DEBRIS_FLOW_HIDDEN_POINT
+          ),
       },
       {
         name: '风险点',
@@ -206,6 +217,7 @@ export const useEarthquakeDisasterChain = () => {
         callback: layerControl.clickRiskPoint,
         link: riskAreaIcon,
         category: ControlPanelCategory.DISASTER_HAZARD,
+        count: () => resourceStore.getResourceCount(LoadingResource.RISK_POINT),
       },
       {
         name: '断裂带',
@@ -223,6 +235,7 @@ export const useEarthquakeDisasterChain = () => {
         callback: layerControl.clickHospital,
         link: hospitalIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
+        count: () => resourceStore.getResourceCount(LoadingResource.HOSPITAL),
       },
       {
         name: '危险源',
@@ -231,6 +244,8 @@ export const useEarthquakeDisasterChain = () => {
         callback: layerControl.clickDangerousSource,
         link: dangerousSourceIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
+        count: () =>
+          resourceStore.getResourceCount(LoadingResource.DANGEROUS_SOURCE),
       },
       {
         name: '避难所',
@@ -239,6 +254,8 @@ export const useEarthquakeDisasterChain = () => {
         callback: layerControl.clickEmergencyShelter,
         link: emergencyShelterIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
+        count: () =>
+          resourceStore.getResourceCount(LoadingResource.EMERGENCY_SHELTER),
       },
       {
         name: '消防站',
@@ -247,6 +264,8 @@ export const useEarthquakeDisasterChain = () => {
         callback: layerControl.clickFireStation,
         link: firefighterIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
+        count: () =>
+          resourceStore.getResourceCount(LoadingResource.FIRE_STATION),
       },
       {
         name: '储备点',
@@ -255,6 +274,8 @@ export const useEarthquakeDisasterChain = () => {
         callback: layerControl.clickStorePoints,
         link: storePointsIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
+        count: () =>
+          resourceStore.getResourceCount(LoadingResource.STORE_POINTS),
       },
       {
         name: '学校',
@@ -263,6 +284,7 @@ export const useEarthquakeDisasterChain = () => {
         callback: layerControl.clickSchool,
         link: schoolIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
+        count: () => resourceStore.getResourceCount(LoadingResource.SCHOOL),
       },
       {
         name: '桥梁',
@@ -271,6 +293,7 @@ export const useEarthquakeDisasterChain = () => {
         callback: layerControl.clickBridge,
         link: bridgeIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
+        count: () => resourceStore.getResourceCount(LoadingResource.BRIDGE),
       },
       {
         name: '水库',
@@ -279,6 +302,7 @@ export const useEarthquakeDisasterChain = () => {
         callback: layerControl.clickReservoir,
         link: reservoirIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
+        count: () => resourceStore.getResourceCount(LoadingResource.RESERVOIR),
       },
       {
         name: '地铁站',
@@ -287,6 +311,8 @@ export const useEarthquakeDisasterChain = () => {
         callback: layerControl.clickSubwayStation,
         link: subwayIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
+        count: () =>
+          resourceStore.getResourceCount(LoadingResource.SUBWAY_STATION),
       },
       {
         name: '人口网格',

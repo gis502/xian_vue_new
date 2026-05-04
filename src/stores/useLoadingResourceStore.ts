@@ -35,10 +35,24 @@ export const useLoadingResourceStore = defineStore('loadingResource', () => {
     return loadingResource.value[key] || { ids: [], info: [] };
   };
 
+  /**
+   * 获取资源数量
+   * @param key - 资源类型
+   * @returns 资源数量，如果资源不存在则返回 null
+   */
+  const getResourceCount = (key: LoadingResource): number | null => {
+    const resource = loadingResource.value[key];
+    if (!resource) {
+      return null;
+    }
+    return resource.ids.length;
+  };
+
   return {
     loadingResource,
     getLoadingResource,
     addLoadingResource,
     removeLoadingResource,
+    getResourceCount,
   };
 });
