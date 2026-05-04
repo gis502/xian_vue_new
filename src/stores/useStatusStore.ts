@@ -19,11 +19,6 @@ export const useStatusStore = defineStore('status', () => {
    * UI 组件显示状态集合
    */
   const uiComponents = reactive({
-    /** 图例显示状态 */
-    legendShow: {
-      show: true,
-      loading: true,
-    },
     /** 灾情链影响点表格显示状态 */
     disasterChainPointShow: {
       show: false,
@@ -196,10 +191,6 @@ export const useStatusStore = defineStore('status', () => {
    */
   const resetScene = () => {
     // UI 组件显示状态重置
-    uiComponents.legendShow = {
-      show: true,
-      loading: true,
-    };
     uiComponents.disasterChainPointShow = {
       show: false,
       loading: true,

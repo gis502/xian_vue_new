@@ -20,16 +20,6 @@
       @change-current-page="changeCurrentPage"
     />
 
-    <!-- 图例组件 -->
-    <LegendComponent
-      v-if="
-        useStatusStore().appLoadingCompleted &&
-        useStatusStore().uiComponents.legendShow.loading
-      "
-      :legend-list="legendList"
-      :cols-num="2"
-    />
-
     <!-- 左侧按钮组件 -->
     <LeftButtonComponent
       v-if="
@@ -66,7 +56,6 @@
   import DisasterChainPointComponent from '@/component/rain-earthquake/DisasterChainPointComponent.vue';
   import FunctionComponent from '@/component/rain-earthquake/FunctionComponent.vue';
   import LeftButtonComponent from '@/component/rain-earthquake/LeftButtonComponent.vue';
-  import LegendComponent from '@/component/rain-earthquake/LegendComponent.vue';
   import RightButtonComponent from '@/component/rain-earthquake/RightButtonComponent.vue';
   import { useRainDisasterChain } from '@/hooks/rainstorm/useRainDisasterChain';
   import { useStatusStore } from '@/stores/useStatusStore';
@@ -80,7 +69,6 @@
     tableDatas,
     tableColumns,
     paginationConfig,
-    legendList,
     leftButtonInfo,
     rightButtonInfo,
     controlPanel,

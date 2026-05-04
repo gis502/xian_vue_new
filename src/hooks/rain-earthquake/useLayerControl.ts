@@ -142,8 +142,16 @@ export const useLayerControl = () => {
     useStatusStore().mapLayers.riskPointShow.loading = true;
   };
 
+  /**
+   * 显示断裂带
+   */
+  const clickFault = () => {
+    useStatusStore().mapLayers.faultShow.loading = true;
+  };
+
   return {
     clickRiskPoint,
+    clickFault,
     clickHospital,
     clickDangerousSource,
     clickEmergencyShelter,
