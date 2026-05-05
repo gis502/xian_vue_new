@@ -168,6 +168,17 @@ export const useStatusStore = defineStore('status', () => {
     },
   });
 
+  /**
+   * 气象图层显示状态
+   */
+  const weatherLayers = reactive({
+    /** 显示降雨栅格 */
+    showRainfallGrid: {
+      show: false,
+      loading: true,
+    },
+  });
+
   // ============================ 地图功能显示状态 ================================
   const functionStatus = reactive({
     aroundAnalysis: {
@@ -294,6 +305,12 @@ export const useStatusStore = defineStore('status', () => {
       loading: false,
     };
 
+    // 气象图层显示状态重置
+    weatherLayers.showRainfallGrid = {
+      show: false,
+      loading: true,
+    };
+
     // 功能显示状态重置
     functionStatus.aroundAnalysis = {
       show: false,
@@ -307,6 +324,7 @@ export const useStatusStore = defineStore('status', () => {
     mapLayers,
     poiLayers,
     infrastructureLayers,
+    weatherLayers,
     functionStatus,
     reset,
     resetScene,

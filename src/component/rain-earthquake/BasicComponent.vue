@@ -65,6 +65,14 @@
         useStatusStore().mapLayers.riskPointShow.loading
       "
     />
+
+    <!-- 降雨栅格图层组件（暴雨模拟） -->
+    <RainfallGridComponent
+      v-if="
+        useStatusStore().appLoadingCompleted &&
+        useStatusStore().weatherLayers.showRainfallGrid.loading
+      "
+    />
   </div>
 </template>
 
@@ -76,6 +84,7 @@
   import DebrisFlowComponent from '@/component/rain-earthquake/basic/DebrisFlowComponent.vue';
   import WaterLoggingComponent from '@/component/rain-earthquake/basic/WaterLoggingComponent.vue';
   import FlashFloodComponent from '@/component/rain-earthquake/basic/FlashFloodComponent.vue';
+  import RainfallGridComponent from '@/component/rain-earthquake/detail-panels/RainfallGridComponent.vue';
   import { useStatusStore } from '@/stores/useStatusStore';
 
   // 获取父组件传递德数据

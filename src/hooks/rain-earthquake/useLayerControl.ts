@@ -149,6 +149,13 @@ export const useLayerControl = () => {
     useStatusStore().mapLayers.faultShow.loading = true;
   };
 
+  /**
+   * 显示降雨栅格
+   */
+  const clickRainfallGrid = () => {
+    useStatusStore().weatherLayers.showRainfallGrid.loading = true;
+  };
+
   return {
     clickRiskPoint,
     clickFault,
@@ -170,5 +177,6 @@ export const useLayerControl = () => {
     clickDebrisFlowHiddenPoint,
     clickWaterLoggingHiddenPoint,
     clickFlashFloodHiddenPoint,
+    clickRainfallGrid,
   };
 };

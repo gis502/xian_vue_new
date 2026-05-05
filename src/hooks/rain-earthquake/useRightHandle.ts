@@ -2,7 +2,6 @@ import { useStatusStore } from '@/stores/useStatusStore.ts';
 import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils.ts';
 import config from '@/config/config.json';
 import { useButtonSelectedIdStore } from '@/stores/useButtonSelectedIdStore';
-import { $api } from '@/api/api';
 
 export const useRightHandle = () => {
   /**
@@ -11,15 +10,12 @@ export const useRightHandle = () => {
    */
   const rainstormSimulation = (status: unknown) => {
     if (status as boolean) {
-      // 获取降雨栅格
-      $api.meteorology
-        .getRainfallGrid({
-          startTime: '2025-08-20T00:00:00',
-          endTime: '2025-08-20T00:00:00',
-        })
-        .then((res) => {
-          console.log(res);
-        });
+      // 开启暴雨模拟：显示降雨栅格图层
+      useStatusStore().weatherLayers.showRainfallGrid.loading = true;
+      useStatusStore().weatherLayers.showRainfallGrid.show = true;
+    } else {
+      // 关闭暴雨模拟：隐藏降雨栅格图层
+      useStatusStore().weatherLayers.showRainfallGrid.show = false;
     }
   };
 

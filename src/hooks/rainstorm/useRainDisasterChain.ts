@@ -31,6 +31,11 @@ import { LoadingResource } from '@/types/common/LoadingResourceType.ts';
  * @returns
  */
 export const useRainDisasterChain = () => {
+  // 初始化暴雨模拟状态（因为右侧按钮默认选中）
+  const statusStore = useStatusStore();
+  statusStore.weatherLayers.showRainfallGrid.loading = true;
+  statusStore.weatherLayers.showRainfallGrid.show = true;
+
   // ================灾害链影响点列表================================
   /**
    * 搜索条件
@@ -168,7 +173,6 @@ export const useRainDisasterChain = () => {
       name: '暴雨模拟',
       callback: (status: unknown) =>
         useRightHandle().rainstormSimulation(status),
-      selected: true,
     },
     {
       name: '暴雨触发',
