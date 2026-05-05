@@ -166,9 +166,8 @@ export const useRainDisasterChain = () => {
   const rightButtonInfo = [
     {
       name: '暴雨模拟',
-      callback: () => {
-        console.log('暴雨模拟');
-      },
+      callback: (status: unknown) =>
+        useRightHandle().rainstormSimulation(status),
       selected: true,
     },
     {
@@ -222,7 +221,10 @@ export const useRainDisasterChain = () => {
         callback: layerControl.clickLandslideHiddenPoint,
         link: landslideIcon,
         category: ControlPanelCategory.DISASTER_HAZARD,
-        count: () => resourceStore.getResourceCount(LoadingResource.LANDSLIDE_HIDDEN_POINT),
+        count: () =>
+          resourceStore.getResourceCount(
+            LoadingResource.LANDSLIDE_HIDDEN_POINT
+          ),
       },
       {
         name: '泥石流隐患点',
@@ -231,7 +233,10 @@ export const useRainDisasterChain = () => {
         callback: layerControl.clickDebrisFlowHiddenPoint,
         link: debrisFlowIcon,
         category: ControlPanelCategory.DISASTER_HAZARD,
-        count: () => resourceStore.getResourceCount(LoadingResource.DEBRIS_FLOW_HIDDEN_POINT),
+        count: () =>
+          resourceStore.getResourceCount(
+            LoadingResource.DEBRIS_FLOW_HIDDEN_POINT
+          ),
       },
       {
         name: '内涝隐患点',
@@ -240,7 +245,10 @@ export const useRainDisasterChain = () => {
         callback: layerControl.clickWaterLoggingHiddenPoint,
         link: waterLoggingIcon,
         category: ControlPanelCategory.DISASTER_HAZARD,
-        count: () => resourceStore.getResourceCount(LoadingResource.WATER_LOGGING_HIDDEN_POINT),
+        count: () =>
+          resourceStore.getResourceCount(
+            LoadingResource.WATER_LOGGING_HIDDEN_POINT
+          ),
       },
       {
         name: '山洪隐患点',
@@ -249,7 +257,10 @@ export const useRainDisasterChain = () => {
         callback: layerControl.clickFlashFloodHiddenPoint,
         link: flashFloodIcon,
         category: ControlPanelCategory.DISASTER_HAZARD,
-        count: () => resourceStore.getResourceCount(LoadingResource.FLASH_FLOOD_HIDDEN_POINT),
+        count: () =>
+          resourceStore.getResourceCount(
+            LoadingResource.FLASH_FLOOD_HIDDEN_POINT
+          ),
       },
       {
         name: '风险点',
@@ -277,7 +288,8 @@ export const useRainDisasterChain = () => {
         callback: layerControl.clickDangerousSource,
         link: dangerousSourceIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
-        count: () => resourceStore.getResourceCount(LoadingResource.DANGEROUS_SOURCE),
+        count: () =>
+          resourceStore.getResourceCount(LoadingResource.DANGEROUS_SOURCE),
       },
       {
         name: '避难所',
@@ -286,7 +298,8 @@ export const useRainDisasterChain = () => {
         callback: layerControl.clickEmergencyShelter,
         link: emergencyShelterIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
-        count: () => resourceStore.getResourceCount(LoadingResource.EMERGENCY_SHELTER),
+        count: () =>
+          resourceStore.getResourceCount(LoadingResource.EMERGENCY_SHELTER),
       },
       {
         name: '消防站',
@@ -295,7 +308,8 @@ export const useRainDisasterChain = () => {
         callback: layerControl.clickFireStation,
         link: firefighterIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
-        count: () => resourceStore.getResourceCount(LoadingResource.FIRE_STATION),
+        count: () =>
+          resourceStore.getResourceCount(LoadingResource.FIRE_STATION),
       },
       {
         name: '储备点',
@@ -304,7 +318,8 @@ export const useRainDisasterChain = () => {
         callback: layerControl.clickStorePoints,
         link: storePointsIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
-        count: () => resourceStore.getResourceCount(LoadingResource.STORE_POINTS),
+        count: () =>
+          resourceStore.getResourceCount(LoadingResource.STORE_POINTS),
       },
       {
         name: '学校',
@@ -340,7 +355,8 @@ export const useRainDisasterChain = () => {
         callback: layerControl.clickSubwayStation,
         link: subwayIcon,
         category: ControlPanelCategory.INFRASTRUCTURE,
-        count: () => resourceStore.getResourceCount(LoadingResource.SUBWAY_STATION),
+        count: () =>
+          resourceStore.getResourceCount(LoadingResource.SUBWAY_STATION),
       },
       {
         name: '人口网格',

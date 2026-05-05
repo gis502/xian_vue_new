@@ -47,7 +47,7 @@
     // 如果找到了选中的按钮，设置选中状态，同时执行回调函数
     if (lastSelectedIndex !== -1) {
       useButtonSelectedIdStore().rightButtonSelectedId = lastSelectedIndex;
-      props.buttonList[lastSelectedIndex].callback();
+      props.buttonList[lastSelectedIndex].callback(true);
     }
   });
 
