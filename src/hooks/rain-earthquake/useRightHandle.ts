@@ -15,46 +15,46 @@ export const useRightHandle = () => {
       useStatusStore().weatherLayers.showRainfallGrid.loading = true;
       useStatusStore().weatherLayers.showRainfallGrid.show = true;
 
-      // 显示图例
-      useStatusStore().uiComponents.leftLegend.loading = true;
-      useStatusStore().uiComponents.leftLegend.show = true;
-      useLeftLegendStore().legendListInfo.title = '降雨量图例';
-      useLeftLegendStore().legendListInfo.list = [
-        {
-          label: '无雨/微雨; <0.1mm/12h',
-          color: 'rgba(200,200,200,0)',
-        },
-        {
-          label: '小雨；<5mm/12h',
-          color: 'rgba(0,0,255,0.4)',
-        },
-        {
-          label: '中雨； <15mm/12h',
-          color: 'rgba(0,255,255,0.5)',
-        },
-        {
-          label: '大雨； <30mm/12h',
-          color: 'rgba(0,255,0,0.6)',
-        },
-        {
-          label: '暴雨； <70mm/12h',
-          color: 'rgba(255,255,0,0.7)',
-        },
-        {
-          label: '大暴雨； <140mm/12h',
-          color: 'rgba(255,165,0,0.8)',
-        },
-        {
-          label: '特大暴雨； >140mm/12h',
-          color: 'rgba(255,0,0,0.9)',
-        },
-      ];
+      // 添加图例
+      useLeftLegendStore().legendListInfo.precipitation = {
+        title: '降雨量图例',
+        list: [
+          {
+            label: '无雨/微雨; <0.1mm/12h',
+            color: 'rgba(200,200,200,0)',
+          },
+          {
+            label: '小雨；<5mm/12h',
+            color: 'rgba(0,0,255,0.4)',
+          },
+          {
+            label: '中雨； <15mm/12h',
+            color: 'rgba(0,255,255,0.5)',
+          },
+          {
+            label: '大雨； <30mm/12h',
+            color: 'rgba(0,255,0,0.6)',
+          },
+          {
+            label: '暴雨； <70mm/12h',
+            color: 'rgba(255,255,0,0.7)',
+          },
+          {
+            label: '大暴雨； <140mm/12h',
+            color: 'rgba(255,165,0,0.8)',
+          },
+          {
+            label: '特大暴雨； >140mm/12h',
+            color: 'rgba(255,0,0,0.9)',
+          },
+        ],
+      };
     } else {
       // 关闭暴雨模拟：隐藏降雨栅格图层
       useStatusStore().weatherLayers.showRainfallGrid.show = false;
 
-      // 隐藏图例
-      useStatusStore().uiComponents.leftLegend.show = false;
+      // 删除图例
+      delete useLeftLegendStore().legendListInfo.precipitation;
     }
   };
 
