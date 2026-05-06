@@ -26,34 +26,6 @@
   let pendingShow = false; // 标记是否有待显示的请求
 
   /**
-   * 颜色缓存
-   */
-  const colorCache = new Map<string, Color>();
-
-  /**
-   * 解析颜色字符串
-   */
-  const parseColor = (colorStr: string): Color | null => {
-    if (colorCache.has(colorStr)) {
-      return colorCache.get(colorStr)!;
-    }
-
-    const match = colorStr.match(
-      /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/
-    );
-    if (!match) return null;
-
-    const r = parseInt(match[1]) / 255;
-    const g = parseInt(match[2]) / 255;
-    const b = parseInt(match[3]) / 255;
-    const a = match[4] ? parseFloat(match[4]) : 1.0;
-
-    const color = new Color(r, g, b, a);
-    colorCache.set(colorStr, color);
-    return color;
-  };
-
-  /**
    * 加载降雨栅格数据
    */
   const loadRainfallGrid = async () => {
@@ -66,9 +38,6 @@
       const geoJsonData = res.data;
 
       if (geoJsonData && geoJsonData.type === 'FeatureCollection') {
-        // 立即让出主线程，避免阻塞渲染
-        await new Promise((resolve) => requestAnimationFrame(resolve));
-
         // 分批处理，避免长时间阻塞主线程
         const features = geoJsonData.features;
         const batchSize = 500; // 每批处理500个
@@ -83,7 +52,9 @@
             // 获取颜色
             let color = Color.WHITE;
             if (feature.properties?.color) {
-              const parsedColor = parseColor(feature.properties.color);
+              const parsedColor = CesiumUtilsSingleton.parseColor(
+                feature.properties.color
+              );
               if (parsedColor) {
                 color = parsedColor;
               }
@@ -108,15 +79,7 @@
 
             instances.push(instance);
           });
-
-          // 每批之间让出主线程
-          if (i + batchSize < features.length) {
-            await new Promise((resolve) => setTimeout(resolve, 0));
-          }
         }
-
-        // 让出主线程
-        await new Promise((resolve) => requestAnimationFrame(resolve));
 
         // 创建 Primitive（初始状态为隐藏）
         primitiveCollection = new GroundPrimitive({

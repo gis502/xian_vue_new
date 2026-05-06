@@ -19,6 +19,7 @@ import {
   Cartesian2,
   SceneTransforms,
   Rectangle,
+  Color,
 } from 'cesium';
 import { CesiumViewerManager } from './CesiumViewerManager';
 import { EntityManager } from './EntityManager';
@@ -43,6 +44,9 @@ export class CesiumUtils {
   #layerManager: LayerManager | null = null;
   #geoJsonManager: GeoJsonManager | null = null;
   #cameraController: CameraController | null = null;
+
+  // 颜色缓存
+  #colorCache = new Map<string, Color>();
 
   constructor() {
     this.#viewerManager = new CesiumViewerManager();
@@ -582,6 +586,31 @@ export class CesiumUtils {
       pos
     );
     return { x: windowCoord.x, y: windowCoord.y };
+  }
+
+  /**
+   * 解析颜色字符串
+   * @param colorStr 颜色字符串
+   * @returns Color 对象
+   */
+  parseColor(colorStr: string): Color | null {
+    if (this.#colorCache.has(colorStr)) {
+      return this.#colorCache.get(colorStr)!;
+    }
+
+    const match = colorStr.match(
+      /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/
+    );
+    if (!match) return null;
+
+    const r = parseInt(match[1]) / 255;
+    const g = parseInt(match[2]) / 255;
+    const b = parseInt(match[3]) / 255;
+    const a = match[4] ? parseFloat(match[4]) : 1.0;
+
+    const color = new Color(r, g, b, a);
+    this.#colorCache.set(colorStr, color);
+    return color;
   }
 
   // ===================== 私有方法 =====================
