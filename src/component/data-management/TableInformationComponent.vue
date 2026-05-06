@@ -13,18 +13,12 @@
 
     <div class="table-content">
       <el-table
-        ref="tableRef"
         :data="filteredTables"
         style="width: 100%"
         v-loading="loading"
         empty-text="暂无数据表"
         @row-click="handleRowClick"
-        @selection-change="handleSelectionChange"
       >
-        <el-table-column
-          type="selection"
-          width="55"
-        />
         <el-table-column
           prop="tableName"
           label="表名"
@@ -49,7 +43,8 @@
         />
         <el-table-column
           label="操作"
-          width="120"
+          width="200"
+          fixed="right"
         >
           <template #default="scope">
             <el-button
@@ -58,6 +53,20 @@
               @click.stop="viewTableDetail(scope.row)"
             >
               查看详情
+            </el-button>
+            <el-button
+              size="small"
+              type="warning"
+              @click.stop="handleModify(scope.row)"
+            >
+              修改
+            </el-button>
+            <el-button
+              size="small"
+              type="danger"
+              @click.stop="handleDelete(scope.row)"
+            >
+              删除
             </el-button>
           </template>
         </el-table-column>
@@ -68,7 +77,7 @@
 
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue';
-  import { ElMessage } from 'element-plus';
+  import { ElMessage, ElMessageBox } from 'element-plus';
   import { getAllTables } from '@/api/data-management';
   import type { TableInfo } from '@/api/data-management';
 
@@ -76,7 +85,8 @@
   const emit = defineEmits<{
     loaded: []
     viewDetail: [tableName: string]
-    selectionChange: [selectedRows: TableInfo[]]
+    modify: [table: TableInfo]
+    delete: [table: TableInfo]
   }>();
 
   // 定义props
@@ -87,8 +97,6 @@
   // 表数据
   const tables = ref<TableInfo[]>([]);
   const loading = ref(false);
-  const tableRef = ref();
-  const selectedRows = ref<TableInfo[]>([]);
 
   // 计算过滤后的表格数据
   const filteredTables = computed(() => {
@@ -140,33 +148,42 @@
     console.log('点击行:', row);
   };
 
-  // 选中变化事件
-  const handleSelectionChange = (selection: TableInfo[]) => {
-    selectedRows.value = selection;
-    emit('selectionChange', selection);
-  };
-
-  // 查看表详情
+  // 查看详情
   const viewTableDetail = (table: TableInfo) => {
     console.log('查看表详情:', table);
-    // 触发事件，通知父组件显示详情
     emit('viewDetail', table.tableName);
   };
 
-  // 清空选中
-  const clearSelection = () => {
-    tableRef.value?.clearSelection();
+  // 修改表
+  const handleModify = (table: TableInfo) => {
+    console.log('修改表:', table);
+    emit('modify', table);
+  };
+
+  // 删除表
+  const handleDelete = (table: TableInfo) => {
+    ElMessageBox.confirm(
+      `确定要删除表 "${table.tableName}" 吗？此操作不可恢复！`,
+      '删除确认',
+      {
+        confirmButtonText: '确定删除',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+    )
+      .then(() => {
+        console.log('删除表:', table);
+        emit('delete', table);
+        ElMessage.success('删除成功');
+      })
+      .catch(() => {
+        ElMessage.info('已取消删除');
+      });
   };
 
   // 组件挂载时加载表列表
   onMounted(() => {
     loadAllTables();
-  });
-
-  // 暴露方法给父组件
-  defineExpose({
-    clearSelection,
-    loadAllTables
   });
 </script>
 
@@ -232,5 +249,13 @@
     );
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  /* 操作按钮样式 */
+  :deep(.el-table .cell) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
 </style>
