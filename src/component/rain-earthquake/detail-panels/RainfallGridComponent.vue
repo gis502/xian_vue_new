@@ -6,7 +6,7 @@
 <script lang="ts" setup>
   import { useStatusStore } from '@/stores/useStatusStore';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
-  import { watch, onMounted, onBeforeUnmount } from 'vue';
+  import { watch, onMounted } from 'vue';
   import { $api } from '@/api/api';
   import {
     Color,
@@ -32,7 +32,7 @@
     try {
       const res = await $api.meteorology.getRainfallGrid({
         time: '2025-08-20T12:00:00',
-        resolution: 0.01,
+        resolution: 0.005,
       });
 
       const geoJsonData = res.data;
@@ -145,19 +145,6 @@
       }
     }
   );
-
-  // 组件卸载时清理资源
-  onBeforeUnmount(() => {
-    if (primitiveCollection) {
-      const viewer = CesiumUtilsSingleton.getViewer();
-      if (viewer) {
-        viewer.scene.primitives.remove(primitiveCollection);
-      }
-      primitiveCollection = null;
-    }
-    isLoaded = false;
-    pendingShow = false;
-  });
 </script>
 
 <style scoped></style>
