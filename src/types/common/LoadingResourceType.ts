@@ -31,4 +31,7 @@ export enum LoadingResource {
 
   /** 学校 */
   SCHOOL = 'SCHOOL',
+
+  /** 数据管理模块 */
+  DATA_MANAGEMENT = 'DATA_MANAGEMENT',
 }

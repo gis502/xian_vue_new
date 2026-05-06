@@ -80,8 +80,9 @@
     height: 100vh;
     width: 100vw;
     position: absolute;
-    top: 0;
+    top: 50px;
     left: 0;
+    overflow-y: auto;
   }
 
   #main_logo {

@@ -8,6 +8,7 @@ import { getBasePoints as getEmergencyShelterBasePoints, getPointDetailById as g
 import { getBasePoints as getFirefighterBasePoints, getPointDetailById as getFirefighterPointDetailById} from './firefighter'
 import { getBasePoints as getStorePointsBasePoints, getPointDetailById as getStorePointsPointDetailById} from './store-points'
 import { getBasePoints as getSchoolsBasePoints, getPointDetailById as getSchoolsPointDetailById} from './schools'
+import { getAllTables as getDataManagementAllTables, getTableData as getDataManagementTableData } from './data-management'
 import type { ApiResponse } from '@/types/ApiResponse'
 import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots'
 import type { XianRiskSpots } from '@/types/base/XianRiskSpots'
@@ -17,6 +18,9 @@ import type { XianEmergencyShelter } from '@/types/base/XianEmergencyShelter'
 import type { XianFirefighter } from '@/types/base/XianFirefighter'
 import type { XianStorePoints } from '@/types/base/XianStorePoints'
 import type { XianSchool } from '@/types/base/XianSchool'
+import type { TableInfo, TableDetailResponse } from '@/api/data-management'
+
+
 
 /**
  * API接口统一导出对象
@@ -30,6 +34,23 @@ export const $api = {
      * @returns SM2公钥响应
      */
     getSm2PublicKey: () => getSm2PublicKey(),
+  },
+
+  // 数据管理模块
+  dataManagement: {
+    /**
+     * 获取所有数据库表信息
+     * @returns 表信息数组
+     */
+    getAllTables: (): Promise<ApiResponse<TableInfo[]>> => getDataManagementAllTables(),
+
+    /**
+     * 获取表的具体数据内容
+     * @param tableName - 表名
+     * @param limit - 限制返回的记录数（可选，默认100）
+     * @returns 表详情（包含字段信息和数据记录）
+     */
+    getTableData: (tableName: string, limit: number = 100): Promise<ApiResponse<TableDetailResponse>> => getDataManagementTableData(tableName, limit),
   },
 
   // 隐患点信息
