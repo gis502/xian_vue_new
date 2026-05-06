@@ -157,13 +157,13 @@
 <style scoped>
   .control-box {
     position: absolute;
-    top: 75px;
+    top: 125px;
     left: 30px;
     z-index: 1001;
   }
   .disaster-list-box {
     position: absolute;
-    top: 65px;
+    top: 115px;
     left: 20px;
     background: rgba(14, 52, 98, 0.8);
     color: white;

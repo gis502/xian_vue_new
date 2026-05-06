@@ -54,6 +54,9 @@
 
     <!-- 功能组件 -->
     <FunctionComponent />
+
+    <!-- 步骤组件 -->
+    <StepComponent />
   </div>
 </template>
 
@@ -66,6 +69,7 @@
   import LeftButtonComponent from '@/component/rain-earthquake/LeftButtonComponent.vue';
   import LeftLegendComponent from '@/component/rain-earthquake/LeftLegendComponent.vue';
   import RightButtonComponent from '@/component/rain-earthquake/RightButtonComponent.vue';
+  import StepComponent from '@/component/rain-earthquake/StepComponent.vue';
   import { useRainDisasterChain } from '@/hooks/rainstorm/useRainDisasterChain';
   import { useStatusStore } from '@/stores/useStatusStore';
   import { DisasterType } from '@/types/common/DisasterType.ts';

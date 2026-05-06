@@ -78,7 +78,7 @@
   .right-button-box {
     width: 180px;
     position: absolute;
-    top: 45px;
+    top: 95px;
     right: 40px;
     z-index: 1000;
     border-radius: 8px;

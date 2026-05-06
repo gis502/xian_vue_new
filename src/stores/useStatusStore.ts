@@ -40,6 +40,10 @@ export const useStatusStore = defineStore('status', () => {
       show: true,
       loading: true,
     },
+    stepBar: {
+      show: false,
+      loading: true,
+    },
   });
 
   // ============================ 地图图层显示状态 ================================
