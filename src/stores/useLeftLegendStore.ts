@@ -14,5 +14,12 @@ export const useLeftLegendStore = defineStore('leftLegend', () => {
       }
     >
   > = ref({});
-  return { legendListInfo };
+
+  /**
+   * 重置左侧图例信息
+   */
+  const resetLegendListInfo = () => {
+    legendListInfo.value = {};
+  };
+  return { legendListInfo, resetLegendListInfo };
 });

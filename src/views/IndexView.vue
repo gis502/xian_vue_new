@@ -10,7 +10,11 @@
       </div>
       <div class="nav-list">
         <router-link
-          @click="useStatusStore().appLoadingCompleted = false"
+          @click="
+            isActive(item.query.identification)
+              ? ''
+              : (useStatusStore().appLoadingCompleted = false)
+          "
           v-for="(item, index) in topNavMap"
           :key="index"
           :to="{ name: item.name, query: item.query }"

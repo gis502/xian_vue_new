@@ -15,7 +15,6 @@
 
   import AdministrativeDivision from './AdministrativeDivision.vue';
   import { useStatusStore } from '@/stores/useStatusStore';
-  import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
 
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { xiAn } from '@/assets';
@@ -23,13 +22,10 @@
   import type { GeoJsonFileType } from '@/types/cesium/GeoJsonFileType';
   import config from '@/config/config.json';
   import { useMap } from '@/hooks/map/useMap';
+  import { useScene } from '@/hooks/useScene';
 
   onBeforeMount(() => {
-    // 重置所有状态
-    useStatusStore().reset();
-
-    // 重置状态
-    useLoadingInformationStore().resetStatue();
+    useScene().resetScene();
   });
 
   onMounted(async () => {

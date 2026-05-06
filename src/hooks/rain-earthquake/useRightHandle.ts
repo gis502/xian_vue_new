@@ -1,8 +1,8 @@
 import { useStatusStore } from '@/stores/useStatusStore.ts';
 import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils.ts';
 import config from '@/config/config.json';
-import { useButtonSelectedIdStore } from '@/stores/useButtonSelectedIdStore';
 import { useLeftLegendStore } from '@/stores/useLeftLegendStore';
+import { useScene } from '../useScene';
 
 export const useRightHandle = () => {
   /**
@@ -63,8 +63,9 @@ export const useRightHandle = () => {
    */
   const resetScene = () => {
     CesiumUtilsSingleton.clearAllResources('custom');
-    useStatusStore().resetScene();
-    useButtonSelectedIdStore().resetId();
+    useScene().resetScene();
+    // 隐藏加载
+    useStatusStore().appLoadingCompleted = true;
   };
 
   /**
