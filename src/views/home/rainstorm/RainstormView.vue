@@ -29,6 +29,14 @@
       :button-list="leftButtonInfo"
     />
 
+    <!-- 左侧图例组件 -->
+    <LeftLegendComponent
+      v-if="
+        useStatusStore().appLoadingCompleted &&
+        useStatusStore().uiComponents.leftLegend.loading
+      "
+    />
+
     <!-- 右侧按钮组件 -->
     <RightButtonComponent
       v-if="
@@ -56,6 +64,7 @@
   import DisasterChainPointComponent from '@/component/rain-earthquake/DisasterChainPointComponent.vue';
   import FunctionComponent from '@/component/rain-earthquake/FunctionComponent.vue';
   import LeftButtonComponent from '@/component/rain-earthquake/LeftButtonComponent.vue';
+  import LeftLegendComponent from '@/component/rain-earthquake/LeftLegendComponent.vue';
   import RightButtonComponent from '@/component/rain-earthquake/RightButtonComponent.vue';
   import { useRainDisasterChain } from '@/hooks/rainstorm/useRainDisasterChain';
   import { useStatusStore } from '@/stores/useStatusStore';

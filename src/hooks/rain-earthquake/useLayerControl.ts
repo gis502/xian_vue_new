@@ -1,3 +1,4 @@
+import { useLeftLegendStore } from '@/stores/useLeftLegendStore';
 import { useStatusStore } from '@/stores/useStatusStore.ts';
 
 /**
@@ -58,6 +59,51 @@ export const useLayerControl = () => {
   const clickPopulationGrid = () => {
     // 加载状态为true
     useStatusStore().poiLayers.showPopulationGrid.loading = true;
+
+    if (useStatusStore().poiLayers.showPopulationGrid.show) {
+      // 显示图例
+      useStatusStore().uiComponents.leftLegend.loading = true;
+      useStatusStore().uiComponents.leftLegend.show = true;
+
+      useLeftLegendStore().legendListInfo.title = '人口密度图例';
+      useLeftLegendStore().legendListInfo.list = [
+        {
+          label: 'Min-0 < 100',
+          color: '#b1fe02',
+        },
+        {
+          label: '100 ≤ X < 500',
+          color: '#6bf700',
+        },
+        {
+          label: '500 ≤ X < 1000',
+          color: '#fcf600',
+        },
+        {
+          label: '1000 ≤ X < 2000',
+          color: '#fecb02',
+        },
+        {
+          label: '2000 ≤ X < 4000',
+          color: '#fc9e00',
+        },
+        {
+          label: '4000 ≤ X < 8000',
+          color: '#fe7004',
+        },
+        {
+          label: '8000 ≤ X < 10000',
+          color: '#fb3f02',
+        },
+        {
+          label: '10000 ≤ X < Max',
+          color: '#ff0000',
+        },
+      ];
+    } else {
+      // 隐藏图例
+      useStatusStore().uiComponents.leftLegend.show = false;
+    }
   };
 
   /**

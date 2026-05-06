@@ -28,6 +28,10 @@ export const useStatusStore = defineStore('status', () => {
       show: true,
       loading: true,
     },
+    leftLegend: {
+      show: false,
+      loading: false,
+    },
     rightButton: {
       show: true,
       loading: true,
@@ -209,6 +213,10 @@ export const useStatusStore = defineStore('status', () => {
     uiComponents.leftButton = {
       show: true,
       loading: true,
+    };
+    uiComponents.leftLegend = {
+      show: false,
+      loading: false,
     };
     uiComponents.rightButton = {
       show: true,
