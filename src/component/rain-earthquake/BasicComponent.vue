@@ -37,6 +37,14 @@
           useStatusStore().poiLayers.showFlashFloodHiddenPoint.loading
         "
       />
+
+      <!-- 降雨栅格图层组件 -->
+      <RainfallGridComponent
+        v-if="
+          useStatusStore().appLoadingCompleted &&
+          useStatusStore().weatherLayers.showRainfallGrid.loading
+        "
+      />
     </template>
 
     <!-- 地震场景隐患点组件 -->
@@ -63,14 +71,6 @@
       v-if="
         useStatusStore().appLoadingCompleted &&
         useStatusStore().mapLayers.riskPointShow.loading
-      "
-    />
-
-    <!-- 降雨栅格图层组件（暴雨模拟） -->
-    <RainfallGridComponent
-      v-if="
-        useStatusStore().appLoadingCompleted &&
-        useStatusStore().weatherLayers.showRainfallGrid.loading
       "
     />
   </div>
