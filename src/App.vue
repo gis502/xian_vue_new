@@ -13,10 +13,12 @@
     text: '正在加载配置相关资源中...',
   };
 
+  const statusStore = useStatusStore();
+
   let loadingInstanve = ElLoading.service(loadingOption);
 
   watch(
-    () => useStatusStore().appLoadingCompleted,
+    () => statusStore.appLoadingCompleted,
     (val) => {
       if (val) {
         loadingInstanve.close();
