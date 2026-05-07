@@ -4,8 +4,8 @@
   <!-- 行政区划 -->
   <AdministrativeDivision
     v-if="
-      useStatus.appLoadingCompleted &&
-      useStatus.mapLayers.showAdministrativeDivision.loading
+      statusStore.appLoadingCompleted &&
+      statusStore.mapLayers.showAdministrativeDivision.loading
     "
   />
 </template>
@@ -31,7 +31,7 @@
     automaticallyAdjustThePerspective,
     prohibitedEvents,
   } = useMap();
-  const useStatus = useStatusStore();
+  const statusStore = useStatusStore();
 
   onBeforeMount(() => {
     resetScene();
@@ -52,7 +52,7 @@
     });
 
     // 设置状态
-    useStatus.appLoadingCompleted = true;
+    statusStore.appLoadingCompleted = true;
 
     // 注册全局点击监听器
     registerAndClickOnTheListener();

@@ -3,7 +3,7 @@
   <div>
     <!-- 加载地铁站点点位 -->
     <LoadingPoints
-      v-if="useStatus.appLoadingCompleted && subwayStationList.length > 0"
+      v-if="statusStore.appLoadingCompleted && subwayStationList.length > 0"
       :base-points="subwayStationList"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.subwayStationPointId"
@@ -15,11 +15,11 @@
     <InformationBox
       :data="subwayStationDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformation.subwayStation.loading"
+      v-if="loadingInformationStore.subwayStation.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformation.subwayStation.id"
+      :key="loadingInformationStore.subwayStation.id"
     />
   </div>
 </template>
@@ -40,9 +40,9 @@
 
   const subwayStationList = ref<Point[]>([]);
 
-  const useStatus = useStatusStore();
-  const useLoadingInformation = useLoadingInformationStore();
-  const useLoadingResource = useLoadingResourceStore();
+  const statusStore = useStatusStore();
+  const loadingInformationStore = useLoadingInformationStore();
+  const loadingResourceStore = useLoadingResourceStore();
 
   // 信息框相关配置
   const offsetX = ref(0);
@@ -59,13 +59,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformation.subwayStation.id,
+    () => loadingInformationStore.subwayStation.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取地铁站点数据
-      const clickObject = useLoadingInformation.clickObject;
+      const clickObject = loadingInformationStore.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -73,7 +73,7 @@
       }
 
       const res = await $api.subwayStations.getPointDetailById(
-        useLoadingInformation.subwayStation.id
+        loadingInformationStore.subwayStation.id
       );
 
       // 更新数据
@@ -89,7 +89,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformation.subwayStation.loading = true;
+        loadingInformationStore.subwayStation.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -98,19 +98,19 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatus.poiLayers.showSubwayStation?.show,
+    () => statusStore.poiLayers.showSubwayStation?.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示地铁站点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResource.getLoadingResource(
+          loadingResourceStore.getLoadingResource(
             LoadingResource.SUBWAY_STATION
           ).ids
         );
       } else {
         // 隐藏地铁站点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResource.getLoadingResource(
+          loadingResourceStore.getLoadingResource(
             LoadingResource.SUBWAY_STATION
           ).ids
         );

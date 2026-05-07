@@ -13,7 +13,7 @@
   import { onMounted, watch } from 'vue';
   import LoadingGeoserverLayer from '../../common/LoadingGeoserverLayer.vue';
 
-  const useStatus = useStatusStore();
+  const statusStore = useStatusStore();
 
   // 保存图层引用
   let trafficRoadLayer: ImageryLayer | null = null;
@@ -21,7 +21,7 @@
   onMounted(() => {
     // 监听显示隐藏
     watch(
-      () => useStatus.infrastructureLayers.showTrafficRoad.show,
+      () => statusStore.infrastructureLayers.showTrafficRoad.show,
       (newValue: boolean) => {
         trafficRoadLayer!.show = newValue;
       }

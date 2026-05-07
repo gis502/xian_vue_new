@@ -1,14 +1,14 @@
 <template>
   <div
     class="right-button-box"
-    v-show="useStatus.uiComponents.rightButton.show"
+    v-show="statusStore.uiComponents.rightButton.show"
   >
     <ul class="right-button-ul">
       <li v-for="(buttonItem, index) in buttonList" :key="index">
         <button
           @click="handelButton(index, buttonItem.callback)"
           :style="{
-            'background-image': `url(${useButtonSelectedId.rightButtonSelectedId == index ? rightOrangeButton : rightBlueButton})`,
+            'background-image': `url(${buttonSelectedIdStore.rightButtonSelectedId == index ? rightOrangeButton : rightBlueButton})`,
           }"
         >
           {{ buttonItem.name }}
@@ -24,8 +24,8 @@
   import { useStatusStore } from '@/stores/useStatusStore.ts';
   import { onMounted } from 'vue';
 
-  const useStatus = useStatusStore();
-  const useButtonSelectedId = useButtonSelectedIdStore();
+  const statusStore = useStatusStore();
+  const buttonSelectedIdStore = useButtonSelectedIdStore();
 
   // 接收父组件传递的参数
   const props = defineProps<{
@@ -49,7 +49,7 @@
 
     // 如果找到了选中的按钮，设置选中状态，同时执行回调函数
     if (lastSelectedIndex !== -1) {
-      useButtonSelectedId.rightButtonSelectedId = lastSelectedIndex;
+      buttonSelectedIdStore.rightButtonSelectedId = lastSelectedIndex;
       props.buttonList[lastSelectedIndex].callback(true);
     }
   });
@@ -59,20 +59,20 @@
     index: number,
     callback: (...args: unknown[]) => unknown
   ) => {
-    if (index == useButtonSelectedId.rightButtonSelectedId) {
-      useButtonSelectedId.rightButtonSelectedId = -1;
+    if (index == buttonSelectedIdStore.rightButtonSelectedId) {
+      buttonSelectedIdStore.rightButtonSelectedId = -1;
       callback(false);
       return;
     } else if (
-      useButtonSelectedId.rightButtonSelectedId != -1 &&
-      useButtonSelectedId.rightButtonSelectedId != index
+      buttonSelectedIdStore.rightButtonSelectedId != -1 &&
+      buttonSelectedIdStore.rightButtonSelectedId != index
     ) {
       return;
     }
-    useButtonSelectedId.rightButtonSelectedId = index;
+    buttonSelectedIdStore.rightButtonSelectedId = index;
     callback(true);
     if (props.buttonList[index].executeOnce) {
-      useButtonSelectedId.rightButtonSelectedId = -1;
+      buttonSelectedIdStore.rightButtonSelectedId = -1;
     }
   };
 </script>

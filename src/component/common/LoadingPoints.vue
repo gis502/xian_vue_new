@@ -22,7 +22,7 @@
   // 点处理钩子
   const pointsHandle = usePointsHandle();
 
-  const useLoadingResource = useLoadingResourceStore();
+  const loadingResourceStore = useLoadingResourceStore();
 
   onMounted(() => {
     // 加载点
@@ -35,7 +35,7 @@
       );
 
     // 记录id
-    useLoadingResource.addLoadingResource(props.loadingResourceField!, result);
+    loadingResourceStore.addLoadingResource(props.loadingResourceField!, result);
   });
 </script>
 

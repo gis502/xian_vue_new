@@ -3,21 +3,21 @@
   <div
     class="legend-container"
     v-show="
-      useStatus.uiComponents.leftLegend.show &&
-      Object.keys(useLeftLegend.legendListInfo).length > 0
+      statusStore.uiComponents.leftLegend.show &&
+      Object.keys(leftLegendStore.legendListInfo).length > 0
     "
   >
     <div
       class="legend-box"
-      v-for="key in Object.keys(useLeftLegend.legendListInfo)"
+      v-for="key in Object.keys(leftLegendStore.legendListInfo)"
       :key="key"
     >
       <div class="legend-title">
-        {{ useLeftLegend.legendListInfo[key].title }}
+        {{ leftLegendStore.legendListInfo[key].title }}
       </div>
       <div
         class="legend-item"
-        v-for="(item, index) in useLeftLegend.legendListInfo[key].list"
+        v-for="(item, index) in leftLegendStore.legendListInfo[key].list"
         :key="index"
       >
         <div
@@ -36,8 +36,8 @@
   import { useLeftLegendStore } from '@/stores/useLeftLegendStore';
   import { useStatusStore } from '@/stores/useStatusStore';
 
-  const useStatus = useStatusStore();
-  const useLeftLegend = useLeftLegendStore();
+  const statusStore = useStatusStore();
+  const leftLegendStore = useLeftLegendStore();
 </script>
 
 <style scoped>

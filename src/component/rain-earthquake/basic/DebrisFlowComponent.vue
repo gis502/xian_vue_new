@@ -3,7 +3,7 @@
   <div>
     <!-- 加载泥石流隐患点 -->
     <LoadingPoints
-      v-if="useStatus.appLoadingCompleted && debrisFlowPoints.length > 0"
+      v-if="statusStore.appLoadingCompleted && debrisFlowPoints.length > 0"
       :base-points="debrisFlowPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.debrisFlowHiddenPointId"
@@ -15,11 +15,11 @@
     <InformationBox
       :data="debrisFlowPointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformation.debrisFlowHiddenPoint.loading"
+      v-if="loadingInformationStore.debrisFlowHiddenPoint.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformation.debrisFlowHiddenPoint.id"
+      :key="loadingInformationStore.debrisFlowHiddenPoint.id"
     />
   </div>
 </template>
@@ -44,9 +44,9 @@
 
   const debrisFlowPoints = ref<Point[]>([]);
 
-  const useStatus = useStatusStore();
-  const useLoadingInformation = useLoadingInformationStore();
-  const useLoadingResource = useLoadingResourceStore();
+  const statusStore = useStatusStore();
+  const loadingInformationStore = useLoadingInformationStore();
+  const loadingResourceStore = useLoadingResourceStore();
 
   const { field, getDisasterIcon } = useHiddenPoint();
 
@@ -65,13 +65,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformation.debrisFlowHiddenPoint.id,
+    () => loadingInformationStore.debrisFlowHiddenPoint.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取泥石流隐患点数据
-      const clickObject = useLoadingInformation.clickObject;
+      const clickObject = loadingInformationStore.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -79,7 +79,7 @@
       }
 
       const res = await $api.hiddenDangerSpots.getPointDetailById(
-        useLoadingInformation.debrisFlowHiddenPoint.id
+        loadingInformationStore.debrisFlowHiddenPoint.id
       );
 
       // 更新数据
@@ -95,7 +95,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformation.debrisFlowHiddenPoint.loading = true;
+        loadingInformationStore.debrisFlowHiddenPoint.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -104,19 +104,19 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatus.poiLayers.showDebrisFlowHiddenPoint.show,
+    () => statusStore.poiLayers.showDebrisFlowHiddenPoint.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示泥石流隐患点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResource.getLoadingResource(
+          loadingResourceStore.getLoadingResource(
             LoadingResource.DEBRIS_FLOW_HIDDEN_POINT
           ).ids
         );
       } else {
         // 隐藏泥石流隐患点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResource.getLoadingResource(
+          loadingResourceStore.getLoadingResource(
             LoadingResource.DEBRIS_FLOW_HIDDEN_POINT
           ).ids
         );

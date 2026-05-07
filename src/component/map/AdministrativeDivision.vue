@@ -16,8 +16,8 @@
   const { areas, areasId, areasColor, areaTransparency, labelTransparency } =
     useAdministrativeDivision();
 
-  const useStatus = useStatusStore();
-  const useLoadingResource = useLoadingResourceStore();
+  const statusStore = useStatusStore();
+  const loadingResourceStore = useLoadingResourceStore();
 
   onMounted(async () => {
     // 构建批量添加配置数组
@@ -48,7 +48,7 @@
     await CesiumUtilsSingleton.batchAddGeoJsonLayers(layerConfigs);
 
     // 记录行政区划id
-    useLoadingResource.addLoadingResource(
+    loadingResourceStore.addLoadingResource(
       LoadingResource.ADMINISTRATIVE_DIVISION,
       { ids: areasId, info: [] } // 此处info不进行记录
     );
@@ -56,7 +56,7 @@
 
   // 监听显示状态改变
   watch(
-    () => useStatus.mapLayers.showAdministrativeDivision.show,
+    () => statusStore.mapLayers.showAdministrativeDivision.show,
     (newValue: boolean) => {
       if (newValue) {
         CesiumUtilsSingleton.batchShowGeoJsonLayers(areasId);

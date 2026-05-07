@@ -2,8 +2,8 @@
   <!-- 周边分析组件 -->
   <AroundAnalysis
     v-if="
-      useStatus.appLoadingCompleted &&
-      useStatus.functionStatus.aroundAnalysis.loading
+      statusStore.appLoadingCompleted &&
+      statusStore.functionStatus.aroundAnalysis.loading
     "
   />
 </template>
@@ -12,7 +12,7 @@
   import { useStatusStore } from '@/stores/useStatusStore';
   import AroundAnalysis from './function-child/AroundAnalysis.vue';
 
-  const useStatus = useStatusStore();
+  const statusStore = useStatusStore();
 </script>
 
 <style scoped></style>

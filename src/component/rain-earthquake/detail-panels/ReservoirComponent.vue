@@ -3,7 +3,7 @@
   <div>
     <!-- 加载水库点位 -->
     <LoadingPoints
-      v-if="useStatus.appLoadingCompleted && reservoirList.length > 0"
+      v-if="statusStore.appLoadingCompleted && reservoirList.length > 0"
       :base-points="reservoirList"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.reservoirPointId"
@@ -15,11 +15,11 @@
     <InformationBox
       :data="reservoirDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformation.reservoir.loading"
+      v-if="loadingInformationStore.reservoir.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformation.reservoir.id"
+      :key="loadingInformationStore.reservoir.id"
     />
   </div>
 </template>
@@ -32,7 +32,7 @@
   import config from '@/config/config.json';
   import InformationBox from '@/component/common/InformationBox.vue';
   import { useStatusStore } from '@/stores/useStatusStore.ts';
-  import { useLoadingInformationStore } from '@/stores/useLoadingInformation.ts';
+  import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
   import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils.ts';
   import { LoadingResource } from '@/types/common/LoadingResourceType.ts';
   import { useReservoirPoint } from '@/hooks/rain-earthquake/useReservoirPoint.ts';
@@ -40,9 +40,9 @@
 
   const reservoirList = ref<Point[]>([]);
 
-  const useStatus = useStatusStore();
-  const useLoadingInformation = useLoadingInformationStore();
-  const useLoadingResource = useLoadingResourceStore();
+  const statusStore = useStatusStore();
+  const loadingInformationStore = useLoadingInformationStore();
+  const loadingResourceStore = useLoadingResourceStore();
 
   // 信息框相关配置
   const offsetX = ref(0);
@@ -59,13 +59,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformation.reservoir.id,
+    () => loadingInformationStore.reservoir.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取水库数据
-      const clickObject = useLoadingInformation.clickObject;
+      const clickObject = loadingInformationStore.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -73,7 +73,7 @@
       }
 
       const res = await $api.reservoirs.getPointDetailById(
-        useLoadingInformation.reservoir.id
+        loadingInformationStore.reservoir.id
       );
 
       // 更新数据
@@ -89,7 +89,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformation.reservoir.loading = true;
+        loadingInformationStore.reservoir.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -98,21 +98,17 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatus.infrastructureLayers.showReservoir?.show,
+    () => statusStore.infrastructureLayers.showReservoir?.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示水库
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResource.getLoadingResource(
-            LoadingResource.RESERVOIR
-          ).ids
+          loadingResourceStore.getLoadingResource(LoadingResource.RESERVOIR).ids
         );
       } else {
         // 隐藏水库
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResource.getLoadingResource(
-            LoadingResource.RESERVOIR
-          ).ids
+          loadingResourceStore.getLoadingResource(LoadingResource.RESERVOIR).ids
         );
       }
     }

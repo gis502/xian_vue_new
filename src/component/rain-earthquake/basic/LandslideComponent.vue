@@ -3,7 +3,7 @@
   <div>
     <!-- 加载滑坡隐患点 -->
     <LoadingPoints
-      v-if="useStatus.appLoadingCompleted && landslidePoints.length > 0"
+      v-if="statusStore.appLoadingCompleted && landslidePoints.length > 0"
       :base-points="landslidePoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.landslideHiddenPointId"
@@ -15,11 +15,11 @@
     <InformationBox
       :data="landslidePointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformation.landslideHiddenPoint.loading"
+      v-if="loadingInformationStore.landslideHiddenPoint.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformation.landslideHiddenPoint.id"
+      :key="loadingInformationStore.landslideHiddenPoint.id"
     />
   </div>
 </template>
@@ -44,9 +44,9 @@
 
   const landslidePoints = ref<Point[]>([]);
 
-  const useStatus = useStatusStore();
-  const useLoadingInformation = useLoadingInformationStore();
-  const useLoadingResource = useLoadingResourceStore();
+  const statusStore = useStatusStore();
+  const loadingInformationStore = useLoadingInformationStore();
+  const loadingResourceStore = useLoadingResourceStore();
 
   const { field, getDisasterIcon } = useHiddenPoint();
 
@@ -65,13 +65,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformation.landslideHiddenPoint.id,
+    () => loadingInformationStore.landslideHiddenPoint.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取滑坡隐患点数据
-      const clickObject = useLoadingInformation.clickObject;
+      const clickObject = loadingInformationStore.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -79,7 +79,7 @@
       }
 
       const res = await $api.hiddenDangerSpots.getPointDetailById(
-        useLoadingInformation.landslideHiddenPoint.id
+        loadingInformationStore.landslideHiddenPoint.id
       );
 
       // 更新数据
@@ -95,7 +95,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformation.landslideHiddenPoint.loading = true;
+        loadingInformationStore.landslideHiddenPoint.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -104,19 +104,19 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatus.poiLayers.showLandslideHiddenPoint.show,
+    () => statusStore.poiLayers.showLandslideHiddenPoint.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示滑坡隐患点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResource.getLoadingResource(
+          loadingResourceStore.getLoadingResource(
             LoadingResource.LANDSLIDE_HIDDEN_POINT
           ).ids
         );
       } else {
         // 隐藏滑坡隐患点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResource.getLoadingResource(
+          loadingResourceStore.getLoadingResource(
             LoadingResource.LANDSLIDE_HIDDEN_POINT
           ).ids
         );

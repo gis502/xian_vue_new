@@ -9,40 +9,40 @@
       <!-- 滑坡隐患点 -->
       <LandslideComponent
         v-if="
-          useStatus.appLoadingCompleted &&
-          useStatus.poiLayers.showLandslideHiddenPoint.loading
+          statusStore.appLoadingCompleted &&
+          statusStore.poiLayers.showLandslideHiddenPoint.loading
         "
       />
 
       <!-- 泥石流隐患点 -->
       <DebrisFlowComponent
         v-if="
-          useStatus.appLoadingCompleted &&
-          useStatus.poiLayers.showDebrisFlowHiddenPoint.loading
+          statusStore.appLoadingCompleted &&
+          statusStore.poiLayers.showDebrisFlowHiddenPoint.loading
         "
       />
 
       <!-- 内涝隐患点 -->
       <WaterLoggingComponent
         v-if="
-          useStatus.appLoadingCompleted &&
-          useStatus.poiLayers.showWaterLoggingHiddenPoint.loading
+          statusStore.appLoadingCompleted &&
+          statusStore.poiLayers.showWaterLoggingHiddenPoint.loading
         "
       />
 
       <!-- 山洪隐患点 -->
       <FlashFloodComponent
         v-if="
-          useStatus.appLoadingCompleted &&
-          useStatus.poiLayers.showFlashFloodHiddenPoint.loading
+          statusStore.appLoadingCompleted &&
+          statusStore.poiLayers.showFlashFloodHiddenPoint.loading
         "
       />
 
       <!-- 降雨栅格图层组件 -->
       <RainfallGridComponent
         v-if="
-          useStatus.appLoadingCompleted &&
-          useStatus.weatherLayers.showRainfallGrid.loading
+          statusStore.appLoadingCompleted &&
+          statusStore.weatherLayers.showRainfallGrid.loading
         "
       />
     </template>
@@ -52,16 +52,16 @@
       <!-- 滑坡隐患点 -->
       <LandslideComponent
         v-if="
-          useStatus.appLoadingCompleted &&
-          useStatus.poiLayers.showLandslideHiddenPoint.loading
+          statusStore.appLoadingCompleted &&
+          statusStore.poiLayers.showLandslideHiddenPoint.loading
         "
       />
 
       <!-- 泥石流隐患点 -->
       <DebrisFlowComponent
         v-if="
-          useStatus.appLoadingCompleted &&
-          useStatus.poiLayers.showDebrisFlowHiddenPoint.loading
+          statusStore.appLoadingCompleted &&
+          statusStore.poiLayers.showDebrisFlowHiddenPoint.loading
         "
       />
     </template>
@@ -69,8 +69,8 @@
     <!-- 风险点组件 -->
     <RiskPointComponent
       v-if="
-        useStatus.appLoadingCompleted &&
-        useStatus.mapLayers.riskPointShow.loading
+        statusStore.appLoadingCompleted &&
+        statusStore.mapLayers.riskPointShow.loading
       "
     />
   </div>
@@ -87,7 +87,7 @@
   import RainfallGridComponent from '@/component/rain-earthquake/detail-panels/RainfallGridComponent.vue';
   import { useStatusStore } from '@/stores/useStatusStore';
 
-  const useStatus = useStatusStore();
+  const statusStore = useStatusStore();
 
   // 获取父组件传递德数据
   const props = defineProps<{

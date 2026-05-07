@@ -3,7 +3,7 @@
   <div>
     <!-- 加载避难所 -->
     <LoadingPoints
-      v-if="useStatus.appLoadingCompleted && emergencyShelterPoints.length > 0"
+      v-if="statusStore.appLoadingCompleted && emergencyShelterPoints.length > 0"
       :base-points="emergencyShelterPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.emergencyShelterPointId"
@@ -15,11 +15,11 @@
     <InformationBox
       :data="emergencyShelterPointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformation.emergencyShelter.loading"
+      v-if="loadingInformationStore.emergencyShelter.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformation.emergencyShelter.id"
+      :key="loadingInformationStore.emergencyShelter.id"
     />
   </div>
 </template>
@@ -40,9 +40,9 @@
 
   const emergencyShelterPoints = ref<Point[]>([]);
 
-  const useStatus = useStatusStore();
-  const useLoadingInformation = useLoadingInformationStore();
-  const useLoadingResource = useLoadingResourceStore();
+  const statusStore = useStatusStore();
+  const loadingInformationStore = useLoadingInformationStore();
+  const loadingResourceStore = useLoadingResourceStore();
 
   // 信息框相关配置
   const offsetX = ref(0);
@@ -59,13 +59,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformation.emergencyShelter.id,
+    () => loadingInformationStore.emergencyShelter.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取避难所数据
-      const clickObject = useLoadingInformation.clickObject;
+      const clickObject = loadingInformationStore.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -73,7 +73,7 @@
       }
 
       const res = await $api.emergencyShelter.getPointDetailById(
-        useLoadingInformation.emergencyShelter.id
+        loadingInformationStore.emergencyShelter.id
       );
 
       // 更新数据
@@ -89,7 +89,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformation.emergencyShelter.loading = true;
+        loadingInformationStore.emergencyShelter.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -98,19 +98,19 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatus.poiLayers.showRefugeeShelter.show,
+    () => statusStore.poiLayers.showRefugeeShelter.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示避难所
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResource.getLoadingResource(
+          loadingResourceStore.getLoadingResource(
             LoadingResource.EMERGENCY_SHELTER
           ).ids
         );
       } else {
         // 隐藏避难所
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResource.getLoadingResource(
+          loadingResourceStore.getLoadingResource(
             LoadingResource.EMERGENCY_SHELTER
           ).ids
         );

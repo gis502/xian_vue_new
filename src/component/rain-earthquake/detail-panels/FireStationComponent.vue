@@ -3,7 +3,7 @@
   <div>
     <!-- 加载消防站 -->
     <LoadingPoints
-      v-if="useStatus.appLoadingCompleted && fireStationPoints.length > 0"
+      v-if="statusStore.appLoadingCompleted && fireStationPoints.length > 0"
       :base-points="fireStationPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.fireStationPointId"
@@ -15,11 +15,11 @@
     <InformationBox
       :data="fireStationPointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformation.fireStation.loading"
+      v-if="loadingInformationStore.fireStation.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformation.fireStation.id"
+      :key="loadingInformationStore.fireStation.id"
     />
   </div>
 </template>
@@ -40,9 +40,9 @@
 
   const fireStationPoints = ref<Point[]>([]);
 
-  const useStatus = useStatusStore();
-  const useLoadingInformation = useLoadingInformationStore();
-  const useLoadingResource = useLoadingResourceStore();
+  const statusStore = useStatusStore();
+  const loadingInformationStore = useLoadingInformationStore();
+  const loadingResourceStore = useLoadingResourceStore();
 
   // 信息框相关配置
   const offsetX = ref(0);
@@ -59,13 +59,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformation.fireStation.id,
+    () => loadingInformationStore.fireStation.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取消防站数据
-      const clickObject = useLoadingInformation.clickObject;
+      const clickObject = loadingInformationStore.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -73,7 +73,7 @@
       }
 
       const res = await $api.firefighter.getPointDetailById(
-        useLoadingInformation.fireStation.id
+        loadingInformationStore.fireStation.id
       );
 
       // 更新数据
@@ -89,7 +89,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformation.fireStation.loading = true;
+        loadingInformationStore.fireStation.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -98,19 +98,19 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatus.poiLayers.showFireStation.show,
+    () => statusStore.poiLayers.showFireStation.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示消防站
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResource.getLoadingResource(
+          loadingResourceStore.getLoadingResource(
             LoadingResource.FIRE_STATION
           ).ids
         );
       } else {
         // 隐藏消防站
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResource.getLoadingResource(
+          loadingResourceStore.getLoadingResource(
             LoadingResource.FIRE_STATION
           ).ids
         );

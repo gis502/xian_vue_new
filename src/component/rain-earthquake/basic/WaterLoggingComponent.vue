@@ -4,7 +4,7 @@
     <!-- 加载内涝隐患点 -->
     <LoadingPoints
       v-if="
-        useStatus.appLoadingCompleted && waterLoggingPoints.length > 0
+        statusStore.appLoadingCompleted && waterLoggingPoints.length > 0
       "
       :base-points="waterLoggingPoints"
       :get-disaster-icon="getDisasterIcon"
@@ -17,11 +17,11 @@
     <InformationBox
       :data="waterLoggingPointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformation.waterLoggingHiddenPoint.loading"
+      v-if="loadingInformationStore.waterLoggingHiddenPoint.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformation.waterLoggingHiddenPoint.id"
+      :key="loadingInformationStore.waterLoggingHiddenPoint.id"
     />
   </div>
 </template>
@@ -46,9 +46,9 @@
 
   const waterLoggingPoints = ref<Point[]>([]);
 
-  const useStatus = useStatusStore();
-  const useLoadingInformation = useLoadingInformationStore();
-  const useLoadingResource = useLoadingResourceStore();
+  const statusStore = useStatusStore();
+  const loadingInformationStore = useLoadingInformationStore();
+  const loadingResourceStore = useLoadingResourceStore();
 
   const { field, getDisasterIcon } = useHiddenPoint();
 
@@ -67,13 +67,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformation.waterLoggingHiddenPoint.id,
+    () => loadingInformationStore.waterLoggingHiddenPoint.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取内涝隐患点数据
-      const clickObject = useLoadingInformation.clickObject;
+      const clickObject = loadingInformationStore.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -81,7 +81,7 @@
       }
 
       const res = await $api.hiddenDangerSpots.getPointDetailById(
-        useLoadingInformation.waterLoggingHiddenPoint.id
+        loadingInformationStore.waterLoggingHiddenPoint.id
       );
 
       // 更新数据
@@ -97,7 +97,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformation.waterLoggingHiddenPoint.loading = true;
+        loadingInformationStore.waterLoggingHiddenPoint.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -106,19 +106,19 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatus.poiLayers.showWaterLoggingHiddenPoint.show,
+    () => statusStore.poiLayers.showWaterLoggingHiddenPoint.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示内涝隐患点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResource.getLoadingResource(
+          loadingResourceStore.getLoadingResource(
             LoadingResource.WATER_LOGGING_HIDDEN_POINT
           ).ids
         );
       } else {
         // 隐藏内涝隐患点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResource.getLoadingResource(
+          loadingResourceStore.getLoadingResource(
             LoadingResource.WATER_LOGGING_HIDDEN_POINT
           ).ids
         );

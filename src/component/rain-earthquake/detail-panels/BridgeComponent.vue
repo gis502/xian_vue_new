@@ -3,7 +3,7 @@
   <div>
     <!-- 加载桥梁点 -->
     <LoadingPoints
-      v-if="useStatus.appLoadingCompleted && bridgeList.length > 0"
+      v-if="statusStore.appLoadingCompleted && bridgeList.length > 0"
       :base-points="bridgeList"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.bridgePointId"
@@ -15,11 +15,11 @@
     <InformationBox
       :data="storePointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformation.bridge.loading"
+      v-if="loadingInformationStore.bridge.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformation.bridge.id"
+      :key="loadingInformationStore.bridge.id"
     />
   </div>
 </template>
@@ -40,9 +40,9 @@
 
   const bridgeList = ref<Point[]>([]);
 
-  const useStatus = useStatusStore();
-  const useLoadingInformation = useLoadingInformationStore();
-  const useLoadingResource = useLoadingResourceStore();
+  const statusStore = useStatusStore();
+  const loadingInformationStore = useLoadingInformationStore();
+  const loadingResourceStore = useLoadingResourceStore();
 
   // 信息框相关配置
   const offsetX = ref(0);
@@ -59,13 +59,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformation.bridge.id,
+    () => loadingInformationStore.bridge.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取桥梁点数据
-      const clickObject = useLoadingInformation.clickObject;
+      const clickObject = loadingInformationStore.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -73,7 +73,7 @@
       }
 
       const res = await $api.bridges.getPointDetailById(
-        useLoadingInformation.bridge.id
+        loadingInformationStore.bridge.id
       );
 
       // 更新数据
@@ -89,7 +89,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformation.bridge.loading = true;
+        loadingInformationStore.bridge.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -98,18 +98,18 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatus.infrastructureLayers.showBridge.show,
+    () => statusStore.infrastructureLayers.showBridge.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示桥梁点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResource.getLoadingResource(LoadingResource.BRIDGE)
+          loadingResourceStore.getLoadingResource(LoadingResource.BRIDGE)
             .ids
         );
       } else {
         // 隐藏桥梁点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResource.getLoadingResource(LoadingResource.BRIDGE)
+          loadingResourceStore.getLoadingResource(LoadingResource.BRIDGE)
             .ids
         );
       }

@@ -1,7 +1,7 @@
 <template>
   <div
     class="around-analysis-box"
-    v-show="useStatus.functionStatus.aroundAnalysis.show"
+    v-show="statusStore.functionStatus.aroundAnalysis.show"
   >
     <!-- 搜索组件 -->
     <SearchComponent />
@@ -20,7 +20,7 @@
   import ButtonComponent from './around-analysis/ButtonComponent.vue';
   import SearchComponent from './around-analysis/SearchComponent.vue';
 
-  const useStatus = useStatusStore();
+  const statusStore = useStatusStore();
 </script>
 
 <style scoped></style>
