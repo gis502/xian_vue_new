@@ -3,19 +3,22 @@ import { useStatusStore } from '@/stores/useStatusStore';
 import { useStepStore } from '@/stores/useStepStore';
 
 export const useRainstormDeduction = () => {
+  const statusStore = useStatusStore();
+  const leftLegendStore = useLeftLegendStore();
+  const stepStore = useStepStore();
   /**
    * 显示步骤
    */
   const showStep = () => {
-    useStatusStore().uiComponents.stepBar.show = true;
-    useStepStore().stepList = ['获取雨量', '模型计算', '灾害预警', '报告产出'];
+    statusStore.uiComponents.stepBar.show = true;
+    stepStore.stepList = ['获取雨量', '模型计算', '灾害预警', '报告产出'];
   };
 
   /**
    * 添加图例
    */
   const addLegend = () => {
-    useLeftLegendStore().legendListInfo.precipitation = {
+    leftLegendStore.legendListInfo.precipitation = {
       title: '降雨量图例',
       list: [
         {

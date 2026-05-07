@@ -8,6 +8,7 @@ import { useLoadingInformationStore } from '@/stores/useLoadingInformation';
  * @returns 注册监听器和视角控制方法
  */
 export const useMap = () => {
+  const loadingInfoStore = useLoadingInformationStore();
   /**
    * 注册全局点击监听器
    */
@@ -23,103 +24,102 @@ export const useMap = () => {
 
         // 当id改变时候，重置状态
         if (
-          useLoadingInformationStore().landslideHiddenPoint.id !== id &&
-          useLoadingInformationStore().debrisFlowHiddenPoint.id !== id &&
-          useLoadingInformationStore().waterLoggingHiddenPoint.id !== id &&
-          useLoadingInformationStore().flashFloodHiddenPoint.id !== id &&
-          useLoadingInformationStore().riskPoint.id !== id &&
-          useLoadingInformationStore().hospital.id !== id
+          loadingInfoStore.landslideHiddenPoint.id !== id &&
+          loadingInfoStore.debrisFlowHiddenPoint.id !== id &&
+          loadingInfoStore.waterLoggingHiddenPoint.id !== id &&
+          loadingInfoStore.flashFloodHiddenPoint.id !== id &&
+          loadingInfoStore.riskPoint.id !== id &&
+          loadingInfoStore.hospital.id !== id
         ) {
-          useLoadingInformationStore().resetStatue();
+          loadingInfoStore.resetStatue();
         }
 
         // 点击对象
-        useLoadingInformationStore().clickObject.id = pickedObject.id;
-        useLoadingInformationStore().clickObject.primitive =
-          pickedObject.primitive;
+        loadingInfoStore.clickObject.id = pickedObject.id;
+        loadingInfoStore.clickObject.primitive = pickedObject.primitive;
 
         // 滑坡隐患点
         if (pickedObject.id.startsWith(config.prefix.landslideHiddenPointId)) {
-          useLoadingInformationStore().landslideHiddenPoint.id = id;
+          loadingInfoStore.landslideHiddenPoint.id = id;
         }
 
         // 泥石流隐患点
         else if (pickedObject.id.startsWith(config.prefix.debrisFlowHiddenPointId)) {
-          useLoadingInformationStore().debrisFlowHiddenPoint.id = id;
+          loadingInfoStore.debrisFlowHiddenPoint.id = id;
         }
 
         // 内涝隐患点
         else if (pickedObject.id.startsWith(config.prefix.waterLoggingHiddenPointId)) {
-          useLoadingInformationStore().waterLoggingHiddenPoint.id = id;
+          loadingInfoStore.waterLoggingHiddenPoint.id = id;
         }
 
         // 山洪隐患点
         else if (pickedObject.id.startsWith(config.prefix.flashFloodHiddenPointId)) {
-          useLoadingInformationStore().flashFloodHiddenPoint.id = id;
+          loadingInfoStore.flashFloodHiddenPoint.id = id;
         }
 
         // 风险点
         else if (pickedObject.id.startsWith(config.prefix.riskPointId)) {
-          useLoadingInformationStore().riskPoint.id = id;
+          loadingInfoStore.riskPoint.id = id;
         }
 
         // 医院
         else if (pickedObject.id.startsWith(config.prefix.hospitalPointId)) {
-          useLoadingInformationStore().hospital.id = id;
+          loadingInfoStore.hospital.id = id;
         }
 
         // 危险源
         else if (
           pickedObject.id.startsWith(config.prefix.dangerousSourcePointId)
         ) {
-          useLoadingInformationStore().dangerousSource.id = id;
+          loadingInfoStore.dangerousSource.id = id;
         }
 
         // 避难所
         else if (
           pickedObject.id.startsWith(config.prefix.emergencyShelterPointId)
         ) {
-          useLoadingInformationStore().emergencyShelter.id = id;
+          loadingInfoStore.emergencyShelter.id = id;
         }
 
         // 消防站
         else if (pickedObject.id.startsWith(config.prefix.fireStationPointId)) {
-          useLoadingInformationStore().fireStation.id = id;
+          loadingInfoStore.fireStation.id = id;
         }
 
         // 物资储备点
         else if (pickedObject.id.startsWith(config.prefix.storePointsPointId)) {
-          useLoadingInformationStore().storePoints.id = id;
+          loadingInfoStore.storePoints.id = id;
         }
 
         // 学校
         else if (pickedObject.id.startsWith(config.prefix.schoolPointId)) {
-          useLoadingInformationStore().school.id = id;
+          loadingInfoStore.school.id = id;
         }
 
         // 桥梁
         else if (pickedObject.id.startsWith(config.prefix.bridgePointId)) {
-          useLoadingInformationStore().bridge.id = id;
+          loadingInfoStore.bridge.id = id;
         }
 
         // 水库
         else if (pickedObject.id.startsWith(config.prefix.reservoirPointId)) {
-          useLoadingInformationStore().reservoir.id = id;
+          loadingInfoStore.reservoir.id = id;
         }
 
         // 地铁站点
         else if (pickedObject.id.startsWith(config.prefix.subwayStationPointId)) {
-          useLoadingInformationStore().subwayStation.id = id;
+          loadingInfoStore.subwayStation.id = id;
         }
 
         // 其他
         else {
           // 重置状态
-          useLoadingInformationStore().resetStatue();
+          loadingInfoStore.resetStatue();
         }
       } else {
         // 重置状态
-        useLoadingInformationStore().resetStatue();
+        loadingInfoStore.resetStatue();
       }
     });
   };

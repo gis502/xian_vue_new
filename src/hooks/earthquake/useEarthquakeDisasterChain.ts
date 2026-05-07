@@ -29,6 +29,11 @@ import { LoadingResource } from '@/types/common/LoadingResourceType.ts';
  * @returns
  */
 export const useEarthquakeDisasterChain = () => {
+  const statusStore = useStatusStore();
+  const layerControl = useLayerControl();
+  const resourceStore = useLoadingResourceStore();
+  const rightHandle = useRightHandle();
+
   // ================灾害链影响点列表================================
   /**
    * 搜索条件
@@ -165,12 +170,12 @@ export const useEarthquakeDisasterChain = () => {
     },
     {
       name: '清除模拟',
-      callback: () => useRightHandle().resetScene(),
+      callback: () => rightHandle.resetScene(),
       executeOnce: true,
     },
     {
       name: '视角重置',
-      callback: () => useRightHandle().resetView(),
+      callback: () => rightHandle.resetView(),
       executeOnce: true,
     },
   ];
@@ -180,9 +185,6 @@ export const useEarthquakeDisasterChain = () => {
    * 控制面板信息
    */
   const getControlPanel = () => {
-    const statusStore = useStatusStore();
-    const layerControl = useLayerControl();
-    const resourceStore = useLoadingResourceStore();
 
     return [
       // 灾害隐患点类别

@@ -31,8 +31,13 @@ import { LoadingResource } from '@/types/common/LoadingResourceType.ts';
  * @returns
  */
 export const useRainDisasterChain = () => {
-  // 初始化暴雨模拟状态（因为右侧按钮默认选中）
   const statusStore = useStatusStore();
+  const layerControl = useLayerControl();
+  const resourceStore = useLoadingResourceStore();
+  const rightHandle = useRightHandle();
+  const leftHandle = useLeftHandle();
+
+  // 初始化暴雨模拟状态（因为右侧按钮默认选中）
   statusStore.weatherLayers.showRainfallGrid.loading = true;
   statusStore.weatherLayers.showRainfallGrid.show = true;
 
@@ -106,7 +111,7 @@ export const useRainDisasterChain = () => {
   const leftButtonInfo = [
     {
       name: '周边分析',
-      callback: useLeftHandle().clickAroundAnalysis,
+      callback: leftHandle.clickAroundAnalysis,
     },
     {
       name: '关联分析',
@@ -171,8 +176,7 @@ export const useRainDisasterChain = () => {
   const rightButtonInfo = [
     {
       name: '降雨推演',
-      callback: (status: unknown) =>
-        useRightHandle().rainstormSimulation(status),
+      callback: (status: unknown) => rightHandle.rainstormSimulation(status),
     },
     {
       name: '暴雨触发',
@@ -194,12 +198,12 @@ export const useRainDisasterChain = () => {
     },
     {
       name: '场景重置',
-      callback: () => useRightHandle().resetScene(),
+      callback: () => rightHandle.resetScene(),
       executeOnce: true,
     },
     {
       name: '视角重置',
-      callback: () => useRightHandle().resetView(),
+      callback: () => rightHandle.resetView(),
       executeOnce: true,
     },
   ];
@@ -212,9 +216,6 @@ export const useRainDisasterChain = () => {
    * 控制面板信息
    */
   const getControlPanel = () => {
-    const statusStore = useStatusStore();
-    const layerControl = useLayerControl();
-    const resourceStore = useLoadingResourceStore();
 
     return [
       // 灾害隐患点类别

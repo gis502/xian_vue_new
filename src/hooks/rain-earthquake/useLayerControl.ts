@@ -5,12 +5,14 @@ import { useStatusStore } from '@/stores/useStatusStore.ts';
  * 控制面板显示隐藏逻辑
  */
 export const useLayerControl = () => {
+  const statusStore = useStatusStore();
+  const leftLegendStore = useLeftLegendStore();
   /**
    * 点击显示医院
    */
   const clickHospital = () => {
     // 加载状态为true
-    useStatusStore().poiLayers.showHospital.loading = true;
+    statusStore.poiLayers.showHospital.loading = true;
   };
 
   /**
@@ -18,7 +20,7 @@ export const useLayerControl = () => {
    */
   const clickDangerousSource = () => {
     // 加载状态为true
-    useStatusStore().poiLayers.showDangerSource.loading = true;
+    statusStore.poiLayers.showDangerSource.loading = true;
   };
 
   /**
@@ -26,7 +28,7 @@ export const useLayerControl = () => {
    */
   const clickEmergencyShelter = () => {
     // 加载状态为true
-    useStatusStore().poiLayers.showRefugeeShelter.loading = true;
+    statusStore.poiLayers.showRefugeeShelter.loading = true;
   };
 
   /**
@@ -34,7 +36,7 @@ export const useLayerControl = () => {
    */
   const clickFireStation = () => {
     // 加载状态为true
-    useStatusStore().poiLayers.showFireStation.loading = true;
+    statusStore.poiLayers.showFireStation.loading = true;
   };
 
   /**
@@ -42,7 +44,7 @@ export const useLayerControl = () => {
    */
   const clickStorePoints = () => {
     // 加载状态为true
-    useStatusStore().poiLayers.showReservePoint.loading = true;
+    statusStore.poiLayers.showReservePoint.loading = true;
   };
 
   /**
@@ -50,7 +52,7 @@ export const useLayerControl = () => {
    */
   const clickSchool = () => {
     // 加载状态为true
-    useStatusStore().poiLayers.showSchool.loading = true;
+    statusStore.poiLayers.showSchool.loading = true;
   };
 
   /**
@@ -58,11 +60,11 @@ export const useLayerControl = () => {
    */
   const clickPopulationGrid = () => {
     // 加载状态为true
-    useStatusStore().poiLayers.showPopulationGrid.loading = true;
+    statusStore.poiLayers.showPopulationGrid.loading = true;
 
-    if (useStatusStore().poiLayers.showPopulationGrid.show) {
+    if (statusStore.poiLayers.showPopulationGrid.show) {
       // 添加图例
-      useLeftLegendStore().legendListInfo.population = {
+      leftLegendStore.legendListInfo.population = {
         title: '人口密度图例',
         list: [
           {
@@ -101,7 +103,7 @@ export const useLayerControl = () => {
       };
     } else {
       // 隐藏图例
-      delete useLeftLegendStore().legendListInfo.population;
+      delete leftLegendStore.legendListInfo.population;
     }
   };
 
@@ -109,96 +111,96 @@ export const useLayerControl = () => {
    * 显示管网
    */
   const clickWaterPipe = () => {
-    useStatusStore().infrastructureLayers.showNetworkSystem.loading = true;
+    statusStore.infrastructureLayers.showNetworkSystem.loading = true;
   };
 
   /**
    * 显示交通道路
    */
   const clickTrafficRoad = () => {
-    useStatusStore().infrastructureLayers.showTrafficRoad.loading = true;
+    statusStore.infrastructureLayers.showTrafficRoad.loading = true;
   };
 
   /**
    * 显示高速
    */
   const clickHighway = () => {
-    useStatusStore().infrastructureLayers.showHighway.loading = true;
+    statusStore.infrastructureLayers.showHighway.loading = true;
   };
   /**
    * 显示国道
    */
   const clickNationRoad = () => {
-    useStatusStore().infrastructureLayers.showMainRoad.loading = true;
+    statusStore.infrastructureLayers.showMainRoad.loading = true;
   };
   /**
    * 显示桥梁
    */
   const clickBridge = () => {
-    useStatusStore().infrastructureLayers.showBridge.loading = true;
+    statusStore.infrastructureLayers.showBridge.loading = true;
   };
 
   /**
    * 显示水库
    */
   const clickReservoir = () => {
-    useStatusStore().infrastructureLayers.showReservoir.loading = true;
+    statusStore.infrastructureLayers.showReservoir.loading = true;
   };
 
   /**
    * 显示地铁站点
    */
   const clickSubwayStation = () => {
-    useStatusStore().poiLayers.showSubwayStation.loading = true;
+    statusStore.poiLayers.showSubwayStation.loading = true;
   };
 
   /**
    * 显示滑坡隐患点
    */
   const clickLandslideHiddenPoint = () => {
-    useStatusStore().poiLayers.showLandslideHiddenPoint.loading = true;
+    statusStore.poiLayers.showLandslideHiddenPoint.loading = true;
   };
 
   /**
    * 显示泥石流隐患点
    */
   const clickDebrisFlowHiddenPoint = () => {
-    useStatusStore().poiLayers.showDebrisFlowHiddenPoint.loading = true;
+    statusStore.poiLayers.showDebrisFlowHiddenPoint.loading = true;
   };
 
   /**
    * 显示内涝隐患点
    */
   const clickWaterLoggingHiddenPoint = () => {
-    useStatusStore().poiLayers.showWaterLoggingHiddenPoint.loading = true;
+    statusStore.poiLayers.showWaterLoggingHiddenPoint.loading = true;
   };
 
   /**
    * 显示山洪隐患点
    */
   const clickFlashFloodHiddenPoint = () => {
-    useStatusStore().poiLayers.showFlashFloodHiddenPoint.loading = true;
+    statusStore.poiLayers.showFlashFloodHiddenPoint.loading = true;
   };
 
   /**
    * 显示风险点
    */
   const clickRiskPoint = () => {
-    useStatusStore().mapLayers.riskPointShow.loading = true;
+    statusStore.mapLayers.riskPointShow.loading = true;
   };
 
   /**
    * 显示断裂带
    */
   const clickFault = () => {
-    useStatusStore().mapLayers.faultShow.loading = true;
+    statusStore.mapLayers.faultShow.loading = true;
   };
 
   /**
    * 显示降雨栅格
    */
   const clickRainfallGrid = () => {
-    useStatusStore().weatherLayers.showRainfallGrid.loading = true;
+    statusStore.weatherLayers.showRainfallGrid.loading = true;
   };
 
   return {
