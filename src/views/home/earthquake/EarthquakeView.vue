@@ -31,8 +31,8 @@
     <!-- 左侧按钮组件 -->
     <LeftButtonComponent
       v-if="
-        useStatusStore().appLoadingCompleted &&
-        useStatusStore().uiComponents.leftButton.loading
+        statusStore.appLoadingCompleted &&
+        statusStore.uiComponents.leftButton.loading
       "
       :button-list="leftButtonInfo"
     />
@@ -40,8 +40,8 @@
     <!-- 右侧按钮组件 -->
     <RightButtonComponent
       v-if="
-        useStatusStore().appLoadingCompleted &&
-        useStatusStore().uiComponents.rightButton.loading
+        statusStore.appLoadingCompleted &&
+        statusStore.uiComponents.rightButton.loading
       "
       :button-list="rightButtonInfo"
     />
@@ -82,6 +82,8 @@
     changeConditions,
     changeCurrentPage,
   } = useEarthquakeDisasterChain();
+
+  const statusStore = useStatusStore();
 
   // 监听条件变化
   watch(

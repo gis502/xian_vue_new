@@ -9,8 +9,8 @@
     <!-- 灾害链影响列表组件 -->
     <DisasterChainPointComponent
       v-if="
-        useStatusStore().appLoadingCompleted &&
-        useStatusStore().uiComponents.disasterChainPointShow.loading
+        statusStore.appLoadingCompleted &&
+        statusStore.uiComponents.disasterChainPointShow.loading
       "
       :select-options="selectOptions"
       :table-data-list="tableDatas"
@@ -23,8 +23,8 @@
     <!-- 左侧按钮组件 -->
     <LeftButtonComponent
       v-if="
-        useStatusStore().appLoadingCompleted &&
-        useStatusStore().uiComponents.leftButton.loading
+        statusStore.appLoadingCompleted &&
+        statusStore.uiComponents.leftButton.loading
       "
       :button-list="leftButtonInfo"
     />
@@ -32,16 +32,16 @@
     <!-- 左侧图例组件 -->
     <LeftLegendComponent
       v-if="
-        useStatusStore().appLoadingCompleted &&
-        useStatusStore().uiComponents.leftLegend.loading
+        statusStore.appLoadingCompleted &&
+        statusStore.uiComponents.leftLegend.loading
       "
     />
 
     <!-- 右侧按钮组件 -->
     <RightButtonComponent
       v-if="
-        useStatusStore().appLoadingCompleted &&
-        useStatusStore().uiComponents.rightButton.loading
+        statusStore.appLoadingCompleted &&
+        statusStore.uiComponents.rightButton.loading
       "
       :button-list="rightButtonInfo"
     />
@@ -88,6 +88,8 @@
     changeConditions,
     changeCurrentPage,
   } = useRainDisasterChain();
+
+  const statusStore = useStatusStore();
 </script>
 
 <style scoped></style>

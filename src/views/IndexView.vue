@@ -13,7 +13,7 @@
           @click="
             isActive(item.query.identification)
               ? ''
-              : (useStatusStore().appLoadingCompleted = false)
+              : (statusStore.appLoadingCompleted = false)
           "
           v-for="(item, index) in topNavMap"
           :key="index"
@@ -39,6 +39,8 @@
 
   // 获取钩子函数
   const { topNavMap, isActive } = useIndex();
+
+  const statusStore = useStatusStore();
 </script>
 
 <style scoped>
