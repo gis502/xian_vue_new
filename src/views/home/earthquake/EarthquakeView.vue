@@ -10,7 +10,7 @@
     <FaultComponent
       v-if="
         useStatusStore().appLoadingCompleted &&
-        useStatusStore().mapLayers.faultShow
+        useStatusStore().mapLayers.faultShow.loading
       "
     />
 
