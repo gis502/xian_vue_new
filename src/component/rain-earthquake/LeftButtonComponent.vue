@@ -1,9 +1,9 @@
 <template>
   <div
-    v-show="useStatusStore().uiComponents.leftButton.show"
+    v-show="useStatus.uiComponents.leftButton.show"
     class="left-button-box"
     :style="{
-      left: `${useStatusStore().uiComponents.disasterChainPointShow.show ? 575 : 100}px`,
+      left: `${useStatus.uiComponents.disasterChainPointShow.show ? 575 : 100}px`,
     }"
   >
     <ul class="left-button-ul">
@@ -11,7 +11,7 @@
         <button
           @click="handelButton(index, buttonItem.callback)"
           :style="{
-            'background-image': `url(${useButtonSelectedIdStore().leftButtonSelectedId == index ? leftOrangeButton : leftBlueButton})`,
+            'background-image': `url(${useButtonSelectedId.leftButtonSelectedId == index ? leftOrangeButton : leftBlueButton})`,
           }"
         >
           {{ buttonItem.name }}
@@ -26,6 +26,9 @@
   import { useButtonSelectedIdStore } from '@/stores/useButtonSelectedIdStore.ts';
   import { useStatusStore } from '@/stores/useStatusStore.ts';
   import { onMounted } from 'vue';
+
+  const useStatus = useStatusStore();
+  const useButtonSelectedId = useButtonSelectedIdStore();
 
   // 接收父组件传递的参数
   const props = defineProps<{
@@ -49,7 +52,7 @@
 
     // 如果找到了选中的按钮，设置选中状态，同时执行回调函数
     if (lastSelectedIndex !== -1) {
-      useButtonSelectedIdStore().leftButtonSelectedId = lastSelectedIndex;
+      useButtonSelectedId.leftButtonSelectedId = lastSelectedIndex;
       props.buttonList[lastSelectedIndex].callback();
     }
   });
@@ -60,23 +63,23 @@
     callback: (...args: unknown[]) => unknown
   ) => {
     // 取消选中
-    if (index == useButtonSelectedIdStore().leftButtonSelectedId) {
+    if (index == useButtonSelectedId.leftButtonSelectedId) {
       callback(false);
-      useButtonSelectedIdStore().leftButtonSelectedId = -1;
+      useButtonSelectedId.leftButtonSelectedId = -1;
       return;
     } else if (
-      useButtonSelectedIdStore().leftButtonSelectedId != -1 &&
-      useButtonSelectedIdStore().leftButtonSelectedId != index
+      useButtonSelectedId.leftButtonSelectedId != -1 &&
+      useButtonSelectedId.leftButtonSelectedId != index
     ) {
       console.error('当前按钮选中有误，请选择正确的按钮。');
       return;
     }
-    useButtonSelectedIdStore().leftButtonSelectedId = index;
+    useButtonSelectedId.leftButtonSelectedId = index;
     callback(true);
 
     // 如果该按钮只执行一次，则取消选中
     if (props.buttonList[index].executeOnce) {
-      useButtonSelectedIdStore().leftButtonSelectedId = -1;
+      useButtonSelectedId.leftButtonSelectedId = -1;
     }
   };
 </script>

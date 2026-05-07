@@ -4,8 +4,8 @@
   <!-- 行政区划 -->
   <AdministrativeDivision
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().mapLayers.showAdministrativeDivision.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.mapLayers.showAdministrativeDivision.loading
     "
   />
 </template>
@@ -24,8 +24,17 @@
   import { useMap } from '@/hooks/map/useMap';
   import { useScene } from '@/hooks/useScene';
 
+  const { resetScene } = useScene();
+  const {
+    registerAndClickOnTheListener,
+    registerAScrollListener,
+    automaticallyAdjustThePerspective,
+    prohibitedEvents,
+  } = useMap();
+  const useStatus = useStatusStore();
+
   onBeforeMount(() => {
-    useScene().resetScene();
+    resetScene();
   });
 
   onMounted(async () => {
@@ -43,19 +52,19 @@
     });
 
     // 设置状态
-    useStatusStore().appLoadingCompleted = true;
+    useStatus.appLoadingCompleted = true;
 
     // 注册全局点击监听器
-    useMap().registerAndClickOnTheListener();
+    registerAndClickOnTheListener();
 
     // 注册全局滚轮监听器
-    useMap().registerAScrollListener();
+    registerAScrollListener();
 
     // 当行政区超出页面时，自动拉回视角
-    useMap().automaticallyAdjustThePerspective();
+    automaticallyAdjustThePerspective();
 
     // 禁止事件
-    useMap().prohibitedEvents();
+    prohibitedEvents();
 
     // 默认视角
     CesiumUtilsSingleton.viewToTarget(

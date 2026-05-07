@@ -3,7 +3,7 @@
   <div>
     <!-- 加载水库点位 -->
     <LoadingPoints
-      v-if="useStatusStore().appLoadingCompleted && reservoirList.length > 0"
+      v-if="useStatus.appLoadingCompleted && reservoirList.length > 0"
       :base-points="reservoirList"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.reservoirPointId"
@@ -15,11 +15,11 @@
     <InformationBox
       :data="reservoirDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformationStore().reservoir.loading"
+      v-if="useLoadingInformation.reservoir.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformationStore().reservoir.id"
+      :key="useLoadingInformation.reservoir.id"
     />
   </div>
 </template>
@@ -40,6 +40,10 @@
 
   const reservoirList = ref<Point[]>([]);
 
+  const useStatus = useStatusStore();
+  const useLoadingInformation = useLoadingInformationStore();
+  const useLoadingResource = useLoadingResourceStore();
+
   // 信息框相关配置
   const offsetX = ref(0);
   const offsetY = ref(0);
@@ -55,13 +59,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformationStore().reservoir.id,
+    () => useLoadingInformation.reservoir.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取水库数据
-      const clickObject = useLoadingInformationStore().clickObject;
+      const clickObject = useLoadingInformation.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -69,7 +73,7 @@
       }
 
       const res = await $api.reservoirs.getPointDetailById(
-        useLoadingInformationStore().reservoir.id
+        useLoadingInformation.reservoir.id
       );
 
       // 更新数据
@@ -85,7 +89,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformationStore().reservoir.loading = true;
+        useLoadingInformation.reservoir.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -94,19 +98,19 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatusStore().infrastructureLayers.showReservoir?.show,
+    () => useStatus.infrastructureLayers.showReservoir?.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示水库
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(
+          useLoadingResource.getLoadingResource(
             LoadingResource.RESERVOIR
           ).ids
         );
       } else {
         // 隐藏水库
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(
+          useLoadingResource.getLoadingResource(
             LoadingResource.RESERVOIR
           ).ids
         );

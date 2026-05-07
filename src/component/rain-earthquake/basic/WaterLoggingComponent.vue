@@ -4,7 +4,7 @@
     <!-- 加载内涝隐患点 -->
     <LoadingPoints
       v-if="
-        useStatusStore().appLoadingCompleted && waterLoggingPoints.length > 0
+        useStatus.appLoadingCompleted && waterLoggingPoints.length > 0
       "
       :base-points="waterLoggingPoints"
       :get-disaster-icon="getDisasterIcon"
@@ -17,11 +17,11 @@
     <InformationBox
       :data="waterLoggingPointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformationStore().waterLoggingHiddenPoint.loading"
+      v-if="useLoadingInformation.waterLoggingHiddenPoint.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformationStore().waterLoggingHiddenPoint.id"
+      :key="useLoadingInformation.waterLoggingHiddenPoint.id"
     />
   </div>
 </template>
@@ -46,14 +46,17 @@
 
   const waterLoggingPoints = ref<Point[]>([]);
 
+  const useStatus = useStatusStore();
+  const useLoadingInformation = useLoadingInformationStore();
+  const useLoadingResource = useLoadingResourceStore();
+
+  const { field, getDisasterIcon } = useHiddenPoint();
+
   // 信息框相关配置
   const offsetX = ref(0);
   const offsetY = ref(0);
   const waterLoggingPointDetail = ref<Point>();
   const informationBoxTitle = ref('');
-
-  // 获取钩子函数
-  const { field, getDisasterIcon } = useHiddenPoint();
 
   // 加载内涝隐患点数据
   $api.hiddenDangerSpots
@@ -64,13 +67,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformationStore().waterLoggingHiddenPoint.id,
+    () => useLoadingInformation.waterLoggingHiddenPoint.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取内涝隐患点数据
-      const clickObject = useLoadingInformationStore().clickObject;
+      const clickObject = useLoadingInformation.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -78,7 +81,7 @@
       }
 
       const res = await $api.hiddenDangerSpots.getPointDetailById(
-        useLoadingInformationStore().waterLoggingHiddenPoint.id
+        useLoadingInformation.waterLoggingHiddenPoint.id
       );
 
       // 更新数据
@@ -94,7 +97,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformationStore().waterLoggingHiddenPoint.loading = true;
+        useLoadingInformation.waterLoggingHiddenPoint.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -103,19 +106,19 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatusStore().poiLayers.showWaterLoggingHiddenPoint.show,
+    () => useStatus.poiLayers.showWaterLoggingHiddenPoint.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示内涝隐患点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(
+          useLoadingResource.getLoadingResource(
             LoadingResource.WATER_LOGGING_HIDDEN_POINT
           ).ids
         );
       } else {
         // 隐藏内涝隐患点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(
+          useLoadingResource.getLoadingResource(
             LoadingResource.WATER_LOGGING_HIDDEN_POINT
           ).ids
         );

@@ -3,7 +3,7 @@
   <div>
     <!-- 加载物资储备点 -->
     <LoadingPoints
-      v-if="useStatusStore().appLoadingCompleted && storePointsList.length > 0"
+      v-if="useStatus.appLoadingCompleted && storePointsList.length > 0"
       :base-points="storePointsList"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.storePointsPointId"
@@ -15,11 +15,11 @@
     <InformationBox
       :data="storePointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformationStore().storePoints.loading"
+      v-if="useLoadingInformation.storePoints.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformationStore().storePoints.id"
+      :key="useLoadingInformation.storePoints.id"
     />
   </div>
 </template>
@@ -40,6 +40,10 @@
 
   const storePointsList = ref<Point[]>([]);
 
+  const useStatus = useStatusStore();
+  const useLoadingInformation = useLoadingInformationStore();
+  const useLoadingResource = useLoadingResourceStore();
+
   // 信息框相关配置
   const offsetX = ref(0);
   const offsetY = ref(0);
@@ -55,13 +59,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformationStore().storePoints.id,
+    () => useLoadingInformation.storePoints.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取物资储备点数据
-      const clickObject = useLoadingInformationStore().clickObject;
+      const clickObject = useLoadingInformation.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -69,7 +73,7 @@
       }
 
       const res = await $api.storePoints.getPointDetailById(
-        useLoadingInformationStore().storePoints.id
+        useLoadingInformation.storePoints.id
       );
 
       // 更新数据
@@ -85,7 +89,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformationStore().storePoints.loading = true;
+        useLoadingInformation.storePoints.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -94,19 +98,19 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatusStore().poiLayers.showReservePoint.show,
+    () => useStatus.poiLayers.showReservePoint.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示物资储备点
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(
+          useLoadingResource.getLoadingResource(
             LoadingResource.STORE_POINTS
           ).ids
         );
       } else {
         // 隐藏物资储备点
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(
+          useLoadingResource.getLoadingResource(
             LoadingResource.STORE_POINTS
           ).ids
         );

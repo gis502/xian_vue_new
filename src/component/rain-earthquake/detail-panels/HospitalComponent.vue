@@ -3,7 +3,7 @@
   <div>
     <!-- 加载医院 -->
     <LoadingPoints
-      v-if="useStatusStore().appLoadingCompleted && hospitalPoints.length > 0"
+      v-if="useStatus.appLoadingCompleted && hospitalPoints.length > 0"
       :base-points="hospitalPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.hospitalPointId"
@@ -15,11 +15,11 @@
     <InformationBox
       :data="hospitalPointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformationStore().hospital.loading"
+      v-if="useLoadingInformation.hospital.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformationStore().hospital.id"
+      :key="useLoadingInformation.hospital.id"
     />
   </div>
 </template>
@@ -40,6 +40,10 @@
 
   const hospitalPoints = ref<Point[]>([]);
 
+  const useStatus = useStatusStore();
+  const useLoadingInformation = useLoadingInformationStore();
+  const useLoadingResource = useLoadingResourceStore();
+
   // 信息框相关配置
   const offsetX = ref(0);
   const offsetY = ref(0);
@@ -55,13 +59,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformationStore().hospital.id,
+    () => useLoadingInformation.hospital.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取医院数据
-      const clickObject = useLoadingInformationStore().clickObject;
+      const clickObject = useLoadingInformation.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -69,7 +73,7 @@
       }
 
       const res = await $api.hospitals.getPointDetailById(
-        useLoadingInformationStore().hospital.id
+        useLoadingInformation.hospital.id
       );
 
       // 更新数据
@@ -85,7 +89,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformationStore().hospital.loading = true;
+        useLoadingInformation.hospital.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -94,18 +98,18 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatusStore().poiLayers.showHospital.show,
+    () => useStatus.poiLayers.showHospital.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示医院
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(LoadingResource.HOSPITAL)
+          useLoadingResource.getLoadingResource(LoadingResource.HOSPITAL)
             .ids
         );
       } else {
         // 隐藏医院
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(LoadingResource.HOSPITAL)
+          useLoadingResource.getLoadingResource(LoadingResource.HOSPITAL)
             .ids
         );
       }

@@ -1,13 +1,13 @@
 <template>
-  <div class="step-box" v-show="useStatusStore().uiComponents.stepBar.show">
+  <div class="step-box" v-show="useStatus.uiComponents.stepBar.show">
     <el-steps
       style="width: 100%; background-color: #ffffff00"
-      :active="useStepStore().currentStep"
+      :active="useStep.currentStep"
       finish-status="success"
       simple
     >
       <el-step
-        v-for="(item, index) in useStepStore().stepList"
+        v-for="(item, index) in useStep.stepList"
         :key="index"
         :title="item"
       />
@@ -18,6 +18,9 @@
 <script lang="ts" setup>
   import { useStatusStore } from '@/stores/useStatusStore';
   import { useStepStore } from '@/stores/useStepStore';
+
+  const useStatus = useStatusStore();
+  const useStep = useStepStore();
 </script>
 
 <style scoped>

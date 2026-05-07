@@ -2,109 +2,109 @@
   <!-- 医院 -->
   <HospitalComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().poiLayers.showHospital.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.poiLayers.showHospital.loading
     "
   />
 
   <!-- 危险源 -->
   <DangerousSourceComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().poiLayers.showDangerSource.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.poiLayers.showDangerSource.loading
     "
   />
 
   <!-- 避难所 -->
   <EmergencyShelterComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().poiLayers.showRefugeeShelter.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.poiLayers.showRefugeeShelter.loading
     "
   />
 
   <!-- 消防站 -->
   <FireStationComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().poiLayers.showFireStation.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.poiLayers.showFireStation.loading
     "
   />
 
   <!-- 物资储备点 -->
   <StorePointsComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().poiLayers.showReservePoint.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.poiLayers.showReservePoint.loading
     "
   />
 
   <!-- 学校 -->
   <SchoolComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().poiLayers.showSchool.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.poiLayers.showSchool.loading
     "
   />
 
   <!-- 人口网格 -->
   <PopulationGridComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().poiLayers.showPopulationGrid.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.poiLayers.showPopulationGrid.loading
     "
   />
 
   <!-- 管网系统 -->
   <WaterPipeComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().infrastructureLayers.showNetworkSystem.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.infrastructureLayers.showNetworkSystem.loading
     "
   />
 
   <!-- 交通道路 -->
   <TrafficRoadComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().infrastructureLayers.showTrafficRoad.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.infrastructureLayers.showTrafficRoad.loading
     "
   />
   <!-- 高速 -->
   <HighwayComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().infrastructureLayers.showHighway.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.infrastructureLayers.showHighway.loading
     "
   />
   <!-- 国道 -->
   <NationRoadComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().infrastructureLayers.showMainRoad.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.infrastructureLayers.showMainRoad.loading
     "
   />
   <!-- 桥梁 -->
   <BridgeComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().infrastructureLayers.showBridge.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.infrastructureLayers.showBridge.loading
     "
   />
 
   <!-- 水库 -->
   <ReservoirComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().infrastructureLayers.showReservoir.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.infrastructureLayers.showReservoir.loading
     "
   />
 
   <!-- 地铁站点 -->
   <SubwayStationComponent
     v-if="
-      useStatusStore().appLoadingCompleted &&
-      useStatusStore().poiLayers.showSubwayStation.loading
+      useStatus.appLoadingCompleted &&
+      useStatus.poiLayers.showSubwayStation.loading
     "
   />
 </template>
@@ -125,6 +125,8 @@
   import BridgeComponent from '@/component/rain-earthquake/detail-panels/BridgeComponent.vue';
   import ReservoirComponent from '@/component/rain-earthquake/detail-panels/ReservoirComponent.vue';
   import SubwayStationComponent from '@/component/rain-earthquake/detail-panels/SubwayStationComponent.vue';
+
+  const useStatus = useStatusStore();
 </script>
 
 <style scoped lang="less"></style>

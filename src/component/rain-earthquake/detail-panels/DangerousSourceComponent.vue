@@ -3,9 +3,7 @@
   <div>
     <!-- 加载危险源 -->
     <LoadingPoints
-      v-if="
-        useStatusStore().appLoadingCompleted && dangerousSourcePoints.length > 0
-      "
+      v-if="useStatus.appLoadingCompleted && dangerousSourcePoints.length > 0"
       :base-points="dangerousSourcePoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.dangerousSourcePointId"
@@ -17,11 +15,11 @@
     <InformationBox
       :data="dangerousSourcePointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformationStore().dangerousSource.loading"
+      v-if="useLoadingInformation.dangerousSource.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformationStore().dangerousSource.id"
+      :key="useLoadingInformation.dangerousSource.id"
     />
   </div>
 </template>
@@ -42,6 +40,10 @@
 
   const dangerousSourcePoints = ref<Point[]>([]);
 
+  const useStatus = useStatusStore();
+  const useLoadingInformation = useLoadingInformationStore();
+  const useLoadingResource = useLoadingResourceStore();
+
   // 信息框相关配置
   const offsetX = ref(0);
   const offsetY = ref(0);
@@ -57,13 +59,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformationStore().dangerousSource.id,
+    () => useLoadingInformation.dangerousSource.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取危险源数据
-      const clickObject = useLoadingInformationStore().clickObject;
+      const clickObject = useLoadingInformation.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -71,7 +73,7 @@
       }
 
       const res = await $api.dangerousSource.getPointDetailById(
-        useLoadingInformationStore().dangerousSource.id
+        useLoadingInformation.dangerousSource.id
       );
 
       // 更新数据
@@ -87,7 +89,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformationStore().dangerousSource.loading = true;
+        useLoadingInformation.dangerousSource.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -96,19 +98,19 @@
 
   // 监听显示隐藏
   watch(
-    () => useStatusStore().poiLayers.showDangerSource.show,
+    () => useStatus.poiLayers.showDangerSource.show,
     (newValue: boolean) => {
       if (newValue) {
         // 显示危险源
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(
+          useLoadingResource.getLoadingResource(
             LoadingResource.DANGEROUS_SOURCE
           ).ids
         );
       } else {
         // 隐藏危险源
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(
+          useLoadingResource.getLoadingResource(
             LoadingResource.DANGEROUS_SOURCE
           ).ids
         );

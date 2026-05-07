@@ -1,7 +1,7 @@
 <template>
   <div
     class="control-show-panel-box"
-    v-show="useStatusStore().uiComponents.controlPanel.show"
+    v-show="useStatus.uiComponents.controlPanel.show"
   >
     <div class="title-box">
       <header>图例与控制</header>
@@ -65,6 +65,9 @@
   import { useStatusStore } from '@/stores/useStatusStore';
   import { computed } from 'vue';
 
+  const useStatus = useStatusStore();
+  const useLoadingInformation = useLoadingInformationStore();
+
   const props = defineProps<{
     constrolShowList: {
       name: string;
@@ -105,7 +108,7 @@
     callback: (...args: unknown[]) => unknown
   ) => {
     // 重置信息框状态，隐藏显示
-    useLoadingInformationStore().resetStatue();
+    useLoadingInformation.resetStatue();
 
     // 调用回调函数
     callback(status);

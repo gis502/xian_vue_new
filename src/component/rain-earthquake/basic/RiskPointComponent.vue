@@ -3,7 +3,7 @@
   <div>
     <!-- 加载风险点 -->
     <LoadingPoints
-      v-if="useStatusStore().appLoadingCompleted && riskPoints.length > 0"
+      v-if="useStatus.appLoadingCompleted && riskPoints.length > 0"
       :base-points="riskPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.riskPointId"
@@ -15,11 +15,11 @@
     <InformationBox
       :data="riskPointDetail as Record<string, any>"
       :field="field"
-      v-if="useLoadingInformationStore().riskPoint.loading"
+      v-if="useLoadingInformation.riskPoint.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
       :offset-y="offsetY"
-      :key="useLoadingInformationStore().riskPoint.id"
+      :key="useLoadingInformation.riskPoint.id"
     />
   </div>
 </template>
@@ -40,6 +40,10 @@
 
   const riskPoints = ref<Point[]>([]);
 
+  const useStatus = useStatusStore();
+  const useLoadingInformation = useLoadingInformationStore();
+  const useLoadingResource = useLoadingResourceStore();
+
   // 信息框相关配置
   const offsetX = ref(0);
   const offsetY = ref(0);
@@ -54,13 +58,13 @@
 
   // 监听id变化
   watch(
-    () => useLoadingInformationStore().riskPoint.id,
+    () => useLoadingInformation.riskPoint.id,
     async (newId: number) => {
       if (newId === -1) {
         return;
       }
       // 获取风险点数据
-      const clickObject = useLoadingInformationStore().clickObject;
+      const clickObject = useLoadingInformation.clickObject;
 
       if (!clickObject || !clickObject.primitive) {
         console.warn('点击对象或图元不存在');
@@ -68,7 +72,7 @@
       }
 
       const res = await $api.riskSpots.getPointDetailById(
-        useLoadingInformationStore().riskPoint.id
+        useLoadingInformation.riskPoint.id
       );
 
       // 更新数据
@@ -83,7 +87,7 @@
         offsetY.value = screenPos.y;
 
         // 显示新的信息框
-        useLoadingInformationStore().riskPoint.loading = true;
+        useLoadingInformation.riskPoint.loading = true;
       } catch (error) {
         throw new Error(`坐标转换失败:${error}`);
       }
@@ -92,17 +96,17 @@
 
   // 监听显示隐藏风险点
   watch(
-    () => useStatusStore().mapLayers.riskPointShow.show,
+    () => useStatus.mapLayers.riskPointShow.show,
     (newValue: boolean) => {
       if (newValue) {
         CesiumUtilsSingleton.batchShowPrimitives(
-          useLoadingResourceStore().getLoadingResource(
+          useLoadingResource.getLoadingResource(
             LoadingResource.RISK_POINT
           ).ids
         );
       } else {
         CesiumUtilsSingleton.batchHidePrimitives(
-          useLoadingResourceStore().getLoadingResource(
+          useLoadingResource.getLoadingResource(
             LoadingResource.RISK_POINT
           ).ids
         );

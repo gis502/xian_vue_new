@@ -13,13 +13,15 @@
   import { onMounted, watch } from 'vue';
   import LoadingGeoserverLayer from '../../common/LoadingGeoserverLayer.vue';
 
+  const useStatus = useStatusStore();
+
   // 保存图层引用
   let waterPipeLayer: ImageryLayer | null = null;
 
   onMounted(() => {
     // 监听显示隐藏
     watch(
-      () => useStatusStore().infrastructureLayers.showNetworkSystem.show,
+      () => useStatus.infrastructureLayers.showNetworkSystem.show,
       (newValue: boolean) => {
         waterPipeLayer!.show = newValue;
       }

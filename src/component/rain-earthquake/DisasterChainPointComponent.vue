@@ -6,15 +6,15 @@
       type="primary"
       @click="changeStatus"
       circle
-      :title="`${useStatusStore().uiComponents.disasterChainPointShow.show ? '关闭' : '打开'}灾害链影响点列表`"
+      :title="`${useStatus.uiComponents.disasterChainPointShow.show ? '关闭' : '打开'}灾害链影响点列表`"
       >{{
-        useStatusStore().uiComponents.disasterChainPointShow.show ? '-' : '+'
+        useStatus.uiComponents.disasterChainPointShow.show ? '-' : '+'
       }}</el-button
     >
   </div>
   <div
     class="disaster-list-box"
-    v-show="useStatusStore().uiComponents.disasterChainPointShow.show"
+    v-show="useStatus.uiComponents.disasterChainPointShow.show"
   >
     <header class="table-title">
       <span>灾害链影响点列表</span>
@@ -84,6 +84,8 @@
   import type { PaginationType } from '@/types/common/PaginationType';
   import { ref, watch, computed, type Ref } from 'vue';
 
+  const useStatus = useStatusStore();
+
   // 接收父组件的参数
   const props = defineProps<{
     selectOptions: { label: string; value: PointType }[];
@@ -124,8 +126,8 @@
 
   // 切换面板显示状态
   const changeStatus = () => {
-    useStatusStore().uiComponents.disasterChainPointShow.show =
-      !useStatusStore().uiComponents.disasterChainPointShow.show;
+    useStatus.uiComponents.disasterChainPointShow.show =
+      !useStatus.uiComponents.disasterChainPointShow.show;
   };
 
   // 上一页
