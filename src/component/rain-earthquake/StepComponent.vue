@@ -4,8 +4,7 @@
       style="width: 100%; background-color: #ffffff00"
       :active="useStepStore().currentStep"
       finish-status="success"
-      process-status="success"
-      align-center
+      simple
     >
       <el-step
         v-for="(item, index) in useStepStore().stepList"
