@@ -7,28 +7,6 @@
     @close="handleClose"
   >
     <div v-loading="loading" class="table-detail-container">
-      <!-- 字段信息 -->
-      <div class="section">
-        <h4>字段信息</h4>
-        <el-table
-          :data="columns"
-          style="width: 100%"
-          max-height="200"
-          border
-        >
-          <el-table-column prop="column_name" label="字段名" width="200" />
-          <el-table-column prop="data_type" label="数据类型" width="150" />
-          <el-table-column prop="is_nullable" label="是否可空" width="120">
-            <template #default="{ row }">
-              <el-tag :type="row.is_nullable === 'YES' ? 'success' : 'danger'" size="small">
-                {{ row.is_nullable === 'YES' ? '是' : '否' }}
-              </el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column prop="column_default" label="默认值" />
-        </el-table>
-      </div>
-
       <!-- 数据记录 -->
       <div class="section">
         <div class="section-header">
@@ -51,6 +29,28 @@
             :width="getColumnWidth(col.data_type)"
             show-overflow-tooltip
           />
+
+          <!-- 操作列 -->
+          <el-table-column label="操作" width="180" fixed="right">
+            <template #default="{ row }">
+              <el-button
+                size="small"
+                type="primary"
+                :icon="Edit"
+                @click="handleEdit(row)"
+              >
+                修改
+              </el-button>
+              <el-button
+                size="small"
+                type="danger"
+                :icon="Delete"
+                @click="handleDelete(row)"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
     </div>
@@ -63,7 +63,8 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { ElMessage } from 'element-plus';
+  import { ElMessage, ElMessageBox } from 'element-plus';
+  import { Edit, Delete } from '@element-plus/icons-vue';
   import { getTableData } from '@/api/data-management';
   import type { TableColumn, TableDataRecord } from '@/api/data-management';
 
@@ -133,6 +134,32 @@
     return 150;
   };
 
+  // 修改按钮点击事件
+  const handleEdit = (row: TableDataRecord) => {
+    console.log('修改行数据:', row);
+    ElMessage.info('修改功能待实现');
+    // TODO: 实现修改逻辑
+  };
+
+  // 删除按钮点击事件
+  const handleDelete = (row: TableDataRecord) => {
+    ElMessageBox.confirm(
+      '确定要删除这条记录吗？',
+      '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+    ).then(() => {
+      console.log('删除行数据:', row);
+      ElMessage.success('删除成功');
+      // TODO: 实现删除逻辑，然后重新加载数据
+    }).catch(() => {
+      ElMessage.info('已取消删除');
+    });
+  };
+
   // 暴露方法给父组件
   defineExpose({
     showDialog
@@ -173,5 +200,12 @@
   :deep(.el-table th) {
     background-color: #f5f7fa !important;
     color: #333 !important;
+  }
+
+  /* 操作列按钮样式 */
+  :deep(.el-table .cell) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>

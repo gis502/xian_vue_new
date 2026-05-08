@@ -18,6 +18,7 @@
         v-loading="loading"
         empty-text="暂无数据表"
         @row-click="handleRowClick"
+        :row-style="{ cursor: 'pointer' }"
       >
         <el-table-column
           prop="tableName"
@@ -41,35 +42,6 @@
           label="记录数"
           width="120"
         />
-        <el-table-column
-          label="操作"
-          width="200"
-          fixed="right"
-        >
-          <template #default="scope">
-            <el-button
-              size="small"
-              type="primary"
-              @click.stop="viewTableDetail(scope.row)"
-            >
-              查看详情
-            </el-button>
-            <el-button
-              size="small"
-              type="warning"
-              @click.stop="handleModify(scope.row)"
-            >
-              修改
-            </el-button>
-            <el-button
-              size="small"
-              type="danger"
-              @click.stop="handleDelete(scope.row)"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -77,7 +49,7 @@
 
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue';
-  import { ElMessage, ElMessageBox } from 'element-plus';
+  import { ElMessage } from 'element-plus';
   import { getAllTables } from '@/api/data-management';
   import type { TableInfo } from '@/api/data-management';
 
@@ -85,8 +57,6 @@
   const emit = defineEmits<{
     loaded: []
     viewDetail: [tableName: string]
-    modify: [table: TableInfo]
-    delete: [table: TableInfo]
   }>();
 
   // 定义props
@@ -143,43 +113,12 @@
     }
   };
 
-  // 行点击事件
+  // 行点击事件 - 显示表详情
   const handleRowClick = (row: TableInfo) => {
-    console.log('点击行:', row);
+    console.log('点击行查看表详情:', row);
+    emit('viewDetail', row.tableName);
   };
 
-  // 查看详情
-  const viewTableDetail = (table: TableInfo) => {
-    console.log('查看表详情:', table);
-    emit('viewDetail', table.tableName);
-  };
-
-  // 修改表
-  const handleModify = (table: TableInfo) => {
-    console.log('修改表:', table);
-    emit('modify', table);
-  };
-
-  // 删除表
-  const handleDelete = (table: TableInfo) => {
-    ElMessageBox.confirm(
-      `确定要删除表 "${table.tableName}" 吗？此操作不可恢复！`,
-      '删除确认',
-      {
-        confirmButtonText: '确定删除',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-    )
-      .then(() => {
-        console.log('删除表:', table);
-        emit('delete', table);
-        ElMessage.success('删除成功');
-      })
-      .catch(() => {
-        ElMessage.info('已取消删除');
-      });
-  };
 
   // 组件挂载时加载表列表
   onMounted(() => {
@@ -251,11 +190,5 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
   }
 
-  /* 操作按钮样式 */
-  :deep(.el-table .cell) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
+  /* 操作列样式已删除 */
 </style>
