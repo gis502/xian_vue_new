@@ -6,7 +6,7 @@
     :close-on-click-modal="false"
     @close="handleClose"
   >
-    <div v-loading="loading" class="table-detail-container">
+    <div class="table-detail-container">
       <!-- 数据记录 -->
       <div class="section">
         <div class="section-header">
@@ -15,11 +15,14 @@
         </div>
 
         <el-table
+          v-if="!isEmptyTable"
+          v-loading="loading"
           :data="tableData"
           style="width: 100%"
           max-height="500"
           border
           stripe
+          empty-text="暂无数据"
         >
           <el-table-column
             v-for="col in columns"
@@ -52,6 +55,11 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <!-- 空表提示 -->
+        <div v-else class="empty-table-hint">
+          暂无数据
+        </div>
       </div>
     </div>
 
@@ -75,6 +83,9 @@
   // 表名
   const tableName = ref('');
 
+  // 是否为空表
+  const isEmptyTable = ref(false);
+
   // 字段信息
   const columns = ref<TableColumn[]>([]);
 
@@ -85,9 +96,21 @@
   const total = ref(0);
 
   // 显示详情对话框
-  const showDialog = async (name: string) => {
+  const showDialog = async (name: string, rowCount?: number) => {
     tableName.value = name;
     dialogVisible.value = true;
+
+    // 根据 rowCount 判断：为 0 直接显示空表，不调用后端
+    if (rowCount === 0) {
+      isEmptyTable.value = true;
+      total.value = 0;
+      columns.value = [];
+      tableData.value = [];
+      return;
+    }
+
+    // 有数据才调用后端接口
+    isEmptyTable.value = false;
     await loadTableData(name);
   };
 
@@ -95,7 +118,7 @@
   const loadTableData = async (name: string) => {
     loading.value = true;
     try {
-      const response = await getTableData(name, 100);
+      const response = await getTableData(name);
       if (response.code === 200 && response.data) {
         columns.value = response.data.columns || [];
         tableData.value = response.data.data || [];
@@ -117,6 +140,7 @@
     columns.value = [];
     tableData.value = [];
     total.value = 0;
+    isEmptyTable.value = false;
   };
 
   // 根据数据类型设置列宽度
@@ -207,5 +231,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .empty-table-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: #999;
+    font-size: 14px;
+    background-color: #f5f7fa;
+    border-radius: 4px;
+    border: 1px dashed #e4e7ed;
   }
 </style>

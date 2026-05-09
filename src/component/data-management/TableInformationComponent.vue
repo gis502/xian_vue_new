@@ -56,7 +56,7 @@
   // 定义事件
   const emit = defineEmits<{
     loaded: []
-    viewDetail: [tableName: string]
+    viewDetail: [tableName: string, rowCount?: number]
   }>();
 
   // 定义props
@@ -116,7 +116,7 @@
   // 行点击事件 - 显示表详情
   const handleRowClick = (row: TableInfo) => {
     console.log('点击行查看表详情:', row);
-    emit('viewDetail', row.tableName);
+    emit('viewDetail', row.tableName, row.rowCount);
   };
 
 

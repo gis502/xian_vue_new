@@ -61,11 +61,11 @@ export const getAllTables = (): Promise<ApiResponse<TableInfo[]>> => {
 /**
  * 获取表的具体数据内容
  * @param tableName - 表名
- * @param limit - 限制返回的记录数（可选，默认100）
+ * @param limit - 限制返回的记录数（可选，默认不限制）
  * @returns 表详情（包含字段信息和数据记录）
  */
-export const getTableData = (tableName: string, limit: number = 100): Promise<ApiResponse<TableDetailResponse>> => {
+export const getTableData = (tableName: string, limit?: number): Promise<ApiResponse<TableDetailResponse>> => {
   return httpInstance.get(`/api/table/data/${tableName}`, {
-    params: { limit }
+    params: limit ? { limit } : {}
   })
 }
