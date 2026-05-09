@@ -56,9 +56,8 @@ export const usePointsHandle = () => {
           isDefault: isDefault,
           scaleByDistance: new NearFarScalar(500, 1, 5e5, 0.3),
           customProperties: {
-            verticalOrigin: VerticalOrigin.BOTTOM,
-            horizontalOrigin: HorizontalOrigin.CENTER,
-            height: 40,
+            verticalOrigin: VerticalOrigin.CENTER,
+            horizontalOrigin: HorizontalOrigin.CENTER
           },
         });
       } catch (error) {
