@@ -1,22 +1,30 @@
 <!-- 数据管理组件 -->
 <template>
-  <!-- 搜索组件 -->
-  <SearchComponent @search="handleSearch" @clear="handleClear" />
+  <div class="data-management-view">
+    <!-- 固定头部区域（搜索+按钮） -->
+    <div class="fixed-header">
+      <!-- 搜索组件 -->
+      <SearchComponent @search="handleSearch" @clear="handleClear" />
 
-  <!-- 按钮组件 -->
-  <ButtonComponent :selected-rows="selectedRows" />
+      <!-- 按钮组件 -->
+      <ButtonComponent :selected-rows="selectedRows" />
+    </div>
 
-  <!-- 表信息组件 -->
-  <TableInformationComponent
-    ref="tableInfoRef"
-    :search-keyword="searchKeyword"
-    @loaded="onDataLoaded"
-    @view-detail="handleViewDetail"
-    @selection-change="handleSelectionChange"
-  />
+    <!-- 可滚动的表格区域 -->
+    <div class="scrollable-content">
+      <!-- 表信息组件 -->
+      <TableInformationComponent
+        ref="tableInfoRef"
+        :search-keyword="searchKeyword"
+        @loaded="onDataLoaded"
+        @view-detail="handleViewDetail"
+        @selection-change="handleSelectionChange"
+      />
+    </div>
 
-  <!-- 表格详情组件 -->
-  <TableDetailComponent ref="tableDetailRef" />
+    <!-- 表格详情组件 -->
+    <TableDetailComponent ref="tableDetailRef" />
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -76,4 +84,26 @@
   });
 </script>
 
-<style scoped></style>
+<style scoped>
+  .data-management-view {
+    background-color: rgba(15, 61, 118, 0.8);
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .fixed-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: rgba(15, 61, 118, 0.8);
+    flex-shrink: 0;
+  }
+
+  .scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+  }
+</style>
