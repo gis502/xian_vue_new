@@ -55,10 +55,12 @@ export class EntityManager {
       const entity = new Entity({
         id,
         position: this.#convertPosition(position),
-        ...attributes,
       });
 
       this.#configureEntityGraphics(entity, entityOptions);
+
+      this.#applyAttributesToEntity(entity, attributes, entityOptions.type);
+
       this.#viewer.entities.add(entity);
       this.#storeEntityId(id, isDefault);
       entities.push(entity);
@@ -82,10 +84,11 @@ export class EntityManager {
     const entity = new Entity({
       id,
       position: this.#convertPosition(position),
-      ...attributes,
     });
 
     this.#configureEntityGraphics(entity, entityOptions);
+
+    this.#applyAttributesToEntity(entity, attributes, entityOptions.type);
 
     this.#viewer.entities.add(entity);
     this.#storeEntityId(id, isDefault);
@@ -248,6 +251,44 @@ export class EntityManager {
       }
       default:
         throw new Error(`不支持的实体类型：${options.type}`);
+    }
+  }
+
+  /**
+   * 将属性应用到实体
+   * @param entity 实体实例
+   * @param attributes 属性对象
+   * @private
+   */
+  #applyAttributesToEntity(entity: Entity, attributes: Record<string, unknown>, entityType?: string): void {
+    if (!attributes || Object.keys(attributes).length === 0) {
+      return;
+    }
+
+    let targetGraphics: any = null;
+
+    if (entityType === 'point' && entity.point) {
+      targetGraphics = entity.point;
+    } else if (entityType === 'billboard' && entity.billboard) {
+      targetGraphics = entity.billboard;
+    } else if (entityType === 'polyline' && entity.polyline) {
+      targetGraphics = entity.polyline;
+    } else if (entityType === 'polygon' && entity.polygon) {
+      targetGraphics = entity.polygon;
+    }
+
+    if (targetGraphics) {
+      Object.entries(attributes).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          (targetGraphics as any)[key] = value;
+        }
+      });
+    } else {
+      Object.entries(attributes).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          (entity as any)[key] = value;
+        }
+      });
     }
   }
 
