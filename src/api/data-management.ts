@@ -26,14 +26,14 @@ export interface TableColumn {
   /** 是否可空 */
   is_nullable?: string;
   /** 默认值 */
-  column_default?: any;
+  column_default?: string | number | boolean | null;
 }
 
 /**
  * 表数据记录接口
  */
 export interface TableDataRecord {
-  [key: string]: any;
+  [key: string]: string | number | boolean | null | undefined;
 }
 
 /**

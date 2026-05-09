@@ -24,10 +24,11 @@
     Download
   } from '@element-plus/icons-vue';
   import { ElMessage } from 'element-plus';
+  import type { TableInfo } from '@/api/data-management';
 
   // 接收选中的行数据
   const props = defineProps<{
-    selectedRows?: any[]
+    selectedRows?: TableInfo[]
   }>();
 
   // 定义事件
