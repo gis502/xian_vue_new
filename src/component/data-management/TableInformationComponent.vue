@@ -15,6 +15,7 @@
       <el-table
         :data="filteredTables"
         style="width: 100%"
+        height="100%"
         v-loading="loading"
         empty-text="暂无数据表"
         @row-click="handleRowClick"
@@ -128,18 +129,22 @@
 
 <style scoped>
   .table-information-container {
-    padding: 20px;
     background-color: rgba(15, 61, 118, 0.8);
     border-radius: 8px;
     margin: 0 20px 20px 20px;
     color: white;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 
   .table-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    padding: 20px;
+    flex-shrink: 0;
   }
 
   .table-header h3 {
@@ -148,7 +153,9 @@
   }
 
   .table-content {
-    min-height: 300px;
+    flex: 1;
+    overflow: hidden;
+    padding: 0 20px 20px 20px;
   }
 
   /* 高亮样式 */
@@ -189,6 +196,4 @@
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.3);
   }
-
-  /* 操作列样式已删除 */
 </style>

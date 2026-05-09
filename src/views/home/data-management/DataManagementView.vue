@@ -1,7 +1,7 @@
 <!-- 数据管理组件 -->
 <template>
   <div class="data-management-view">
-    <!-- 固定头部区域（搜索+按钮） -->
+    <!-- 固定头部区域 -->
     <div class="fixed-header">
       <!-- 搜索组件 -->
       <SearchComponent @search="handleSearch" @clear="handleClear" />
@@ -10,17 +10,14 @@
       <ButtonComponent :selected-rows="selectedRows" />
     </div>
 
-    <!-- 可滚动的表格区域 -->
-    <div class="scrollable-content">
-      <!-- 表信息组件 -->
-      <TableInformationComponent
-        ref="tableInfoRef"
-        :search-keyword="searchKeyword"
-        @loaded="onDataLoaded"
-        @view-detail="handleViewDetail"
-        @selection-change="handleSelectionChange"
-      />
-    </div>
+    <!-- 表信息组件（内部包含可滚动的表格） -->
+    <TableInformationComponent
+      ref="tableInfoRef"
+      :search-keyword="searchKeyword"
+      @loaded="onDataLoaded"
+      @view-detail="handleViewDetail"
+      @selection-change="handleSelectionChange"
+    />
 
     <!-- 表格详情组件 -->
     <TableDetailComponent ref="tableDetailRef" />
@@ -92,18 +89,11 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    padding-top: 10px;
   }
 
   .fixed-header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background-color: rgba(15, 61, 118, 0.8);
     flex-shrink: 0;
-  }
-
-  .scrollable-content {
-    flex: 1;
-    overflow-y: auto;
+    background-color: rgba(15, 61, 118, 0.8);
   }
 </style>
