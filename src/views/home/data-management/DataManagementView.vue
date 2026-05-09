@@ -64,8 +64,8 @@
   };
 
   // 处理查看表详情
-  const handleViewDetail = (tableName: string) => {
-    tableDetailRef.value?.showDialog(tableName);
+  const handleViewDetail = (tableName: string, rowCount?: number) => {
+    tableDetailRef.value?.showDialog(tableName, rowCount);
   };
 
   // 组件挂载时的处理

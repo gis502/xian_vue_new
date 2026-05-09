@@ -1,6 +1,7 @@
 <template>
+  <!-- 有数据时的弹窗 -->
   <el-dialog
-    v-model="dialogVisible"
+    v-model="hasDataDialogVisible"
     :title="`表详情 - ${tableName}`"
     width="90%"
     :close-on-click-modal="false"
@@ -15,14 +16,13 @@
         </div>
 
         <el-table
-          v-if="!isEmptyTable"
           v-loading="loading"
           :data="tableData"
           style="width: 100%"
           max-height="500"
           border
           stripe
-          empty-text="暂无数据"
+          :empty-text="loading ? '加载中...' : '暂无数据'"
         >
           <el-table-column
             v-for="col in columns"
@@ -55,36 +55,50 @@
             </template>
           </el-table-column>
         </el-table>
-
-        <!-- 空表提示 -->
-        <div v-else class="empty-table-hint">
-          暂无数据
-        </div>
       </div>
     </div>
 
     <template #footer>
-      <el-button @click="dialogVisible = false">关闭</el-button>
+      <el-button @click="hasDataDialogVisible = false">关闭</el-button>
+    </template>
+  </el-dialog>
+
+  <!-- 无数据时的弹窗 -->
+  <el-dialog
+    v-model="noDataDialogVisible"
+    :title="`表详情 - ${tableName}`"
+    width="90%"
+    :close-on-click-modal="false"
+  >
+    <div class="empty-table-container">
+      <div class="empty-content">
+        <el-empty
+          description="暂无数据"
+          :image-size="120"
+        />
+      </div>
+    </div>
+
+    <template #footer>
+      <el-button @click="noDataDialogVisible = false">关闭</el-button>
     </template>
   </el-dialog>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { ElMessage, ElMessageBox } from 'element-plus';
+  import { ElMessage, ElMessageBox, ElEmpty } from 'element-plus';
   import { Edit, Delete } from '@element-plus/icons-vue';
   import { getTableData } from '@/api/data-management';
   import type { TableColumn, TableDataRecord } from '@/api/data-management';
 
-  // 对话框可见性
-  const dialogVisible = ref(false);
+  // 两个独立的对话框状态
+  const hasDataDialogVisible = ref(false);
+  const noDataDialogVisible = ref(false);
   const loading = ref(false);
 
   // 表名
   const tableName = ref('');
-
-  // 是否为空表
-  const isEmptyTable = ref(false);
 
   // 字段信息
   const columns = ref<TableColumn[]>([]);
@@ -95,26 +109,22 @@
   // 总记录数
   const total = ref(0);
 
-  // 显示详情对话框
+  // 显示详情对话框 - 根据 rowCount 决定使用哪个弹窗
   const showDialog = async (name: string, rowCount?: number) => {
     tableName.value = name;
-    dialogVisible.value = true;
 
-    // 根据 rowCount 判断：为 0 直接显示空表，不调用后端
+    // 直接根据 rowCount 判断，不调用任何接口
     if (rowCount === 0) {
-      isEmptyTable.value = true;
-      total.value = 0;
-      columns.value = [];
-      tableData.value = [];
-      return;
+      // 无数据：直接显示空表弹窗
+      noDataDialogVisible.value = true;
+    } else {
+      // 有数据：显示数据弹窗并加载数据
+      hasDataDialogVisible.value = true;
+      await loadTableData(name);
     }
-
-    // 有数据才调用后端接口
-    isEmptyTable.value = false;
-    await loadTableData(name);
   };
 
-  // 加载表数据
+  // 加载表数据（仅在有数据时调用）
   const loadTableData = async (name: string) => {
     loading.value = true;
     try {
@@ -140,7 +150,6 @@
     columns.value = [];
     tableData.value = [];
     total.value = 0;
-    isEmptyTable.value = false;
   };
 
   // 根据数据类型设置列宽度
@@ -217,6 +226,17 @@
     font-size: 14px;
   }
 
+  .empty-table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
+
+  .empty-content {
+    width: 100%;
+  }
+
   :deep(.el-table) {
     font-size: 13px;
   }
@@ -231,17 +251,5 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .empty-table-hint {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 200px;
-    color: #999;
-    font-size: 14px;
-    background-color: #f5f7fa;
-    border-radius: 4px;
-    border: 1px dashed #e4e7ed;
   }
 </style>
