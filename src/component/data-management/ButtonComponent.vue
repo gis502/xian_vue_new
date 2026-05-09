@@ -16,31 +16,63 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import {
-    Refresh,
-    Download,
-    Upload
+    Delete,
+    Plus,
+    Edit,
+    Download
   } from '@element-plus/icons-vue';
   import { ElMessage } from 'element-plus';
 
+  // 接收选中的行数据
+  const props = defineProps<{
+    selectedRows?: any[]
+  }>();
+
   // 定义事件
   const emit = defineEmits<{
-    refresh: []
+    deleteSelected: []
+    addData: []
+    modifySelected: []
     export: []
-    import: []
   }>();
+
+  // 按钮是否禁用
+  const isSelectedEmpty = computed(() => {
+    return !props.selectedRows || props.selectedRows.length === 0;
+  });
 
   // 按钮配置
   const buttons = ref([
     {
-      name: '刷新列表',
+      name: '删除选中',
+      type: 'danger',
+      icon: Delete,
+      disabled: isSelectedEmpty,
+      click: () => {
+        ElMessage.success(`删除 ${props.selectedRows?.length} 条选中数据`);
+        emit('deleteSelected');
+      }
+    },
+    {
+      name: '新增数据',
       type: 'primary',
-      icon: Refresh,
+      icon: Plus,
       disabled: false,
       click: () => {
-        ElMessage.success('刷新列表');
-        emit('refresh');
+        ElMessage.info('新增数据功能待实现');
+        emit('addData');
+      }
+    },
+    {
+      name: '修改选中',
+      type: 'warning',
+      icon: Edit,
+      disabled: isSelectedEmpty,
+      click: () => {
+        ElMessage.success(`修改 ${props.selectedRows?.length} 条选中数据`);
+        emit('modifySelected');
       }
     },
     {
@@ -51,16 +83,6 @@
       click: () => {
         ElMessage.info('导出数据功能待实现');
         emit('export');
-      }
-    },
-    {
-      name: '导入数据',
-      type: 'warning',
-      icon: Upload,
-      disabled: false,
-      click: () => {
-        ElMessage.info('导入数据功能待实现');
-        emit('import');
       }
     }
   ]);
