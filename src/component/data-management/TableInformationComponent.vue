@@ -2,13 +2,23 @@
   <div class="table-information-container">
     <div class="table-header">
       <h3>数据表信息</h3>
-      <el-button
-        type="primary"
-        :loading="loading"
-        @click="loadAllTables"
-      >
-        刷新表列表
-      </el-button>
+      <div class="header-buttons">
+        <el-button
+          type="info"
+          :icon="RefreshLeft"
+          :disabled="!hasDeletedData"
+          @click="handleRestore"
+        >
+          还原数据
+        </el-button>
+        <el-button
+          type="primary"
+          :loading="loading"
+          @click="loadAllTables"
+        >
+          刷新表列表
+        </el-button>
+      </div>
     </div>
 
     <div class="table-content">
@@ -53,7 +63,8 @@
 
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue';
-  import { ElMessage } from 'element-plus';
+  import { ElMessage, ElMessageBox } from 'element-plus';
+  import { RefreshLeft } from '@element-plus/icons-vue';
   import { getAllTables } from '@/api/data-management';
   import type { TableInfo } from '@/api/data-management';
 
@@ -71,8 +82,15 @@
 
   // 表数据
   const tables = ref<TableInfo[]>([]);
+  const originalTables = ref<TableInfo[]>([]);
+  const deletedTables = ref<TableInfo[]>([]);
   const loading = ref(false);
   const tableRef = ref();
+
+  // 是否有已删除的数据
+  const hasDeletedData = computed(() => {
+    return deletedTables.value.length > 0;
+  });
 
   // 计算过滤后的表格数据
   const filteredTables = computed(() => {
@@ -105,7 +123,10 @@
     try {
       const response = await getAllTables();
       if (response.code === 200) {
-        tables.value = response.data || [];
+        const data = response.data || [];
+        originalTables.value = JSON.parse(JSON.stringify(data));
+        tables.value = data;
+        deletedTables.value = [];
         ElMessage.success('表列表加载成功');
         emit('loaded');
       } else {
@@ -116,6 +137,38 @@
       ElMessage.error('加载表列表失败');
     } finally {
       loading.value = false;
+    }
+  };
+
+  // 删除表
+  const deleteTables = (tablesToDelete: TableInfo[]) => {
+    tables.value = tables.value.filter(table => {
+      const shouldDelete = tablesToDelete.some(t => t.tableName === table.tableName);
+      if (shouldDelete) {
+        deletedTables.value.push(table);
+      }
+      return !shouldDelete;
+    });
+  };
+
+  // 还原数据
+  const handleRestore = async () => {
+    try {
+      await ElMessageBox.confirm(
+        `确定要还原 ${deletedTables.value.length} 条已删除的数据吗？`,
+        '还原确认',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info'
+        }
+      );
+
+      tables.value = [...tables.value, ...deletedTables.value];
+      deletedTables.value = [];
+      ElMessage.success('数据还原成功');
+    } catch {
+      // 用户取消操作
     }
   };
 
@@ -142,7 +195,8 @@
 
   // 暴露方法给父组件
   defineExpose({
-    clearSelection
+    clearSelection,
+    deleteTables
   });
 </script>
 
@@ -163,6 +217,11 @@
     align-items: center;
     padding: 20px;
     flex-shrink: 0;
+  }
+
+  .header-buttons {
+    display: flex;
+    gap: 10px;
   }
 
   .table-header h3 {
