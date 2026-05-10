@@ -83,13 +83,46 @@
       <el-button @click="noDataDialogVisible = false">关闭</el-button>
     </template>
   </el-dialog>
+
+  <!-- 修改数据对话框 -->
+  <el-dialog
+    v-model="editDialogVisible"
+    :title="`修改数据 - ${tableName}`"
+    width="600px"
+    :close-on-click-modal="false"
+  >
+    <el-form :model="editForm" label-width="120px" v-loading="editLoading">
+      <el-form-item
+        v-for="col in columns"
+        :key="col.column_name"
+        :label="col.column_name"
+      >
+        <!-- 主键字段不可修改 -->
+        <el-input
+          v-if="isPrimaryKey(col.column_name)"
+          :value="editForm[col.column_name]"
+          disabled
+        />
+        <!-- 普通字段可修改 -->
+        <el-input
+          v-else
+          v-model="editForm[col.column_name]"
+          :placeholder="`请输入${col.column_name}`"
+        />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <el-button @click="editDialogVisible = false">取消</el-button>
+      <el-button type="primary" @click="confirmEdit" :loading="editLoading">确定</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { ElMessage, ElMessageBox, ElEmpty } from 'element-plus';
   import { Edit, Delete } from '@element-plus/icons-vue';
-  import { getTableData } from '@/api/data-management';
+  import { getTableData, updateTableData } from '@/api/data-management';
   import type { TableColumn, TableDataRecord } from '@/api/data-management';
 
   // 两个独立的对话框状态
@@ -109,22 +142,30 @@
   // 总记录数
   const total = ref(0);
 
+  // 修改对话框
+  const editDialogVisible = ref(false);
+  const editLoading = ref(false);
+  const editForm = ref<TableDataRecord>({});
+  const editRowOriginal = ref<TableDataRecord>({});
+
+  // 获取主键字段名（简化处理，假设第一个字段为主键）
+  const isPrimaryKey = (columnName: string): boolean => {
+    return columns.value.length > 0 && columns.value[0].column_name === columnName;
+  };
+
   // 显示详情对话框 - 根据 rowCount 决定使用哪个弹窗
   const showDialog = async (name: string, rowCount?: number) => {
     tableName.value = name;
 
-    // 直接根据 rowCount 判断，不调用任何接口
     if (rowCount === 0) {
-      // 无数据：直接显示空表弹窗
       noDataDialogVisible.value = true;
     } else {
-      // 有数据：显示数据弹窗并加载数据
       hasDataDialogVisible.value = true;
       await loadTableData(name);
     }
   };
 
-  // 加载表数据（仅在有数据时调用）
+  // 加载表数据
   const loadTableData = async (name: string) => {
     loading.value = true;
     try {
@@ -169,9 +210,55 @@
 
   // 修改按钮点击事件
   const handleEdit = (row: TableDataRecord) => {
-    console.log('修改行数据:', row);
-    ElMessage.info('修改功能待实现');
-    // TODO: 实现修改逻辑
+    editRowOriginal.value = { ...row };
+    editForm.value = { ...row };
+    editDialogVisible.value = true;
+  };
+
+  // 确认修改
+  const confirmEdit = async () => {
+    // 构建更新数据（只更新修改过的字段）
+    const updateData: Record<string, any> = {};
+    for (const key in editForm.value) {
+      if (editForm.value[key] !== editRowOriginal.value[key]) {
+        updateData[key] = editForm.value[key];
+      }
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      ElMessage.warning('没有修改任何数据');
+      return;
+    }
+
+    // 构建WHERE条件（使用主键）
+    const primaryKey = columns.value[0]?.column_name;
+    if (!primaryKey || !editRowOriginal.value[primaryKey]) {
+      ElMessage.error('无法确定主键字段');
+      return;
+    }
+
+    const whereConditions = {
+      [primaryKey]: editRowOriginal.value[primaryKey]
+    };
+
+    try {
+      editLoading.value = true;
+      const response = await updateTableData(tableName.value, whereConditions, updateData);
+
+      if (response.code === 200) {
+        ElMessage.success('修改成功');
+        editDialogVisible.value = false;
+        // 重新加载数据
+        await loadTableData(tableName.value);
+      } else {
+        ElMessage.error(response.message || '修改失败');
+      }
+    } catch (error) {
+      console.error('修改数据失败:', error);
+      ElMessage.error('修改数据失败');
+    } finally {
+      editLoading.value = false;
+    }
   };
 
   // 删除按钮点击事件
@@ -246,7 +333,6 @@
     color: #333 !important;
   }
 
-  /* 操作列按钮样式 */
   :deep(.el-table .cell) {
     display: flex;
     align-items: center;

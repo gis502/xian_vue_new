@@ -69,3 +69,42 @@ export const getTableData = (tableName: string, limit?: number): Promise<ApiResp
     params: limit ? { limit } : {}
   })
 }
+
+/**
+ * 修改表信息
+ * @param oldTableName - 原表名
+ * @param newTableName - 新表名（可选）
+ * @param newComment - 新表描述（可选）
+ * @returns 操作结果
+ */
+export const updateTableInfo = (
+  oldTableName: string,
+  newTableName?: string,
+  newComment?: string
+): Promise<ApiResponse<void>> => {
+  return httpInstance.put('/api/table/update-table-info', null, {
+    params: {
+      oldTableName,
+      ...(newTableName && { newTableName }),
+      ...(newComment && { newComment })
+    }
+  })
+}
+
+/**
+ * 修改表数据记录
+ * @param tableName - 表名
+ * @param whereConditions - WHERE条件
+ * @param updateData - 更新数据
+ * @returns 操作结果
+ */
+export const updateTableData = (
+  tableName: string,
+  whereConditions: Record<string, any>,
+  updateData: Record<string, any>
+): Promise<ApiResponse<void>> => {
+  return httpInstance.put(`/api/table/update-data/${tableName}`, {
+    whereConditions,
+    updateData
+  })
+}

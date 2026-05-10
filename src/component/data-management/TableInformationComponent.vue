@@ -13,6 +13,14 @@
         </el-button>
         <el-button
           type="primary"
+          :icon="Edit"
+          :disabled="isModifyDisabled"
+          @click="handleModifyTableInfo"
+        >
+          修改表信息
+        </el-button>
+        <el-button
+          type="primary"
           :loading="loading"
           @click="loadAllTables"
         >
@@ -58,14 +66,35 @@
         />
       </el-table>
     </div>
+
+    <!-- 修改表信息对话框 -->
+    <el-dialog
+      v-model="modifyDialogVisible"
+      title="修改表信息"
+      width="500px"
+      :close-on-click-modal="false"
+    >
+      <el-form :model="modifyForm" label-width="80px">
+        <el-form-item label="表名">
+          <el-input v-model="modifyForm.tableName" placeholder="留空则不修改表名" />
+        </el-form-item>
+        <el-form-item label="表描述">
+          <el-input v-model="modifyForm.tableComment" type="textarea" placeholder="留空则不修改表描述" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="modifyDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmModify">确定</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
-  import { RefreshLeft } from '@element-plus/icons-vue';
-  import { getAllTables } from '@/api/data-management';
+  import { RefreshLeft, Edit } from '@element-plus/icons-vue';
+  import { getAllTables, updateTableInfo } from '@/api/data-management';
   import type { TableInfo } from '@/api/data-management';
 
   // 定义事件
@@ -87,9 +116,22 @@
   const loading = ref(false);
   const tableRef = ref();
 
+  // 修改对话框
+  const modifyDialogVisible = ref(false);
+  const modifyForm = ref({
+    tableName: '',
+    tableComment: ''
+  });
+  const selectedTable = ref<TableInfo | null>(null);
+
   // 是否有已删除的数据
   const hasDeletedData = computed(() => {
     return deletedTables.value.length > 0;
+  });
+
+  // 修改按钮是否禁用（只能选中一条）
+  const isModifyDisabled = computed(() => {
+    return tables.value.length === 0;
   });
 
   // 计算过滤后的表格数据
@@ -172,6 +214,60 @@
     }
   };
 
+  // 打开修改表信息对话框
+  const handleModifyTableInfo = () => {
+    if (!selectedTable.value) {
+      ElMessage.warning('请先选中一条要修改的表');
+      return;
+    }
+    modifyForm.value = {
+      tableName: '',
+      tableComment: selectedTable.value.tableComment || ''
+    };
+    modifyDialogVisible.value = true;
+  };
+
+  // 确认修改表信息
+  const confirmModify = async () => {
+    if (!selectedTable.value) return;
+
+    if (!modifyForm.value.tableName && !modifyForm.value.tableComment) {
+      ElMessage.warning('请至少修改一项');
+      return;
+    }
+
+    try {
+      await ElMessageBox.confirm(
+        `确定要修改表 "${selectedTable.value.tableName}" 的信息吗？`,
+        '确认修改',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      );
+
+      const response = await updateTableInfo(
+        selectedTable.value.tableName,
+        modifyForm.value.tableName || undefined,
+        modifyForm.value.tableComment || undefined
+      );
+
+      if (response.code === 200) {
+        ElMessage.success('修改成功');
+        modifyDialogVisible.value = false;
+        // 重新加载表列表
+        await loadAllTables();
+      } else {
+        ElMessage.error(response.message || '修改失败');
+      }
+    } catch (error: any) {
+      if (error !== 'cancel') {
+        console.error('修改表信息失败:', error);
+      }
+    }
+  };
+
   // 行点击事件 - 显示表详情
   const handleRowClick = (row: TableInfo) => {
     console.log('点击行查看表详情:', row);
@@ -181,11 +277,18 @@
   // 选中变化事件
   const handleSelectionChange = (rows: TableInfo[]) => {
     emit('selectionChange', rows);
+    // 保存当前选中的表
+    if (rows.length === 1) {
+      selectedTable.value = rows[0];
+    } else {
+      selectedTable.value = null;
+    }
   };
 
   // 清除选中
   const clearSelection = () => {
     tableRef.value?.clearSelection();
+    selectedTable.value = null;
   };
 
   // 组件挂载时加载表列表
@@ -272,5 +375,13 @@
     );
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  :deep(.el-table__empty-text) {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  :deep(.el-table__inner-wrapper::before) {
+    display: none;
   }
 </style>
