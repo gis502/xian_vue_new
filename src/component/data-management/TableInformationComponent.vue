@@ -130,8 +130,7 @@
 <style scoped>
   .table-information-container {
     background-color: rgba(15, 61, 118, 0.8);
-    border-radius: 8px;
-    margin: 0 20px 20px 20px;
+    margin: 0;
     color: white;
     flex: 1;
     display: flex;

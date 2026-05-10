@@ -93,7 +93,7 @@
   .button-component-container {
     padding: 10px 20px;
     background-color: rgba(15, 61, 118, 0.8);
-    margin: 0 20px;
+    margin: 0;
   }
 
   .button-group {

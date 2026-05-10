@@ -46,8 +46,7 @@
   .search-component-container {
     padding: 15px 20px;
     background-color: rgba(15, 61, 118, 0.8);
-    border-radius: 8px;
-    margin: 40px 20px 0 20px;
+    margin: 0;
   }
 
   .search-box {
