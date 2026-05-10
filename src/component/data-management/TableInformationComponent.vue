@@ -13,14 +13,17 @@
 
     <div class="table-content">
       <el-table
+        ref="tableRef"
         :data="filteredTables"
         style="width: 100%"
         height="100%"
         v-loading="loading"
         empty-text="暂无数据表"
         @row-click="handleRowClick"
+        @selection-change="handleSelectionChange"
         :row-style="{ cursor: 'pointer' }"
       >
+        <el-table-column type="selection" width="55" />
         <el-table-column
           prop="tableName"
           label="表名"
@@ -58,6 +61,7 @@
   const emit = defineEmits<{
     loaded: []
     viewDetail: [tableName: string, rowCount?: number]
+    selectionChange: [rows: TableInfo[]]
   }>();
 
   // 定义props
@@ -68,6 +72,7 @@
   // 表数据
   const tables = ref<TableInfo[]>([]);
   const loading = ref(false);
+  const tableRef = ref();
 
   // 计算过滤后的表格数据
   const filteredTables = computed(() => {
@@ -120,10 +125,24 @@
     emit('viewDetail', row.tableName, row.rowCount);
   };
 
+  // 选中变化事件
+  const handleSelectionChange = (rows: TableInfo[]) => {
+    emit('selectionChange', rows);
+  };
+
+  // 清除选中
+  const clearSelection = () => {
+    tableRef.value?.clearSelection();
+  };
 
   // 组件挂载时加载表列表
   onMounted(() => {
     loadAllTables();
+  });
+
+  // 暴露方法给父组件
+  defineExpose({
+    clearSelection
   });
 </script>
 
