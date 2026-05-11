@@ -13,14 +13,6 @@
         </el-button>
         <el-button
           type="primary"
-          :icon="Edit"
-          :disabled="isModifyDisabled"
-          @click="handleModifyTableInfo"
-        >
-          修改表信息
-        </el-button>
-        <el-button
-          type="primary"
           :loading="loading"
           @click="loadAllTables"
         >
@@ -93,7 +85,7 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
-  import { RefreshLeft, Edit } from '@element-plus/icons-vue';
+  import { RefreshLeft } from '@element-plus/icons-vue';
   import { getAllTables, updateTableInfo } from '@/api/data-management';
   import type { TableInfo } from '@/api/data-management';
 
@@ -127,11 +119,6 @@
   // 是否有已删除的数据
   const hasDeletedData = computed(() => {
     return deletedTables.value.length > 0;
-  });
-
-  // 修改按钮是否禁用（只能选中一条）
-  const isModifyDisabled = computed(() => {
-    return tables.value.length === 0;
   });
 
   // 计算过滤后的表格数据
@@ -214,8 +201,31 @@
     }
   };
 
-  // 打开修改表信息对话框
-  const handleModifyTableInfo = () => {
+  // 行点击事件 - 显示表详情
+  const handleRowClick = (row: TableInfo) => {
+    console.log('点击行查看表详情:', row);
+    emit('viewDetail', row.tableName, row.rowCount);
+  };
+
+  // 选中变化事件
+  const handleSelectionChange = (rows: TableInfo[]) => {
+    emit('selectionChange', rows);
+    // 保存当前选中的表
+    if (rows.length === 1) {
+      selectedTable.value = rows[0];
+    } else {
+      selectedTable.value = null;
+    }
+  };
+
+  // 清除选中
+  const clearSelection = () => {
+    tableRef.value?.clearSelection();
+    selectedTable.value = null;
+  };
+
+  // 打开修改表信息对话框（由父组件调用）
+  const handleModifySelected = () => {
     if (!selectedTable.value) {
       ElMessage.warning('请先选中一条要修改的表');
       return;
@@ -261,34 +271,11 @@
       } else {
         ElMessage.error(response.message || '修改失败');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error !== 'cancel') {
         console.error('修改表信息失败:', error);
       }
     }
-  };
-
-  // 行点击事件 - 显示表详情
-  const handleRowClick = (row: TableInfo) => {
-    console.log('点击行查看表详情:', row);
-    emit('viewDetail', row.tableName, row.rowCount);
-  };
-
-  // 选中变化事件
-  const handleSelectionChange = (rows: TableInfo[]) => {
-    emit('selectionChange', rows);
-    // 保存当前选中的表
-    if (rows.length === 1) {
-      selectedTable.value = rows[0];
-    } else {
-      selectedTable.value = null;
-    }
-  };
-
-  // 清除选中
-  const clearSelection = () => {
-    tableRef.value?.clearSelection();
-    selectedTable.value = null;
   };
 
   // 组件挂载时加载表列表
@@ -299,7 +286,8 @@
   // 暴露方法给父组件
   defineExpose({
     clearSelection,
-    deleteTables
+    deleteTables,
+    handleModifySelected
   });
 </script>
 

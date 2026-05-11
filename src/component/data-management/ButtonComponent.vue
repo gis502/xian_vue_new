@@ -97,7 +97,6 @@
       }
       return;
     }
-    ElMessage.success(`修改选中的数据`);
     emit('modifySelected');
   };
 

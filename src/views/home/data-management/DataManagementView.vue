@@ -1,4 +1,3 @@
-<!-- 数据管理组件 -->
 <template>
   <div class="data-management-view">
     <!-- 固定头部区域 -->
@@ -7,7 +6,11 @@
       <SearchComponent @search="handleSearch" @clear="handleClear" />
 
       <!-- 按钮组件 -->
-      <ButtonComponent :selected-rows="selectedRows" @delete-selected="handleDeleteSelected" />
+      <ButtonComponent
+        :selected-rows="selectedRows"
+        @delete-selected="handleDeleteSelected"
+        @modify-selected="handleModifySelected"
+      />
     </div>
 
     <!-- 表信息组件（内部包含可滚动的表格） -->
@@ -31,8 +34,8 @@
   import TableInformationComponent from '@/component/data-management/TableInformationComponent.vue';
   import { onMounted, ref } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
-  import { useStatusStore } from '@/stores/useStatusStore';
   import type { TableInfo } from '@/api/data-management';
+  import { useStatusStore } from '@/stores/useStatusStore';
 
   // 初始化状态store
   const statusStore = useStatusStore();
@@ -89,6 +92,19 @@
     } catch {
       // 用户取消操作
     }
+  };
+
+  // 处理修改选中
+  const handleModifySelected = () => {
+    if (!selectedRows.value || selectedRows.value.length !== 1) {
+      if (!selectedRows.value || selectedRows.value.length === 0) {
+        ElMessage.warning('请选中一条数据');
+      } else {
+        ElMessage.warning('只能选中一条数据进行修改');
+      }
+      return;
+    }
+    tableInfoRef.value?.handleModifySelected();
   };
 
   // 数据加载完成回调
