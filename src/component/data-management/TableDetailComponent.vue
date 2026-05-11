@@ -257,7 +257,7 @@
   // 确认修改
   const confirmEdit = async () => {
     // 构建更新数据（只更新修改过的字段）
-    const updateData: Record<string, any> = {};
+    const updateData: Record<string, unknown> = {};
     for (const key in editForm.value) {
       if (editForm.value[key] !== editRowOriginal.value[key]) {
         updateData[key] = editForm.value[key];
