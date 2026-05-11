@@ -55,6 +55,19 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <!-- 分页 -->
+        <div class="pagination-container">
+          <el-pagination
+            v-model:current-page="currentPage"
+            v-model:page-size="pageSize"
+            :page-sizes="[10, 20, 50, 100]"
+            :total="total"
+            layout="total, sizes, prev, pager, next, jumper"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
+        </div>
       </div>
     </div>
 
@@ -142,6 +155,10 @@
   // 总记录数
   const total = ref(0);
 
+  // 分页参数
+  const currentPage = ref(1);
+  const pageSize = ref(10);
+
   // 修改对话框
   const editDialogVisible = ref(false);
   const editLoading = ref(false);
@@ -156,6 +173,9 @@
   // 显示详情对话框 - 根据 rowCount 决定使用哪个弹窗
   const showDialog = async (name: string, rowCount?: number) => {
     tableName.value = name;
+    // 重置分页
+    currentPage.value = 1;
+    pageSize.value = 10;
 
     if (rowCount === 0) {
       noDataDialogVisible.value = true;
@@ -172,8 +192,12 @@
       const response = await getTableData(name);
       if (response.code === 200 && response.data) {
         columns.value = response.data.columns || [];
-        tableData.value = response.data.data || [];
-        total.value = response.data.total || 0;
+        // 根据分页参数截取数据
+        const startIndex = (currentPage.value - 1) * pageSize.value;
+        const endIndex = startIndex + pageSize.value;
+        const allData = response.data.data || [];
+        tableData.value = allData.slice(startIndex, endIndex);
+        total.value = response.data.total || allData.length;
         ElMessage.success('表数据加载成功');
       } else {
         ElMessage.error(response.message || '获取表数据失败');
@@ -191,6 +215,8 @@
     columns.value = [];
     tableData.value = [];
     total.value = 0;
+    currentPage.value = 1;
+    pageSize.value = 10;
   };
 
   // 根据数据类型设置列宽度
@@ -206,6 +232,19 @@
       return 200;
     }
     return 150;
+  };
+
+  // 每页条数变化
+  const handleSizeChange = (val: number) => {
+    pageSize.value = val;
+    currentPage.value = 1; // 改变每页条数时重置到第一页
+    loadTableData(tableName.value);
+  };
+
+  // 页码变化
+  const handleCurrentChange = (val: number) => {
+    currentPage.value = val;
+    loadTableData(tableName.value);
   };
 
   // 修改按钮点击事件
@@ -311,6 +350,13 @@
   .record-count {
     color: #666;
     font-size: 14px;
+  }
+
+  .pagination-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
   }
 
   .empty-table-container {
