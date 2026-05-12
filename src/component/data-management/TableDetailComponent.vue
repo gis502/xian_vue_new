@@ -189,15 +189,11 @@
   const loadTableData = async (name: string) => {
     loading.value = true;
     try {
-      const response = await getTableData(name);
+      const response = await getTableData(name, currentPage.value, pageSize.value);
       if (response.code === 200 && response.data) {
         columns.value = response.data.columns || [];
-        // 根据分页参数截取数据
-        const startIndex = (currentPage.value - 1) * pageSize.value;
-        const endIndex = startIndex + pageSize.value;
-        const allData = response.data.data || [];
-        tableData.value = allData.slice(startIndex, endIndex);
-        total.value = response.data.total || allData.length;
+        tableData.value = response.data.data || [];
+        total.value = response.data.total || 0;
         ElMessage.success('表数据加载成功');
       } else {
         ElMessage.error(response.message || '获取表数据失败');

@@ -61,12 +61,17 @@ export const getAllTables = (): Promise<ApiResponse<TableInfo[]>> => {
 /**
  * 获取表的具体数据内容
  * @param tableName - 表名
- * @param limit - 限制返回的记录数（可选，默认不限制）
+ * @param page - 页码
+ * @param pageSize - 每页条数
  * @returns 表详情（包含字段信息和数据记录）
  */
-export const getTableData = (tableName: string, limit?: number): Promise<ApiResponse<TableDetailResponse>> => {
+export const getTableData = (
+  tableName: string,
+  page: number = 1,
+  pageSize: number = 10
+): Promise<ApiResponse<TableDetailResponse>> => {
   return httpInstance.get(`/api/table/data/${tableName}`, {
-    params: limit ? { limit } : {}
+    params: { page, pageSize }
   })
 }
 
@@ -100,8 +105,8 @@ export const updateTableInfo = (
  */
 export const updateTableData = (
   tableName: string,
-  whereConditions: Record<string, any>,
-  updateData: Record<string, any>
+  whereConditions: Record<string, unknown>,
+  updateData: Record<string, unknown>
 ): Promise<ApiResponse<void>> => {
   return httpInstance.put(`/api/table/update-data/${tableName}`, {
     whereConditions,
