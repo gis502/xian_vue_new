@@ -1,9 +1,8 @@
-NEW_FILE_CODE;
 /// <reference types="vite/client" />
 
 declare module '*.vue' {
   import type { DefineComponent } from 'vue';
-  const component: DefineComponent<{}, {}, any>;
+  const component: DefineComponent<object, object, unknown>;
   export default component;
 }
 
@@ -12,6 +11,7 @@ interface ImportMetaEnv {
   readonly VITE_BACKEND_BASE_URL: string;
   readonly START_PORT: number;
   readonly VITE_GEOSERVER_BASE_URL: string;
+  readonly VITE_WEBSOCKET_URL: string;
   readonly MODE: string;
   readonly DEV: boolean;
   readonly PROD: boolean;
