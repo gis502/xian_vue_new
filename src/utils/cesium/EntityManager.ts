@@ -260,12 +260,21 @@ export class EntityManager {
    * @param attributes 属性对象
    * @private
    */
-  #applyAttributesToEntity(entity: Entity, attributes: Record<string, unknown>, entityType?: string): void {
+  #applyAttributesToEntity(
+    entity: Entity,
+    attributes: Record<string, unknown>,
+    entityType?: string
+  ): void {
     if (!attributes || Object.keys(attributes).length === 0) {
       return;
     }
 
-    let targetGraphics: any = null;
+    let targetGraphics:
+      | PointGraphics
+      | BillboardGraphics
+      | PolylineGraphics
+      | PolygonGraphics
+      | null = null;
 
     if (entityType === 'point' && entity.point) {
       targetGraphics = entity.point;
@@ -280,13 +289,13 @@ export class EntityManager {
     if (targetGraphics) {
       Object.entries(attributes).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
-          (targetGraphics as any)[key] = value;
+          (targetGraphics as unknown as Record<string, unknown>)[key] = value;
         }
       });
     } else {
       Object.entries(attributes).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
-          (entity as any)[key] = value;
+          (entity as unknown as Record<string, unknown>)[key] = value;
         }
       });
     }

@@ -82,7 +82,6 @@ export class CesiumViewerManager {
       containerId: options.containerId,
       shouldAnimate: true,
       baseLayerPicker: false,
-      imageryProvider: false,
       timeline: false,
       animation: false,
       infoBox: false,
