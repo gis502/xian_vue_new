@@ -55,9 +55,6 @@ import type { XianSchool } from '@/types/base/XianSchool';
 import type { XianBridge } from '@/types/base/XianBridge.ts';
 import type { XianReservoirList } from '@/types/base/XianReservoirList';
 import type { XianSubwayStations } from '@/types/base/XianSubwayStations';
-import type { RainfallGridRequest } from '@/types/rainstorm/RainfallGridRequest';
-import type { RainfallGridResponse } from '@/types/rainstorm/RainfallGridResponse';
-import { getRainfallGrid } from './meteorology';
 
 /**
  * API接口统一导出对象
@@ -279,17 +276,5 @@ export const $api = {
       id: number
     ): Promise<ApiResponse<XianSubwayStations>> =>
       getSubwayStationsPointDetailById(id),
-  },
-
-  // 气象信息
-  meteorology: {
-    /**
-     * 获取网格天气信息
-     * @param request - 请求参数
-     * @returns 网格天气信息
-     */
-    getRainfallGrid: (
-      request: RainfallGridRequest
-    ): Promise<ApiResponse<RainfallGridResponse>> => getRainfallGrid(request),
   },
 };
