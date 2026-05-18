@@ -183,7 +183,7 @@ export const useStatusStore = defineStore('status', () => {
     /** 显示降雨栅格 */
     showRainfallGrid: {
       show: false,
-      loading: true,
+      loading: false,
     },
   });
 
@@ -320,7 +320,7 @@ export const useStatusStore = defineStore('status', () => {
     // 气象图层显示状态重置
     weatherLayers.showRainfallGrid = {
       show: false,
-      loading: true,
+      loading: false,
     };
 
     // 功能显示状态重置

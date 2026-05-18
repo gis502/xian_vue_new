@@ -3,7 +3,7 @@
  */
 export interface WebSocketConfig {
   /** WebSocket路径 */
-  url: string;
+  url?: string;
   /** 自动重连间隔（毫秒，默认3000） */
   reconnectDelay?: number;
   /** 最大重连次数（默认5，-1表示无限重连） */

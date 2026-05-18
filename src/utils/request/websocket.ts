@@ -16,13 +16,14 @@ export class WebSocketService {
   onDisconnected?: () => void;
   onError?: (error: unknown) => void;
 
-  constructor(config: WebSocketConfig) {
+  constructor(config?: WebSocketConfig) {
+    config = config || ({} as WebSocketConfig);
     this.config = {
-      url: config.url,
-      reconnectDelay: config.reconnectDelay || 3000,
-      maxReconnectAttempts: config.maxReconnectAttempts || 5,
-      heartbeatIncoming: config.heartbeatIncoming || 30000,
-      heartbeatOutgoing: config.heartbeatOutgoing || 30000,
+      url: config!.url || import.meta.env.VITE_WEBSOCKET_URL,
+      reconnectDelay: config!.reconnectDelay || 3000,
+      maxReconnectAttempts: config!.maxReconnectAttempts || 5,
+      heartbeatIncoming: config!.heartbeatIncoming || 30000,
+      heartbeatOutgoing: config!.heartbeatOutgoing || 30000,
     };
   }
 
@@ -102,7 +103,7 @@ export class WebSocketService {
   /**
    * 发送消息到指定目的地
    */
-  send(destination: string, body: unknown) {
+  send(destination: string, body?: unknown) {
     if (!this.stompClient || !this.connected) {
       console.error('WebSocket 未连接');
       return;
@@ -153,3 +154,5 @@ export class WebSocketService {
     }
   }
 }
+
+export const socketSignalInstance = new WebSocketService();

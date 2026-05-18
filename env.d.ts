@@ -12,6 +12,7 @@ interface ImportMetaEnv {
   readonly START_PORT: number;
   readonly VITE_GEOSERVER_BASE_URL: string;
   readonly VITE_WEBSOCKET_URL: string;
+  readonly VITE_FILE_URL: string;
   readonly MODE: string;
   readonly DEV: boolean;
   readonly PROD: boolean;
