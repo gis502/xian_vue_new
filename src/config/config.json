@@ -2,8 +2,7 @@
   "backendBaseUrl": "__BACKEND_BASE_URL__",
   "apiBaseUrl": "/api",
   "noEncryptUrls": [
-    "/crypto/sm2/public-key",
-    "/algorithm-api/rainfall/grid"
+    "/crypto/sm2/public-key"
   ],
   "tdMapToken": [
     "fc6cb1139b8eed4f79439130eb34eb00",
