@@ -6,6 +6,7 @@
 <script lang="ts" setup>
   import { useRainstormDeduction } from '@/hooks/rainstorm/useRainstormDeduction';
   import { useStatusStore } from '@/stores/useStatusStore';
+  import { useStepStore } from '@/stores/useStepStore';
   import type { ApiResponse } from '@/types/ApiResponse';
   import type { RainfallGridResponse } from '@/types/rainstorm/RainfallGridResponse';
   import { WebSocketService } from '@/utils/request/websocket';
@@ -14,6 +15,7 @@
   let rainfallWsService: WebSocketService | null = null;
   const { triggerLayerShowStatus, addGridLayer } = useRainstormDeduction();
   const statusStore = useStatusStore();
+  const stepStore = useStepStore();
 
   // 请求降雨栅格数据
   const requestRainfallData = () => {
@@ -38,6 +40,9 @@
           if (response.code === 200 && response.data) {
             // 显示图层
             addGridLayer(response.data);
+
+            // 推进到下一步
+            stepStore.nextStep();
           } else {
             console.warn('响应错误:', response.message);
           }

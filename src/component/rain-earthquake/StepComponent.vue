@@ -4,6 +4,7 @@
       style="width: 100%; background-color: #ffffff00"
       :active="stepStore.currentStep"
       finish-status="success"
+      process-status="success"
       simple
     >
       <el-step

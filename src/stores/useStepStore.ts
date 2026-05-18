@@ -15,5 +15,10 @@ export const useStepStore = defineStore('step', () => {
    */
   const currentStep: Ref<number> = ref(0);
 
-  return { stepList, currentStep };
+  const nextStep = () => {
+    currentStep.value =
+      currentStep.value >= stepList.value.length ? 0 : currentStep.value + 1;
+  };
+
+  return { stepList, currentStep, nextStep };
 });
