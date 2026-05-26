@@ -4,13 +4,6 @@
     <div class="fixed-header">
       <!-- 搜索组件 -->
       <SearchComponent @search="handleSearch" @clear="handleClear" />
-
-      <!-- 按钮组件 -->
-      <ButtonComponent
-        :selected-rows="selectedRows"
-        @delete-selected="handleDeleteSelected"
-        @modify-selected="handleModifySelected"
-      />
     </div>
 
     <!-- 表信息组件（内部包含可滚动的表格） -->
@@ -28,7 +21,6 @@
 
 <script lang="ts" setup>
   import SearchComponent from '@/component/data-management/SearchComponent.vue';
-  import ButtonComponent from '@/component/data-management/ButtonComponent.vue';
   import TableDetailComponent from '@/component/data-management/TableDetailComponent.vue';
   import TableInformationComponent from '@/component/data-management/TableInformationComponent.vue';
   import { onMounted, ref } from 'vue';
