@@ -19,7 +19,6 @@
       :search-keyword="searchKeyword"
       @loaded="onDataLoaded"
       @view-detail="handleViewDetail"
-      @selection-change="handleSelectionChange"
     />
 
     <!-- 表格详情组件 -->
@@ -33,8 +32,6 @@
   import TableDetailComponent from '@/component/data-management/TableDetailComponent.vue';
   import TableInformationComponent from '@/component/data-management/TableInformationComponent.vue';
   import { onMounted, ref } from 'vue';
-  import { ElMessage, ElMessageBox } from 'element-plus';
-  import type { TableInfo } from '@/api/data-management';
   import { useStatusStore } from '@/stores/useStatusStore';
 
   // 初始化状态store
@@ -47,9 +44,6 @@
   // 搜索关键字
   const searchKeyword = ref('');
 
-  // 选中的行
-  const selectedRows = ref<TableInfo[]>([]);
-
   // 处理搜索
   const handleSearch = (keyword: string) => {
     searchKeyword.value = keyword;
@@ -58,53 +52,7 @@
   // 处理清空
   const handleClear = () => {
     searchKeyword.value = '';
-    selectedRows.value = [];
     tableInfoRef.value?.clearSelection();
-  };
-
-  // 处理选中变化
-  const handleSelectionChange = (rows: TableInfo[]) => {
-    selectedRows.value = rows;
-  };
-
-  // 处理删除选中
-  const handleDeleteSelected = async () => {
-    if (!selectedRows.value || selectedRows.value.length === 0) {
-      ElMessage.warning('请至少选中一条数据');
-      return;
-    }
-
-    try {
-      await ElMessageBox.confirm(
-        `确定要删除选中的 ${selectedRows.value.length} 条数据吗？删除后可通过还原按钮恢复。`,
-        '删除确认',
-        {
-          confirmButtonText: '确定删除',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      );
-
-      tableInfoRef.value?.deleteTables(selectedRows.value);
-      selectedRows.value = [];
-      tableInfoRef.value?.clearSelection();
-      ElMessage.success('删除成功');
-    } catch {
-      // 用户取消操作
-    }
-  };
-
-  // 处理修改选中
-  const handleModifySelected = () => {
-    if (!selectedRows.value || selectedRows.value.length !== 1) {
-      if (!selectedRows.value || selectedRows.value.length === 0) {
-        ElMessage.warning('请选中一条数据');
-      } else {
-        ElMessage.warning('只能选中一条数据进行修改');
-      }
-      return;
-    }
-    tableInfoRef.value?.handleModifySelected();
   };
 
   // 数据加载完成回调

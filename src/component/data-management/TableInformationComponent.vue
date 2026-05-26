@@ -4,6 +4,13 @@
       <h3>数据表信息</h3>
       <div class="header-buttons">
         <el-button
+          type="success"
+          :icon="Download"
+          @click="handleExport"
+        >
+          导出数据
+        </el-button>
+        <el-button
           type="info"
           :icon="RefreshLeft"
           :disabled="!hasDeletedData"
@@ -85,7 +92,7 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
-  import { RefreshLeft } from '@element-plus/icons-vue';
+  import { RefreshLeft, Download } from '@element-plus/icons-vue';
   import { getAllTables, updateTableInfo } from '@/api/data-management';
   import type { TableInfo } from '@/api/data-management';
 
@@ -276,6 +283,11 @@
         console.error('修改表信息失败:', error);
       }
     }
+  };
+
+  // 导出数据
+  const handleExport = () => {
+    console.log('导出数据');
   };
 
   // 组件挂载时加载表列表
