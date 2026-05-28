@@ -196,6 +196,11 @@ export const useStatusStore = defineStore('status', () => {
   });
 
   /**
+   * 鼠标样式状态
+   */
+  const cursorStyle = ref<string>('default');
+
+  /**
    * 恢复默认值
    */
   const reset = () => {
@@ -338,6 +343,7 @@ export const useStatusStore = defineStore('status', () => {
     infrastructureLayers,
     weatherLayers,
     functionStatus,
+    cursorStyle,
     reset,
     resetScene,
   };

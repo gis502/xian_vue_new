@@ -75,3 +75,70 @@ export interface EntityOptions {
   /** 自定义属性（用于存储额外信息） */
   attributes?: Record<string, unknown>;
 }
+/**
+ * 椭圆配置选项
+ * 用于绘制椭圆形区域（圆形是椭圆的特例：semiMajorAxis = semiMinorAxis）
+ */
+export interface EllipseOptions {
+  /** 椭圆中心位置 */
+  position: Cartesian3;
+  /** 半长轴（米） */
+  semiMajorAxis: number;
+  /** 半短轴（米） */
+  semiMinorAxis: number;
+  /** 旋转角度（弧度），默认0 */
+  rotation?: number;
+  /** 高度，默认0 */
+  height?: number;
+  /** 拉伸高度，默认0 */
+  extrudedHeight?: number;
+  /** 高度参考，默认CLAMP_TO_GROUND */
+  heightReference?: HeightReference;
+  /** 填充材质，默认白色 */
+  material?: MaterialProperty | Color;
+  /** 是否显示轮廓，默认false */
+  outline?: boolean;
+  /** 轮廓颜色，默认黑色 */
+  outlineColor?: Color;
+  /** 轮廓宽度，默认1 */
+  outlineWidth?: number;
+  /** 分段数（控制平滑度），默认128 */
+  granularity?: number;
+}
+
+/**
+ * 圆形区域配置选项（基于椭圆配置）
+ * 用于周边分析功能的圆形绘制
+ */
+export interface CircleAnalysisOptions {
+  /** 圆心位置 */
+  position: Cartesian3;
+  /** 半径（公里） */
+  radiusKm: number;
+  /** 填充颜色，默认半透明红色 */
+  fillColor?: Color;
+  /** 填充透明度，默认0.1 */
+  fillAlpha?: number;
+  /** 轮廓颜色，默认红色 */
+  outlineColor?: Color;
+  /** 轮廓透明度，默认0.9 */
+  outlineAlpha?: number;
+  /** 轮廓宽度，默认3 */
+  outlineWidth?: number;
+  /** 高度，默认0 */
+  height?: number;
+  /** 高度参考，默认CLAMP_TO_GROUND */
+  heightReference?: HeightReference;
+}
+// ==================== Cesium Entity 类型扩展 ====================
+
+/**
+ * Cesium Entity 类型扩展
+ * 为周边分析功能添加自定义属性
+ */
+declare module 'cesium' {
+  interface Entity {
+    /** 是否为分析圆形标记 */
+    _isAnalysisCircle?: boolean;
+  }
+}
