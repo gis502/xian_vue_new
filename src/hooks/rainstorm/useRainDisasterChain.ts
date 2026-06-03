@@ -175,7 +175,7 @@ export const useRainDisasterChain = () => {
    */
   const rightButtonInfo = [
     {
-      name: '降雨推演',
+      name: '自动推演',
       callback: (status: unknown) => rightHandle.rainstormSimulation(status),
     },
     {
