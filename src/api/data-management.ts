@@ -113,3 +113,16 @@ export const updateTableData = (
     updateData
   })
 }
+
+/**
+ * 新增表数据记录
+ * @param tableName - 表名
+ * @param insertData - 新增数据
+ * @returns 操作结果
+ */
+export const insertTableData = (
+  tableName: string,
+  insertData: Record<string, unknown>
+): Promise<ApiResponse<void>> => {
+  return httpInstance.post(`/api/table/insert-data/${tableName}`, insertData)
+}

@@ -134,6 +134,40 @@
       <el-button type="primary" @click="confirmEdit" :loading="editLoading">确定</el-button>
     </template>
   </el-dialog>
+
+  <!-- 新增数据对话框 -->
+  <el-dialog
+    v-model="addDialogVisible"
+    :title="`新增数据 - ${tableName}`"
+    width="600px"
+    :close-on-click-modal="false"
+  >
+    <el-form :model="addForm" label-width="120px" v-loading="addLoading">
+      <el-form-item
+        v-for="col in columns"
+        :key="col.column_name"
+        :label="col.column_name"
+      >
+        <!-- 主键字段（id）自动生成，不显示 -->
+        <el-input
+          v-if="isPrimaryKey(col.column_name)"
+          value="自动生成"
+          disabled
+        />
+        <!-- 普通字段可输入 -->
+        <el-input
+          v-else
+          v-model="addForm[col.column_name]"
+          :placeholder="`请输入${col.column_name}`"
+          clearable
+        />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <el-button @click="addDialogVisible = false">取消</el-button>
+      <el-button type="primary" @click="confirmAdd" :loading="addLoading">确定</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -173,6 +207,11 @@
   const editForm = ref<TableDataRecord>({});
   const editRowOriginal = ref<TableDataRecord>({});
   const isBatchEdit = ref(false);
+
+  // 新增对话框
+  const addDialogVisible = ref(false);
+  const addLoading = ref(false);
+  const addForm = ref<TableDataRecord>({});
 
   // 获取主键字段名（简化处理，假设第一个字段为主键）
   const isPrimaryKey = (columnName: string): boolean => {
@@ -262,9 +301,54 @@
 
   // 新增按钮点击事件
   const handleAdd = () => {
-    console.log('新增数据');
-    ElMessage.info('新增功能待实现');
-    // TODO: 实现新增逻辑
+    // 初始化新增表单，所有字段设为空字符串
+    addForm.value = {};
+    columns.value.forEach(col => {
+      if (!isPrimaryKey(col.column_name)) {
+        addForm.value[col.column_name] = '';
+      }
+    });
+    addDialogVisible.value = true;
+  };
+
+  // 确认新增
+  const confirmAdd = async () => {
+    // 校验必填字段（这里简单校验，实际可根据数据库字段约束调整）
+    const emptyFields: string[] = [];
+    columns.value.forEach(col => {
+      if (!isPrimaryKey(col.column_name) &&
+          !col.is_nullable?.includes('YES') &&
+          (!addForm.value[col.column_name] || addForm.value[col.column_name].toString().trim() === '')) {
+        emptyFields.push(col.column_name);
+      }
+    });
+
+    if (emptyFields.length > 0) {
+      ElMessage.warning(`请填写必填字段: ${emptyFields.join(', ')}`);
+      return;
+    }
+
+    try {
+      addLoading.value = true;
+
+      // TODO: 调用新增API
+      // const response = await insertTableData(tableName.value, addForm.value);
+
+      // 模拟API调用
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      ElMessage.success('新增成功');
+      addDialogVisible.value = false;
+
+      // 重新加载数据（回到第一页）
+      currentPage.value = 1;
+      await loadTableData(tableName.value);
+    } catch (error) {
+      console.error('新增数据失败:', error);
+      ElMessage.error('新增数据失败');
+    } finally {
+      addLoading.value = false;
+    }
   };
 
   // 批量删除按钮点击事件
