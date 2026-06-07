@@ -55,9 +55,13 @@
             :key="col.column_name"
             :prop="col.column_name"
             :label="col.column_name"
-            :width="getColumnWidth(col.data_type)"
+            :min-width="getColumnWidth(col)"
             show-overflow-tooltip
-          />
+          >
+            <template #default="{ row }">
+              {{ formatCell(row[col.column_name], col) }}
+            </template>
+          </el-table-column>
 
         </el-table>
 
@@ -267,8 +271,11 @@
   };
 
   // 根据数据类型设置列宽度
-  const getColumnWidth = (dataType?: string): number | undefined => {
-    if (!dataType) return undefined;
+  const getColumnWidth = (col: TableColumn): number | undefined => {
+    if (!col || !col.data_type) return undefined;
+
+    const dataType = typeof col.data_type === 'string' ? col.data_type : String(col.data_type);
+
     if (dataType.includes('int') || dataType.includes('float') || dataType.includes('double')) {
       return 100;
     }
@@ -331,18 +338,19 @@
     try {
       addLoading.value = true;
 
-      // TODO: 调用新增API
-      // const response = await insertTableData(tableName.value, addForm.value);
+      // 调用新增API
+      const response = await insertTableData(tableName.value, addForm.value);
 
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 500));
+      if (response.code === 200) {
+        ElMessage.success('新增成功');
+        addDialogVisible.value = false;
 
-      ElMessage.success('新增成功');
-      addDialogVisible.value = false;
-
-      // 重新加载数据（回到第一页）
-      currentPage.value = 1;
-      await loadTableData(tableName.value);
+        // 重新加载数据（回到第一页）
+        currentPage.value = 1;
+        await loadTableData(tableName.value);
+      } else {
+        ElMessage.error(response.message || '新增失败');
+      }
     } catch (error) {
       console.error('新增数据失败:', error);
       ElMessage.error('新增数据失败');
@@ -431,6 +439,74 @@
       ElMessage.error('修改数据失败');
     } finally {
       editLoading.value = false;
+    }
+  };
+
+  // 格式化单元格显示（解决科学计数法和时间格式问题）
+  const formatCell = (value: string | number | null | undefined, column?: TableColumn): string => {
+    if (value === null || value === undefined) return '';
+
+    // 检查是否为时间字段
+    if (column?.data_type) {
+      const dataType = typeof column.data_type === 'string' ? column.data_type : String(column.data_type);
+      // 如果是时间类型字段
+      if (dataType.includes('timestamp') || dataType.includes('date') || dataType.includes('time')) {
+        return formatDateTime(value);
+      }
+    }
+
+    // 尝试转换为数字
+    const numValue = Number(value);
+
+    // 如果是有效数字
+    if (!isNaN(numValue)) {
+      // 对于极小的数字（如 E-51），直接返回原始字符串，避免显示为 0.000000
+      if (Math.abs(numValue) < 0.0001) {
+        // 如果是科学计数法表示的极小值，保持原样
+        if (typeof value === 'string' && value.includes('E')) {
+          return value;
+        }
+        // 否则显示为 0
+        return '0';
+      }
+
+      // 对于正常的数字，保留6位小数
+      if (Math.abs(numValue) <= 999999) {
+        return numValue.toFixed(6);
+      }
+
+      // 对于大数字，保持原样
+      return String(value);
+    }
+
+    return String(value);
+  };
+
+  // 格式化日期时间（ISO 8601 → 年-月-日 时:分:秒）
+  const formatDateTime = (value: string | number): string => {
+    if (!value) return '';
+
+    try {
+      // 创建Date对象
+      const date = new Date(value);
+
+      // 检查是否为有效日期
+      if (isNaN(date.getTime())) {
+        return String(value);
+      }
+
+      // 格式化：YYYY-MM-DD HH:mm:ss
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    } catch (error) {
+      console.error('日期格式化失败:', error);
+      return String(value);
     }
   };
 

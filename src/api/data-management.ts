@@ -126,3 +126,18 @@ export const insertTableData = (
 ): Promise<ApiResponse<void>> => {
   return httpInstance.post(`/api/table/insert-data/${tableName}`, insertData)
 }
+
+/**
+ * 删除表数据记录（物理删除）
+ * @param tableName - 表名
+ * @param ids - 要删除的记录主键ID列表
+ * @returns 操作结果
+ */
+export const deleteTableData = (
+  tableName: string,
+  ids: (string | number)[]
+): Promise<ApiResponse<void>> => {
+  return httpInstance.delete(`/api/table/delete-data/${tableName}`, {
+    data: { ids }
+  })
+}
