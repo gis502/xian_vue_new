@@ -13,6 +13,10 @@ export interface TableInfo {
   rowCount?: number;
   /** 数据大小 */
   dataSize?: string;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
 }
 
 /**
