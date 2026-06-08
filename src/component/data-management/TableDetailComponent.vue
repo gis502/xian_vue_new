@@ -158,11 +158,35 @@
           value="自动生成"
           disabled
         />
+        <!-- geom 字段：隐藏，由经纬度计算 -->
+        <el-input
+          v-else-if="isGeometryField(col.column_name, col.data_type)"
+          value="由经纬度自动生成"
+          disabled
+        />
+        <!-- create_time 字段：自动填充当前时间 -->
+        <el-input
+          v-else-if="isCreateTimeField(col.column_name)"
+          :value="getCurrentDateTime()"
+          disabled
+        />
+        <!-- update_time 字段：自动填充当前时间 -->
+        <el-input
+          v-else-if="isUpdateTimeField(col.column_name)"
+          :value="getCurrentDateTime()"
+          disabled
+        />
+        <!-- is_delete 字段：默认为 0 -->
+        <el-input
+          v-else-if="col.column_name === 'is_delete'"
+          value="0"
+          disabled
+        />
         <!-- 普通字段可输入 -->
         <el-input
           v-else
           v-model="addForm[col.column_name]"
-          :placeholder="`请输入${col.column_name}`"
+          :placeholder="getPlaceholder(col)"
           clearable
         />
       </el-form-item>
@@ -178,7 +202,7 @@
   import { ref } from 'vue';
   import { ElMessage, ElMessageBox, ElEmpty } from 'element-plus';
   import { Edit, Delete, Plus } from '@element-plus/icons-vue';
-  import { getTableData, updateTableData } from '@/api/data-management';
+  import { getTableData, updateTableData, insertTableData, deleteTableData } from '@/api/data-management';
   import type { TableColumn, TableDataRecord } from '@/api/data-management';
 
   // 两个独立的对话框状态
@@ -220,6 +244,50 @@
   // 获取主键字段名（简化处理，假设第一个字段为主键）
   const isPrimaryKey = (columnName: string): boolean => {
     return columns.value.length > 0 && columns.value[0].column_name === columnName;
+  };
+
+  // 判断是否为几何字段
+  const isGeometryField = (columnName: string, dataType?: string): boolean => {
+    return columnName === 'geom' ||
+           (typeof dataType === 'string' && dataType.toLowerCase().includes('geometry'));
+  };
+
+  // 判断是否为创建时间字段
+  const isCreateTimeField = (columnName: string): boolean => {
+    return columnName === 'create_time';
+  };
+
+  // 判断是否为更新时间字段
+  const isUpdateTimeField = (columnName: string): boolean => {
+    return columnName === 'update_time';
+  };
+
+  // 获取当前日期时间字符串
+  const getCurrentDateTime = (): string => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
+
+  // 获取输入框占位符
+  const getPlaceholder = (col: TableColumn): string => {
+    const dataType = typeof col.data_type === 'string' ? col.data_type.toLowerCase() : '';
+
+    if (dataType.includes('int')) {
+      return `请输入${col.column_name}（整数）`;
+    }
+    if (dataType.includes('float') || dataType.includes('double') || dataType.includes('numeric')) {
+      return `请输入${col.column_name}（数字）`;
+    }
+    if (dataType.includes('timestamp') || dataType.includes('date')) {
+      return `请输入${col.column_name}（如：2026-01-01 12:00:00）`;
+    }
+    return `请输入${col.column_name}`;
   };
 
   // 显示详情对话框 - 根据 rowCount 决定使用哪个弹窗
@@ -312,7 +380,16 @@
     addForm.value = {};
     columns.value.forEach(col => {
       if (!isPrimaryKey(col.column_name)) {
-        addForm.value[col.column_name] = '';
+        // 特殊字段自动填充
+        if (col.column_name === 'is_delete') {
+          addForm.value[col.column_name] = '0';
+        } else if (col.column_name === 'create_time' || col.column_name === 'update_time') {
+          addForm.value[col.column_name] = getCurrentDateTime();
+        } else if (isGeometryField(col.column_name, col.data_type)) {
+          // geom 字段不添加到表单
+        } else {
+          addForm.value[col.column_name] = '';
+        }
       }
     });
     addDialogVisible.value = true;
@@ -323,9 +400,18 @@
     // 校验必填字段（这里简单校验，实际可根据数据库字段约束调整）
     const emptyFields: string[] = [];
     columns.value.forEach(col => {
-      if (!isPrimaryKey(col.column_name) &&
-          !col.is_nullable?.includes('YES') &&
-          (!addForm.value[col.column_name] || addForm.value[col.column_name].toString().trim() === '')) {
+      // 跳过特殊字段
+      if (isPrimaryKey(col.column_name) ||
+          isGeometryField(col.column_name, col.data_type) ||
+          col.column_name === 'create_time' ||
+          col.column_name === 'update_time' ||
+          col.column_name === 'is_delete') {
+        return;
+      }
+
+      if (!col.is_nullable?.includes('YES') &&
+          (!addForm.value[col.column_name] ||
+           String(addForm.value[col.column_name] ?? '').trim() === '')) {
         emptyFields.push(col.column_name);
       }
     });
@@ -338,8 +424,29 @@
     try {
       addLoading.value = true;
 
+      // 过滤掉空值字段和特殊字段
+      const filteredData: Record<string, unknown> = {};
+      for (const key in addForm.value) {
+        const value = addForm.value[key];
+
+        // 跳过特殊字段
+        if (key === 'geom' || isGeometryField(key, undefined)) {
+          continue;
+        }
+
+        // 只保留非空值
+        if (value !== null && value !== undefined && value.toString().trim() !== '') {
+          // 类型转换
+          if (key === 'is_delete') {
+            filteredData[key] = 0;  // 转换为整数
+          } else {
+            filteredData[key] = value;
+          }
+        }
+      }
+
       // 调用新增API
-      const response = await insertTableData(tableName.value, addForm.value);
+      const response = await insertTableData(tableName.value, filteredData);
 
       if (response.code === 200) {
         ElMessage.success('新增成功');
@@ -351,36 +458,74 @@
       } else {
         ElMessage.error(response.message || '新增失败');
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('新增数据失败:', error);
-      ElMessage.error('新增数据失败');
+      // 显示详细错误信息
+      const err = error as { response?: { data?: { message?: string } }; message?: string };
+      const errorMsg = err.response?.data?.message || err.message || '新增数据失败';
+      ElMessage.error(errorMsg);
     } finally {
-      addLoading.value = false;
+
     }
   };
 
   // 批量删除按钮点击事件
-  const handleBatchDelete = () => {
+  const handleBatchDelete = async () => {
     if (selectedRows.value.length === 0) {
       ElMessage.warning('请先选择要删除的记录');
       return;
     }
 
-    ElMessageBox.confirm(
-      `确定要删除选中的 ${selectedRows.value.length} 条记录吗？`,
-      '提示',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
+    try {
+      await ElMessageBox.confirm(
+        `确定要删除选中的 ${selectedRows.value.length} 条记录吗？此操作不可恢复！`,
+        '删除确认',
+        {
+          confirmButtonText: '确定删除',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      );
+
+      // 获取所有选中行的主键
+      const primaryKey = columns.value[0]?.column_name;
+      if (!primaryKey) {
+        ElMessage.error('无法确定主键字段');
+        return;
       }
-    ).then(() => {
-      console.log('批量删除数据:', selectedRows.value);
-      ElMessage.success('批量删除成功');
-      // TODO: 实现批量删除逻辑，然后重新加载数据
-    }).catch(() => {
-      ElMessage.info('已取消删除');
-    });
+
+      const ids = selectedRows.value
+        .map(row => row[primaryKey])
+        .filter((id): id is string | number => id != null && typeof id !== 'boolean');
+
+      if (ids.length === 0) {
+        ElMessage.error('未获取到有效的主键值');
+        return;
+      }
+
+      // 调用删除API
+      loading.value = true;
+      const response = await deleteTableData(tableName.value, ids);
+
+      if (response.code === 200) {
+        ElMessage.success(`成功删除 ${ids.length} 条记录`);
+        // 清空选中项
+        selectedRows.value = [];
+        // 重新加载数据
+        await loadTableData(tableName.value);
+      } else {
+        ElMessage.error(response.message || '删除失败');
+      }
+    } catch (error: unknown) {
+      if (error !== 'cancel') {
+        console.error('删除数据失败:', error);
+        const err = error as { response?: { data?: { message?: string } }; message?: string };
+        const errorMsg = err.response?.data?.message || err.message || '删除数据失败';
+        ElMessage.error(errorMsg);
+      }
+    } finally {
+      loading.value = false;
+    }
   };
 
   // 批量修改按钮点击事件

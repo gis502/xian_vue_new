@@ -55,7 +55,7 @@ export interface TableDetailResponse {
  * @returns 表信息数组
  */
 export const getAllTables = (): Promise<ApiResponse<TableInfo[]>> => {
-  return httpInstance.get('/api/table/data-management/tables')
+  return httpInstance.get('/table/data-management/tables')
 }
 
 /**
@@ -70,7 +70,7 @@ export const getTableData = (
   page: number = 1,
   pageSize: number = 10
 ): Promise<ApiResponse<TableDetailResponse>> => {
-  return httpInstance.get(`/api/table/data/${tableName}`, {
+  return httpInstance.get(`/table/data/${tableName}`, {
     params: { page, pageSize }
   })
 }
@@ -87,7 +87,7 @@ export const updateTableInfo = (
   newTableName?: string,
   newComment?: string
 ): Promise<ApiResponse<void>> => {
-  return httpInstance.put('/api/table/update-table-info', null, {
+  return httpInstance.put('/table/update-table-info', null, {
     params: {
       oldTableName,
       ...(newTableName && { newTableName }),
@@ -108,7 +108,7 @@ export const updateTableData = (
   whereConditions: Record<string, unknown>,
   updateData: Record<string, unknown>
 ): Promise<ApiResponse<void>> => {
-  return httpInstance.put(`/api/table/update-data/${tableName}`, {
+  return httpInstance.put(`/table/update-data/${tableName}`, {
     whereConditions,
     updateData
   })
@@ -124,7 +124,7 @@ export const insertTableData = (
   tableName: string,
   insertData: Record<string, unknown>
 ): Promise<ApiResponse<void>> => {
-  return httpInstance.post(`/api/table/insert-data/${tableName}`, insertData)
+  return httpInstance.post(`/table/insert-data/${tableName}`, insertData)
 }
 
 /**
@@ -137,7 +137,9 @@ export const deleteTableData = (
   tableName: string,
   ids: (string | number)[]
 ): Promise<ApiResponse<void>> => {
-  return httpInstance.delete(`/api/table/delete-data/${tableName}`, {
+  return httpInstance({
+    url: `/table/delete-data/${tableName}`,
+    method: 'DELETE',
     data: { ids }
   })
 }
