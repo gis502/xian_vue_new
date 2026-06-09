@@ -33,4 +33,10 @@
     padding: 0;
     font-family: '微软雅黑';
   }
+
+  /* 调整 ElMessage 提示框位置，避免被导航栏遮挡 */
+  .el-message {
+    top: 80px !important;
+    z-index: 10000 !important;
+  }
 </style>
