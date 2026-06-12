@@ -1,7 +1,3 @@
-import { ref, watch } from 'vue';
-import type { XianHiddenDangerSpots } from '@/types/base/XianHiddenDangerSpots';
-import type { PaginationType } from '@/types/common/PaginationType';
-import { PointType } from '@/types/common/DisasterType';
 import { ControlPanelCategory } from '@/types/common/ControlPanelCategory';
 import { useStatusStore } from '@/stores/useStatusStore';
 import {
@@ -40,69 +36,6 @@ export const useRainDisasterChain = () => {
   // 初始化暴雨模拟状态（因为右侧按钮默认选中）
   statusStore.weatherLayers.showRainfallGrid.loading = true;
   statusStore.weatherLayers.showRainfallGrid.show = true;
-
-  // ================灾害链影响点列表================================
-  /**
-   * 搜索条件
-   */
-  const conditions = ref({
-    tableData: '',
-    hiddenPoint: PointType.LANDSLIDE,
-  });
-
-  /**
-   * 下拉选项
-   */
-  const selectOptions = ref([
-    { value: PointType.LANDSLIDE, label: '滑坡' },
-    { value: PointType.DEBRIS_FLOW, label: '泥石流' },
-    { value: PointType.FLASH_FLOOD, label: '山洪' },
-    { value: PointType.WATER_LOGGING, label: '内涝' },
-  ]);
-
-  /**
-   * 表格数据
-   */
-  const tableDatas = ref<XianHiddenDangerSpots[]>([]);
-
-  /**
-   * 表头配置
-   */
-  const tableColumns = ref([
-    { title: '名称', key: 'disasterName' },
-    { title: '位置', key: 'position' },
-    { title: '规模等级', key: 'scaleGrade' },
-    { title: '险情等级', key: 'riskGrade' },
-  ]);
-
-  /**
-   * 分页配置
-   */
-  const paginationConfig = ref<PaginationType>({
-    currentPage: 1,
-    pageSize: 10,
-    total: 10,
-    totalPage: 1,
-  });
-
-  /**
-   * 修改搜索条件
-   * @param value - 新的搜索条件
-   */
-  const changeConditions = (value: {
-    tableData: string;
-    hiddenPoint: PointType;
-  }): void => {
-    conditions.value = value;
-  };
-
-  /**
-   * 修改页码
-   * @param value - 新的页码
-   */
-  const changeCurrentPage = (value: number) => {
-    paginationConfig.value.currentPage = value;
-  };
 
   // ================左侧按钮================================
   /**
@@ -216,7 +149,6 @@ export const useRainDisasterChain = () => {
    * 控制面板信息
    */
   const getControlPanel = () => {
-
     return [
       // 灾害隐患点类别
       {
@@ -402,25 +334,9 @@ export const useRainDisasterChain = () => {
     ];
   };
 
-  // 监听条件变化
-  watch(
-    conditions,
-    () => {
-      console.log('条件改变');
-    },
-    { deep: true }
-  );
-
   return {
-    conditions,
-    selectOptions,
-    tableDatas,
-    tableColumns,
-    paginationConfig,
     leftButtonInfo,
     rightButtonInfo,
-    changeConditions,
-    changeCurrentPage,
     controlPanel: getControlPanel(),
   };
 };
