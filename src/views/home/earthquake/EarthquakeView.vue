@@ -20,12 +20,12 @@
         statusStore.appLoadingCompleted &&
         statusStore.uiComponents.disasterChainPointShow.loading
       "
-      :select-options="disasterChainTableStore.selectOptions"
-      :table-data-list="disasterChainTableStore.tableDatas"
-      :table-columns="disasterChainTableStore.tableColumns"
-      :page-option="disasterChainTableStore.paginationConfig"
-      @change-conditions="disasterChainTableStore.changeConditions"
-      @change-current-page="disasterChainTableStore.changeCurrentPage"
+      :select-options="selectOptions"
+      :table-data-list="tableDatas"
+      :table-columns="tableColumns"
+      :page-option="paginationConfig"
+      @change-conditions="changeConditions"
+      @change-current-page="changeCurrentPage"
     />
 
     <!-- 左侧按钮组件 -->
@@ -63,7 +63,10 @@
   import LeftButtonComponent from '@/component/rain-earthquake/LeftButtonComponent.vue';
   import RightButtonComponent from '@/component/rain-earthquake/RightButtonComponent.vue';
   import { useEarthquakeDisasterChain } from '@/hooks/earthquake/useEarthquakeDisasterChain';
-  import { useDisasterChainTableStore } from '@/stores/useDisasterChainTableStore';
+  import {
+    useDisasterChainTable,
+    type SearchConditions,
+  } from '@/hooks/useDisasterChainTable';
   import { useStatusStore } from '@/stores/useStatusStore';
   import { DisasterType, PointType } from '@/types/common/DisasterType.ts';
   import { onBeforeMount } from 'vue';
@@ -76,22 +79,41 @@
 
   const statusStore = useStatusStore();
 
-  const disasterChainTableStore = useDisasterChainTableStore();
+  const {
+    selectOptions,
+    tableColumns,
+    tableDatas,
+    paginationConfig,
+    changeConditions,
+    setConditions,
+    changeCurrentPage,
+    setSelectOptions,
+    setTableColumns,
+  } = useDisasterChainTable();
 
   onBeforeMount(() => {
-    // 设置相关数据
-    disasterChainTableStore.selectOptions = [
+    // 设置下拉选项
+    setSelectOptions([
       { value: PointType.LANDSLIDE, label: '滑坡' },
       { value: PointType.DEBRIS_FLOW, label: '泥石流' },
       { value: PointType.RISK_AREA, label: '风险区' },
-    ];
+    ]);
 
-    disasterChainTableStore.tableColumns = [
+    // 设置表格列配置
+    setTableColumns([
       { title: '名称', key: 'disasterName' },
       { title: '位置', key: 'position' },
       { title: '规模等级', key: 'scaleGrade' },
       { title: '险情等级', key: 'riskGrade' },
-    ];
+    ]);
+
+    /**
+     * 条件改变执行
+     * @param value
+     */
+    changeConditions.value = (value: SearchConditions) => {
+      setConditions(value);
+    };
   });
 </script>
 
