@@ -9,16 +9,16 @@
     <!-- 断裂带 -->
     <FaultComponent
       v-if="
-        useStatusStore().appLoadingCompleted &&
-        useStatusStore().mapLayers.faultShow.loading
+        statusStore.appLoadingCompleted &&
+        statusStore.mapLayers.faultShow.loading
       "
     />
 
     <!-- 灾害链影响列表组件 -->
     <DisasterChainPointComponent
       v-if="
-        useStatusStore().appLoadingCompleted &&
-        useStatusStore().uiComponents.disasterChainPointShow.loading
+        statusStore.appLoadingCompleted &&
+        statusStore.uiComponents.disasterChainPointShow.loading
       "
       :select-options="selectOptions"
       :table-data-list="tableDatas"
@@ -63,36 +63,58 @@
   import LeftButtonComponent from '@/component/rain-earthquake/LeftButtonComponent.vue';
   import RightButtonComponent from '@/component/rain-earthquake/RightButtonComponent.vue';
   import { useEarthquakeDisasterChain } from '@/hooks/earthquake/useEarthquakeDisasterChain';
+  import {
+    useDisasterChainTable,
+    type SearchConditions,
+  } from '@/hooks/useDisasterChainTable';
   import { useStatusStore } from '@/stores/useStatusStore';
-  import { DisasterType } from '@/types/common/DisasterType.ts';
-  import { watch } from 'vue';
+  import { DisasterType, PointType } from '@/types/common/DisasterType.ts';
+  import { onBeforeMount } from 'vue';
   import { useRoute } from 'vue-router';
 
   const route = useRoute();
 
-  const {
-    conditions,
-    selectOptions,
-    tableDatas,
-    tableColumns,
-    paginationConfig,
-    leftButtonInfo,
-    rightButtonInfo,
-    controlPanel,
-    changeConditions,
-    changeCurrentPage,
-  } = useEarthquakeDisasterChain();
+  const { leftButtonInfo, rightButtonInfo, controlPanel } =
+    useEarthquakeDisasterChain();
 
   const statusStore = useStatusStore();
 
-  // 监听条件变化
-  watch(
-    conditions,
-    () => {
-      console.log('条件改变');
-    },
-    { deep: true }
-  );
+  const {
+    selectOptions,
+    tableColumns,
+    tableDatas,
+    paginationConfig,
+    changeConditions,
+    setConditions,
+    changeCurrentPage,
+    setSelectOptions,
+    setTableColumns,
+  } = useDisasterChainTable();
+
+  onBeforeMount(() => {
+    // 设置下拉选项
+    setSelectOptions([
+      { value: PointType.LANDSLIDE, label: '滑坡' },
+      { value: PointType.DEBRIS_FLOW, label: '泥石流' },
+      { value: PointType.RISK_AREA, label: '风险区' },
+    ]);
+
+    // 设置表格列配置
+    setTableColumns([
+      { title: '名称', key: 'disasterName' },
+      { title: '位置', key: 'position' },
+      { title: '规模等级', key: 'scaleGrade' },
+      { title: '险情等级', key: 'riskGrade' },
+    ]);
+
+    /**
+     * 条件改变执行
+     * @param value
+     */
+    changeConditions.value = (value: SearchConditions) => {
+      setConditions(value);
+    };
+  });
 </script>
 
 <style scoped></style>
