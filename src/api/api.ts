@@ -57,6 +57,7 @@ import type { XianReservoirList } from '@/types/base/XianReservoirList';
 import type { XianSubwayStations } from '@/types/base/XianSubwayStations';
 import { modelDeduction as rainfallModelDeduction } from './rainfall';
 import type { RainPredictResponse } from '@/types/rainstorm/RainPredictResponse';
+import type { RainPredictRequest } from '@/types/rainstorm/RainPredictRequest';
 
 /**
  * API接口统一导出对象
@@ -284,12 +285,11 @@ export const $api = {
   rainfall: {
     /**
      * 进行模型推演
-     * @param disasterName 灾害名称
+     * @param req 请求体
      * @returns 推演点的概率
      */
     modelDeduction: (
-      disasterName: string
-    ): Promise<ApiResponse<RainPredictResponse>> =>
-      rainfallModelDeduction(disasterName),
+      req: RainPredictRequest
+    ): Promise<ApiResponse<RainPredictResponse>> => rainfallModelDeduction(req),
   },
 };

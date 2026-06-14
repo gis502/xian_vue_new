@@ -10,6 +10,7 @@
   import { useStepStore } from '@/stores/useStepStore';
   import type { ApiResponse } from '@/types/ApiResponse';
   import type { RainfallGridResponse } from '@/types/rainstorm/RainfallGridResponse';
+  import { CesiumUtilsSingleton } from '@/utils/cesium/CesiumUtils';
   import { WebSocketService } from '@/utils/request/websocket';
   import { Utils } from '@/utils/utils';
   import { onMounted, onUnmounted, watch } from 'vue';
@@ -51,14 +52,18 @@
 
             // 进行模型计算
             $api.rainfall
-              .modelDeduction(
-                `${Utils.formatDate('YYYYMMDDHHmmss')}暴雨自动推演`
-              )
+              .modelDeduction({
+                disaster_name: `${Utils.formatDate('YYYYMMDDHHmmss', new Date('2025-09-16 20:00:00'))}暴雨自动推演`,
+                occurred_time: '2025-09-16 20:00:00',
+                operation_type: '暴雨灾害链自动推演',
+              })
               .then((res) => {
                 // 推进到下一步
                 stepStore.nextStep();
 
-                // 报告产出
+                // 进行预警
+                CesiumUtilsSingleton.addPulseEffect(res.data.list);
+                console.log(res);
               });
           } else {
             console.warn('响应错误:', response.message);

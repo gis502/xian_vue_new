@@ -20,6 +20,11 @@ import {
   SceneTransforms,
   Rectangle,
   Color,
+  JulianDate,
+  CallbackProperty,
+  HeightReference,
+  VerticalOrigin,
+  HorizontalOrigin,
 } from 'cesium';
 import { CesiumViewerManager } from './CesiumViewerManager';
 import { EntityManager } from './EntityManager';
@@ -29,6 +34,7 @@ import { GeoJsonManager, type ClearType } from './GeoJsonManager';
 import { CameraController } from './CameraController';
 import config from '@/config/config.json';
 import type { ClickObject } from '@/types/cesium/ClickObject';
+import type { WarningList } from '@/types/common/WarningList';
 
 // 导出 ClearType 类型
 export type { ClearType };
@@ -47,6 +53,12 @@ export class CesiumUtils {
 
   // 颜色缓存
   #colorCache = new Map<string, Color>();
+
+  // 脉冲相关状态
+  #pulseMap: Record<string, { pulseId: string; probability: number }> = {};
+  #maxPulseRadius = 30;
+  #pulseDuration = 5;
+  #pulseCircleImage: string | null = null;
 
   constructor() {
     this.#viewerManager = new CesiumViewerManager();
@@ -613,6 +625,44 @@ export class CesiumUtils {
     return color;
   }
 
+  /**
+   * 添加脉冲效果
+   * @param list 点列表
+   * @returns
+   */
+  addPulseEffect(list: Record<string, WarningList>) {
+    const viewer = this.getViewer();
+    if (!viewer) return;
+
+    // 移除已有脉冲
+    this.#removeAllPulses();
+
+    // 生成圆形贴图
+    if (!this.#pulseCircleImage) {
+      this.#pulseCircleImage = this.#createCircleImage(this.#maxPulseRadius);
+    }
+
+    for (const [disasterType, warning] of Object.entries(list)) {
+      const { lon, lat, probability } = warning;
+
+      // 根据概率确定颜色
+      let color: Color;
+      if (probability >= 0.7) {
+        color = Color.RED;
+      } else if (probability >= 0.5) {
+        color = Color.YELLOW;
+      } else {
+        continue;
+      }
+
+      const key = `${disasterType}_${lon}_${lat}`;
+      const pulseId = `PULSE_${key}_${Date.now()}`;
+
+      this.#createPulseCircle(pulseId, lon, lat, color);
+      this.#pulseMap[key] = { pulseId, probability };
+    }
+  }
+
   // ===================== 私有方法 =====================
 
   /**
@@ -624,6 +674,104 @@ export class CesiumUtils {
     if (!manager) {
       throw new Error(`${managerName} 未初始化，请先调用 initCesiumViewer()`);
     }
+  }
+
+  /**
+   * 生成脉冲圆形贴图
+   */
+  #createCircleImage(maxRadius: number): string {
+    const canvas = document.createElement('canvas');
+    canvas.width = maxRadius * 2;
+    canvas.height = maxRadius * 2;
+    const ctx = canvas.getContext('2d')!;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    ctx.arc(maxRadius, maxRadius, maxRadius, 0, Math.PI * 2, false);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.fill();
+    return canvas.toDataURL('image/png');
+  }
+
+  /**
+   * 创建脉冲实体
+   * @param pulseId - 脉冲实体 ID
+   * @param lon - 经度
+   * @param lat - 纬度
+   * @param color - 颜色
+   */
+  #createPulseCircle(
+    pulseId: string,
+    lon: number,
+    lat: number,
+    color: Color
+  ): void {
+    const viewer = this.getViewer();
+    if (!viewer || !this.#pulseCircleImage) return;
+
+    const startTime = JulianDate.now();
+    const maxRadius = this.#maxPulseRadius;
+    const duration = this.#pulseDuration;
+
+    viewer.entities.add({
+      id: pulseId,
+      position: Cartesian3.fromDegrees(lon, lat),
+      billboard: {
+        image: this.#pulseCircleImage,
+        width: new CallbackProperty((time) => {
+          const elapsed =
+            JulianDate.secondsDifference(time, startTime) % duration;
+          const progress = elapsed / duration;
+          return maxRadius * 2 * Math.abs(Math.sin(progress * Math.PI));
+        }, false),
+        height: new CallbackProperty((time) => {
+          const elapsed =
+            JulianDate.secondsDifference(time, startTime) % duration;
+          const progress = elapsed / duration;
+          return maxRadius * 2 * Math.abs(Math.sin(progress * Math.PI));
+        }, false),
+        color: new CallbackProperty((time) => {
+          const elapsed =
+            JulianDate.secondsDifference(time, startTime) % duration;
+          const progress = elapsed / duration;
+          const alpha = 0.7 * (1 - progress);
+          return color.withAlpha(alpha);
+        }, false),
+        heightReference: HeightReference.CLAMP_TO_GROUND,
+        verticalOrigin: VerticalOrigin.CENTER,
+        horizontalOrigin: HorizontalOrigin.CENTER,
+        eyeOffset: new Cartesian3(0.0, 0.0, -10.0),
+        disableDepthTestDistance: Number.POSITIVE_INFINITY,
+      },
+    });
+  }
+
+  /**
+   * 移除所有脉冲实体
+   */
+  #removeAllPulses(): void {
+    for (const key of Object.keys(this.#pulseMap)) {
+      this.#deletePulseEntity(key);
+    }
+  }
+
+  /**
+   * 删除单个脉冲实体
+   * @param key - 脉冲映射 key
+   */
+  #deletePulseEntity(key: string): void {
+    const viewer = this.getViewer();
+    if (!viewer) return;
+
+    const entry = this.#pulseMap[key];
+    if (!entry) return;
+
+    const entity = viewer.entities.getById(entry.pulseId);
+    if (entity) {
+      viewer.entities.remove(entity);
+    }
+    delete this.#pulseMap[key];
   }
 }
 

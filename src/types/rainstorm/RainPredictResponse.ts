@@ -1,6 +1,6 @@
+import type { WarningList } from '../common/WarningList';
+
 export interface RainPredictResponse {
-  id: number;
-  type: string;
-  probability: number;
-  level: string;
+  record_id: number;
+  list: Record<string, WarningList>;
 }
