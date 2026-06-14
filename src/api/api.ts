@@ -55,6 +55,8 @@ import type { XianSchool } from '@/types/base/XianSchool';
 import type { XianBridge } from '@/types/base/XianBridge.ts';
 import type { XianReservoirList } from '@/types/base/XianReservoirList';
 import type { XianSubwayStations } from '@/types/base/XianSubwayStations';
+import { modelDeduction as rainfallModelDeduction } from './rainfall';
+import type { RainPredictResponse } from '@/types/rainstorm/RainPredictResponse';
 
 /**
  * API接口统一导出对象
@@ -276,5 +278,18 @@ export const $api = {
       id: number
     ): Promise<ApiResponse<XianSubwayStations>> =>
       getSubwayStationsPointDetailById(id),
+  },
+
+  // 暴雨推演
+  rainfall: {
+    /**
+     * 进行模型推演
+     * @param disasterName 灾害名称
+     * @returns 推演点的概率
+     */
+    modelDeduction: (
+      disasterName: string
+    ): Promise<ApiResponse<RainPredictResponse>> =>
+      rainfallModelDeduction(disasterName),
   },
 };

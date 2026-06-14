@@ -40,7 +40,9 @@
         polygonStyle: {
           fill: true,
           fillColor: areasColor[index].withAlpha(areaTransparency),
-          outline: false,
+          outline: true,
+          outlineColor: Color.WHITE,
+          outlineWidth: 3,
         },
       },
     }));

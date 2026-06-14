@@ -4,12 +4,14 @@
 </template>
 
 <script lang="ts" setup>
+  import { $api } from '@/api/api';
   import { useRainstormDeduction } from '@/hooks/rainstorm/useRainstormDeduction';
   import { useStatusStore } from '@/stores/useStatusStore';
   import { useStepStore } from '@/stores/useStepStore';
   import type { ApiResponse } from '@/types/ApiResponse';
   import type { RainfallGridResponse } from '@/types/rainstorm/RainfallGridResponse';
   import { WebSocketService } from '@/utils/request/websocket';
+  import { Utils } from '@/utils/utils';
   import { onMounted, onUnmounted, watch } from 'vue';
 
   let rainfallWsService: WebSocketService | null = null;
@@ -38,11 +40,26 @@
         '/topic/rainfall/grid/messages',
         (response) => {
           if (response.code === 200 && response.data) {
+            // 设置步骤为第一步
+            stepStore.currentStep = 0;
+
             // 显示图层
             addGridLayer(response.data);
 
             // 推进到下一步
             stepStore.nextStep();
+
+            // 进行模型计算
+            $api.rainfall
+              .modelDeduction(
+                `${Utils.formatDate('YYYYMMDDHHmmss')}暴雨自动推演`
+              )
+              .then((res) => {
+                // 推进到下一步
+                stepStore.nextStep();
+
+                // 报告产出
+              });
           } else {
             console.warn('响应错误:', response.message);
           }
