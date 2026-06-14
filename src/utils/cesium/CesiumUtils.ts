@@ -508,10 +508,11 @@ export class CesiumUtils {
   clickLayer(callback: (pickedObject: ClickObject) => void) {
     const handler = new ScreenSpaceEventHandler(this.getViewer()?.scene.canvas);
     handler.setInputAction((clickEvent: { position: Cartesian2 }) => {
-      // 在点击位置进行拾取
-      const pickedObject = CesiumUtilsSingleton.getViewer()?.scene.pick(
-        clickEvent.position
-      );
+      const viewer = CesiumUtilsSingleton.getViewer();
+      if (!viewer) return;
+      const pickedList = viewer.scene.drillPick(clickEvent.position);
+      // 跳过脉冲实体，取第一个非脉冲实体
+      const pickedObject = pickedList.find((p) => !p.id?.properties?.pulseKey);
       callback(pickedObject);
     }, ScreenSpaceEventType.LEFT_CLICK);
   }
@@ -658,7 +659,7 @@ export class CesiumUtils {
       const key = `${disasterType}_${lon}_${lat}`;
       const pulseId = `PULSE_${key}_${Date.now()}`;
 
-      this.#createPulseCircle(pulseId, lon, lat, color);
+      this.#createPulseCircle(pulseId, key, lon, lat, color);
       this.#pulseMap[key] = { pulseId, probability };
     }
   }
@@ -703,6 +704,7 @@ export class CesiumUtils {
    */
   #createPulseCircle(
     pulseId: string,
+    key: string,
     lon: number,
     lat: number,
     color: Color
@@ -717,6 +719,7 @@ export class CesiumUtils {
     viewer.entities.add({
       id: pulseId,
       position: Cartesian3.fromDegrees(lon, lat),
+      properties: { pulseKey: key },
       billboard: {
         image: this.#pulseCircleImage,
         width: new CallbackProperty((time) => {
