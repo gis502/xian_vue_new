@@ -35,6 +35,7 @@
   },
   "prefix": {
     "landslideHiddenPointId": "landslide-hidden-point-",
+    "collapseHiddenPointId": "collapse-hidden-point-",
     "debrisFlowHiddenPointId": "debris-flow-hidden-point-",
     "waterLoggingHiddenPointId": "water-logging-hidden-point-",
     "flashFloodHiddenPointId": "flash-flood-hidden-point-",

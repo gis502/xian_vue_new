@@ -2,6 +2,7 @@
 
 // 图标
 export { default as landslideIcon } from '@/assets/images/icon/landslide.png';
+export { default as collapseIcon } from '@/assets/images/icon/collapse.png';
 export { default as waterLoggingIcon } from '@/assets/images/icon/waterlogging.png';
 export { default as debrisFlowIcon } from '@/assets/images/icon/debris-flow.png';
 export { default as flashFloodIcon } from '@/assets/images/icon/flash-flood.png';

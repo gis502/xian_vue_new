@@ -14,6 +14,14 @@
         "
       />
 
+      <!-- 崩塌隐患点 -->
+      <CollapseComponent
+        v-if="
+          statusStore.appLoadingCompleted &&
+          statusStore.poiLayers.showCollapseHiddenPoint.loading
+        "
+      />
+
       <!-- 泥石流隐患点 -->
       <DebrisFlowComponent
         v-if="
@@ -57,6 +65,14 @@
         "
       />
 
+      <!-- 崩塌隐患点 -->
+      <CollapseComponent
+        v-if="
+          statusStore.appLoadingCompleted &&
+          statusStore.poiLayers.showCollapseHiddenPoint.loading
+        "
+      />
+
       <!-- 泥石流隐患点 -->
       <DebrisFlowComponent
         v-if="
@@ -81,6 +97,7 @@
   import { DisasterType } from '@/types/common/DisasterType.ts';
   import RiskPointComponent from '@/component/rain-earthquake/basic/RiskPointComponent.vue';
   import LandslideComponent from '@/component/rain-earthquake/basic/LandslideComponent.vue';
+  import CollapseComponent from '@/component/rain-earthquake/basic/CollapseComponent.vue';
   import DebrisFlowComponent from '@/component/rain-earthquake/basic/DebrisFlowComponent.vue';
   import WaterLoggingComponent from '@/component/rain-earthquake/basic/WaterLoggingComponent.vue';
   import FlashFloodComponent from '@/component/rain-earthquake/basic/FlashFloodComponent.vue';

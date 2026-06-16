@@ -1,4 +1,5 @@
 import {
+  collapseIcon,
   debrisFlowIcon,
   flashFloodIcon,
   landslideIcon,
@@ -33,6 +34,9 @@ export const useHiddenPoint = () => {
       case 'landslide':
       case '滑坡':
         return landslideIcon;
+      case 'collapse':
+      case '崩塌':
+        return collapseIcon;
       case 'debris_flow':
       case '泥石流':
         return debrisFlowIcon;

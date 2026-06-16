@@ -25,6 +25,7 @@ export const useMap = () => {
         // 当id改变时候，重置状态
         if (
           loadingInfoStore.landslideHiddenPoint.id !== id &&
+          loadingInfoStore.collapseHiddenPoint.id !== id &&
           loadingInfoStore.debrisFlowHiddenPoint.id !== id &&
           loadingInfoStore.waterLoggingHiddenPoint.id !== id &&
           loadingInfoStore.flashFloodHiddenPoint.id !== id &&
@@ -41,6 +42,11 @@ export const useMap = () => {
         // 滑坡隐患点
         if (pickedObject.id.startsWith(config.prefix.landslideHiddenPointId)) {
           loadingInfoStore.landslideHiddenPoint.id = id;
+        }
+
+        // 崩塌隐患点
+        else if (pickedObject.id.startsWith(config.prefix.collapseHiddenPointId)) {
+          loadingInfoStore.collapseHiddenPoint.id = id;
         }
 
         // 泥石流隐患点

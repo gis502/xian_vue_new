@@ -114,6 +114,14 @@ export const useLoadingInformationStore = defineStore(
       id: -1,
     });
 
+    // ============================== 崩塌隐患点状态 ================================
+    const collapseHiddenPoint = reactive({
+      /** 加载状态 */
+      loading: false,
+      /** 崩塌隐患点ID */
+      id: -1,
+    });
+
     // ============================== 泥石流隐患点状态 ================================
     const debrisFlowHiddenPoint = reactive({
       /** 加载状态 */
@@ -190,6 +198,10 @@ export const useLoadingInformationStore = defineStore(
       landslideHiddenPoint.loading = false;
       landslideHiddenPoint.id = -1;
 
+      // 崩塌隐患点状态重置
+      collapseHiddenPoint.loading = false;
+      collapseHiddenPoint.id = -1;
+
       // 泥石流隐患点状态重置
       debrisFlowHiddenPoint.loading = false;
       debrisFlowHiddenPoint.id = -1;
@@ -216,6 +228,7 @@ export const useLoadingInformationStore = defineStore(
       reservoir,
       subwayStation,
       landslideHiddenPoint,
+      collapseHiddenPoint,
       debrisFlowHiddenPoint,
       waterLoggingHiddenPoint,
       flashFloodHiddenPoint,

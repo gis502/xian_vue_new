@@ -118,6 +118,11 @@ export const useStatusStore = defineStore('status', () => {
       show: true,
       loading: true,
     },
+    /** 显示崩塌隐患点 */
+    showCollapseHiddenPoint: {
+      show: true,
+      loading: true,
+    },
     /** 显示泥石流隐患点 */
     showDebrisFlowHiddenPoint: {
       show: true,
@@ -275,6 +280,10 @@ export const useStatusStore = defineStore('status', () => {
       loading: false,
     };
     poiLayers.showLandslideHiddenPoint = {
+      show: true,
+      loading: true,
+    };
+    poiLayers.showCollapseHiddenPoint = {
       show: true,
       loading: true,
     };

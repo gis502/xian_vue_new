@@ -4,6 +4,7 @@ import { useLayerControl } from '../rain-earthquake/useLayerControl.ts';
 import {
   debrisFlowIcon,
   landslideIcon,
+  collapseIcon,
   riskAreaIcon,
   earthquakeLineIcon,
   hospitalIcon,
@@ -144,6 +145,18 @@ export const useEarthquakeDisasterChain = () => {
         count: () =>
           resourceStore.getResourceCount(
             LoadingResource.DEBRIS_FLOW_HIDDEN_POINT
+          ),
+      },
+      {
+        name: '崩塌隐患点',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showCollapseHiddenPoint' as const,
+        callback: layerControl.clickCollapseHiddenPoint,
+        link: collapseIcon,
+        category: ControlPanelCategory.DISASTER_HAZARD,
+        count: () =>
+          resourceStore.getResourceCount(
+            LoadingResource.COLLAPSE_HIDDEN_POINT
           ),
       },
       {

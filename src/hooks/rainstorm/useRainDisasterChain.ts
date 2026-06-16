@@ -4,6 +4,7 @@ import {
   debrisFlowIcon,
   flashFloodIcon,
   landslideIcon,
+  collapseIcon,
   riskAreaIcon,
   waterLoggingIcon,
   hospitalIcon,
@@ -197,6 +198,18 @@ export const useRainDisasterChain = () => {
         count: () =>
           resourceStore.getResourceCount(
             LoadingResource.FLASH_FLOOD_HIDDEN_POINT
+          ),
+      },
+      {
+        name: '崩塌隐患点',
+        statusStore: statusStore.poiLayers,
+        statusKey: 'showCollapseHiddenPoint' as const,
+        callback: layerControl.clickCollapseHiddenPoint,
+        link: collapseIcon,
+        category: ControlPanelCategory.DISASTER_HAZARD,
+        count: () =>
+          resourceStore.getResourceCount(
+            LoadingResource.COLLAPSE_HIDDEN_POINT
           ),
       },
       {

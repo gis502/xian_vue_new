@@ -48,6 +48,11 @@ export enum LoadingResource {
   LANDSLIDE_HIDDEN_POINT = 'LANDSLIDE_HIDDEN_POINT',
 
   /**
+   * 崩塌隐患点
+   */
+  COLLAPSE_HIDDEN_POINT = 'COLLAPSE_HIDDEN_POINT',
+
+  /**
    * 泥石流隐患点
    */
   DEBRIS_FLOW_HIDDEN_POINT = 'DEBRIS_FLOW_HIDDEN_POINT',

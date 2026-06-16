@@ -14,6 +14,8 @@ export enum DisasterType {
 export enum PointType {
   /** 滑坡 */
   LANDSLIDE = '滑坡',
+  /** 崩塌 */
+  COLLAPSE = '崩塌',
   /** 泥石流 */
   DEBRIS_FLOW = '泥石流',
   /** 内涝 */
@@ -29,6 +31,7 @@ export enum PointType {
  */
 export const HiddenDangerPointTypeMap: Record<PointType, string> = {
   [PointType.LANDSLIDE]: 'landslide',
+  [PointType.COLLAPSE]: 'collapse',
   [PointType.DEBRIS_FLOW]: 'debris_flow',
   [PointType.WATER_LOGGING]: 'water_logging',
   [PointType.FLASH_FLOOD]: 'flash_flood',

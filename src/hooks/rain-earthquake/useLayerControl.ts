@@ -162,6 +162,13 @@ export const useLayerControl = () => {
   };
 
   /**
+   * 显示崩塌隐患点
+   */
+  const clickCollapseHiddenPoint = () => {
+    statusStore.poiLayers.showCollapseHiddenPoint.loading = true;
+  };
+
+  /**
    * 显示泥石流隐患点
    */
   const clickDebrisFlowHiddenPoint = () => {
@@ -221,6 +228,7 @@ export const useLayerControl = () => {
     clickReservoir,
     clickSubwayStation,
     clickLandslideHiddenPoint,
+    clickCollapseHiddenPoint,
     clickDebrisFlowHiddenPoint,
     clickWaterLoggingHiddenPoint,
     clickFlashFloodHiddenPoint,
