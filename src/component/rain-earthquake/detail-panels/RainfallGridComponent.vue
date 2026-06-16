@@ -58,11 +58,14 @@
                 operation_type: '暴雨灾害链自动推演',
               })
               .then((res) => {
+                // 进行预警
+                CesiumUtilsSingleton.addPulseEffect(res.data.list);
+
                 // 推进到下一步
                 stepStore.nextStep();
 
-                // 进行预警
-                CesiumUtilsSingleton.addPulseEffect(res.data.list);
+                // 产出报告
+
                 console.log(res);
               });
           } else {

@@ -552,6 +552,7 @@ export class CesiumUtils {
     this.clearAllPrimitives(clearType);
     this.clearAllLayers(clearType);
     this.clearAllGeoJsonLayers(clearType);
+    this.#removeAllPulses();
   }
 
   // ===================== getter 和 setter函数 =====================
