@@ -6,6 +6,7 @@
 <script lang="ts" setup>
   import { $api } from '@/api/api';
   import { useRainstormDeduction } from '@/hooks/rainstorm/useRainstormDeduction';
+  import { useSimulationIdStore } from '@/stores/useSimulationIdStore';
   import { useStatusStore } from '@/stores/useStatusStore';
   import { useStepStore } from '@/stores/useStepStore';
   import type { ApiResponse } from '@/types/ApiResponse';
@@ -19,6 +20,7 @@
   const { triggerLayerShowStatus, addGridLayer } = useRainstormDeduction();
   const statusStore = useStatusStore();
   const stepStore = useStepStore();
+  const simulationIdStore = useSimulationIdStore();
 
   // 请求降雨栅格数据
   const requestRainfallData = () => {
@@ -59,12 +61,13 @@
               .then((res) => {
                 // 进行预警
                 CesiumUtilsSingleton.addPulseEffect(res.data.list);
+                // 设置事件id
+                simulationIdStore.setId(res.data.record_id);
 
                 // 推进到下一步
                 stepStore.nextStep();
 
                 // 产出报告
-
                 console.log(res);
               });
           } else {

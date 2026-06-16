@@ -4,12 +4,15 @@ import config from '@/config/config.json';
 import { useLeftLegendStore } from '@/stores/useLeftLegendStore';
 import { useScene } from '../useScene';
 import { useRainstormDeduction } from '../rainstorm/useRainstormDeduction';
+import { useSimulationIdStore } from '@/stores/useSimulationIdStore';
 
 export const useRightHandle = () => {
   const statusStore = useStatusStore();
   const leftLegendStore = useLeftLegendStore();
   const scene = useScene();
   const rainstormDeduction = useRainstormDeduction();
+  const simulationIdStore = useSimulationIdStore();
+
   /**
    * 暴雨模拟
    * @param status - 状态
@@ -28,6 +31,9 @@ export const useRightHandle = () => {
 
       // 如果有脉冲，显示脉冲
       CesiumUtilsSingleton.showPulseEffects();
+
+      // 模拟id状态为true
+      simulationIdStore.status = true;
     } else {
       // 关闭暴雨模拟：隐藏降雨栅格图层
       statusStore.weatherLayers.showRainfallGrid.show = false;
@@ -40,6 +46,9 @@ export const useRightHandle = () => {
 
       // 隐藏脉冲
       CesiumUtilsSingleton.hidePulseEffects();
+
+      // 模拟id状态为false
+      simulationIdStore.status = false;
     }
   };
 
