@@ -22,6 +22,7 @@ import {
   Color,
   JulianDate,
   CallbackProperty,
+  ConstantProperty,
   HeightReference,
   VerticalOrigin,
   HorizontalOrigin,
@@ -674,6 +675,38 @@ export class CesiumUtils {
     }
   }
 
+  /**
+   * 隐藏所有脉冲效果
+   */
+  hidePulseEffects(): void {
+    const viewer = this.getViewer();
+    if (!viewer) return;
+
+    for (const key of Object.keys(this.#pulseMap)) {
+      const entry = this.#pulseMap[key];
+      const entity = viewer.entities.getById(entry.pulseId);
+      if (entity && entity.billboard) {
+        entity.billboard.show = new ConstantProperty(false);
+      }
+    }
+  }
+
+  /**
+   * 显示所有脉冲效果
+   */
+  showPulseEffects(): void {
+    const viewer = this.getViewer();
+    if (!viewer) return;
+
+    for (const key of Object.keys(this.#pulseMap)) {
+      const entry = this.#pulseMap[key];
+      const entity = viewer.entities.getById(entry.pulseId);
+      if (entity && entity.billboard) {
+        entity.billboard.show = new ConstantProperty(true);
+      }
+    }
+  }
+
   // ===================== 私有方法 =====================
 
   /**
@@ -729,24 +762,24 @@ export class CesiumUtils {
     viewer.entities.add({
       id: pulseId,
       position: Cartesian3.fromDegrees(lon, lat),
-      properties: {pulseKey: key},
+      properties: { pulseKey: key },
       billboard: {
         image: this.#pulseCircleImage,
         width: new CallbackProperty((time) => {
           const elapsed =
-              JulianDate.secondsDifference(time, startTime) % duration;
+            JulianDate.secondsDifference(time, startTime) % duration;
           const progress = elapsed / duration;
           return maxRadius * 2 * Math.abs(Math.sin(progress * Math.PI));
         }, false),
         height: new CallbackProperty((time) => {
           const elapsed =
-              JulianDate.secondsDifference(time, startTime) % duration;
+            JulianDate.secondsDifference(time, startTime) % duration;
           const progress = elapsed / duration;
           return maxRadius * 2 * Math.abs(Math.sin(progress * Math.PI));
         }, false),
         color: new CallbackProperty((time) => {
           const elapsed =
-              JulianDate.secondsDifference(time, startTime) % duration;
+            JulianDate.secondsDifference(time, startTime) % duration;
           const progress = elapsed / duration;
           const alpha = 0.7 * (1 - progress);
           return color.withAlpha(alpha);

@@ -25,6 +25,9 @@ export const useRightHandle = () => {
 
       // 添加图例
       rainstormDeduction.addLegend();
+
+      // 如果有脉冲，显示脉冲
+      CesiumUtilsSingleton.showPulseEffects();
     } else {
       // 关闭暴雨模拟：隐藏降雨栅格图层
       statusStore.weatherLayers.showRainfallGrid.show = false;
@@ -35,8 +38,8 @@ export const useRightHandle = () => {
       // 隐藏步骤条
       statusStore.uiComponents.stepBar.show = false;
 
-      // 删除脉冲
-      CesiumUtilsSingleton.removeAllPulses();
+      // 隐藏脉冲
+      CesiumUtilsSingleton.hidePulseEffects();
     }
   };
 

@@ -53,8 +53,7 @@
             // 进行模型计算
             $api.rainfall
               .modelDeduction({
-                disaster_name: `${Utils.formatDate('YYYYMMDDHHmmss', new Date('2025-09-16 20:00:00'))}暴雨自动推演`,
-                occurred_time: '2025-09-16 20:00:00',
+                disaster_name: `${Utils.formatDate('YYYYMMDDHHmmss')}暴雨自动推演`,
                 operation_type: '暴雨灾害链自动推演',
               })
               .then((res) => {
