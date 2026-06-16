@@ -552,7 +552,7 @@ export class CesiumUtils {
     this.clearAllPrimitives(clearType);
     this.clearAllLayers(clearType);
     this.clearAllGeoJsonLayers(clearType);
-    this.#removeAllPulses();
+    this.removeAllPulses();
   }
 
   // ===================== getter 和 setter函数 =====================
@@ -637,7 +637,7 @@ export class CesiumUtils {
     if (!viewer) return;
 
     // 移除已有脉冲
-    this.#removeAllPulses();
+    this.removeAllPulses();
 
     // 生成圆形贴图
     if (!this.#pulseCircleImage) {
@@ -662,6 +662,15 @@ export class CesiumUtils {
 
       this.#createPulseCircle(pulseId, key, lon, lat, color);
       this.#pulseMap[key] = { pulseId, probability };
+    }
+  }
+
+  /**
+   * 移除所有脉冲实体
+   */
+  removeAllPulses(): void {
+    for (const key of Object.keys(this.#pulseMap)) {
+      this.#deletePulseEntity(key);
     }
   }
 
@@ -720,24 +729,24 @@ export class CesiumUtils {
     viewer.entities.add({
       id: pulseId,
       position: Cartesian3.fromDegrees(lon, lat),
-      properties: { pulseKey: key },
+      properties: {pulseKey: key},
       billboard: {
         image: this.#pulseCircleImage,
         width: new CallbackProperty((time) => {
           const elapsed =
-            JulianDate.secondsDifference(time, startTime) % duration;
+              JulianDate.secondsDifference(time, startTime) % duration;
           const progress = elapsed / duration;
           return maxRadius * 2 * Math.abs(Math.sin(progress * Math.PI));
         }, false),
         height: new CallbackProperty((time) => {
           const elapsed =
-            JulianDate.secondsDifference(time, startTime) % duration;
+              JulianDate.secondsDifference(time, startTime) % duration;
           const progress = elapsed / duration;
           return maxRadius * 2 * Math.abs(Math.sin(progress * Math.PI));
         }, false),
         color: new CallbackProperty((time) => {
           const elapsed =
-            JulianDate.secondsDifference(time, startTime) % duration;
+              JulianDate.secondsDifference(time, startTime) % duration;
           const progress = elapsed / duration;
           const alpha = 0.7 * (1 - progress);
           return color.withAlpha(alpha);
@@ -749,15 +758,6 @@ export class CesiumUtils {
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
       },
     });
-  }
-
-  /**
-   * 移除所有脉冲实体
-   */
-  #removeAllPulses(): void {
-    for (const key of Object.keys(this.#pulseMap)) {
-      this.#deletePulseEntity(key);
-    }
   }
 
   /**

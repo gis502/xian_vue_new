@@ -34,6 +34,9 @@ export const useRightHandle = () => {
 
       // 隐藏步骤条
       statusStore.uiComponents.stepBar.show = false;
+
+      // 删除脉冲
+      CesiumUtilsSingleton.removeAllPulses();
     }
   };
 
