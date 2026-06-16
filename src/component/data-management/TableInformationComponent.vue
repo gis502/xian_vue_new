@@ -6,9 +6,11 @@
         <el-button
           type="success"
           :icon="Download"
+          :loading="exporting"
+          :disabled="exporting || progressVisible"
           @click="handleExport"
         >
-          导出数据
+          {{ exporting && !progressVisible ? '导出中…' : '导出数据' }}
         </el-button>
         <el-button
           type="info"
@@ -105,10 +107,60 @@
       </template>
     </el-dialog>
   </div>
+
+<el-dialog
+      v-model="progressVisible"
+      :title="'导出进度 - ' + progressTableName"
+      width="480px"
+      :close-on-click-modal="false"
+      :show-close="true"
+      @close="closeProgress"
+    >
+      <div class="progress-container">
+        <div class="progress-status">
+          <el-tag v-if="progressStatus === 'PENDING'" type="info">等待中</el-tag>
+          <el-tag v-else-if="progressStatus === 'RUNNING'" type="warning">导出中</el-tag>
+          <el-tag v-else-if="progressStatus === 'COMPLETED'" type="success">已完成</el-tag>
+          <el-tag v-else-if="progressStatus === 'FAILED'" type="danger">失败</el-tag>
+        </div>
+        <div class="progress-info" style="margin: 8px 0; font-size: 14px;">
+          <span v-if="progressStatus === 'RUNNING' || progressStatus === 'COMPLETED'">
+            已导出 {{ progressProcessed.toLocaleString() }} / {{ progressTotal.toLocaleString() }} 行
+            <template v-if="progressTotal > 0">
+              （{{ ((progressProcessed / progressTotal) * 100).toFixed(1) }}%）
+            </template>
+          </span>
+          <span v-else-if="progressStatus === 'PENDING'">任务已提交，等待执行...</span>
+        </div>
+        <el-progress
+          v-if="progressStatus === 'RUNNING' && progressTotal > 0"
+          :percentage="Math.round((progressProcessed / progressTotal) * 100)"
+          :stroke-width="20"
+          :text-inside="true"
+          style="margin: 16px 0"
+        />
+        <el-alert
+          v-if="progressStatus === 'FAILED'"
+          title="导出失败"
+          :description="progressError || '未知错误'"
+          type="error" show-icon :closable="false" style="margin-top: 12px"
+        />
+        <el-alert
+          v-if="progressStatus === 'COMPLETED'"
+          title="导出完成，正在触发下载..."
+          type="success" show-icon :closable="false" style="margin-top: 12px"
+        />
+      </div>
+      <template #footer>
+        <el-button @click="closeProgress">
+          {{ progressStatus === 'RUNNING' || progressStatus === 'PENDING' ? '后台运行' : '关闭' }}
+        </el-button>
+      </template>
+    </el-dialog>
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, onMounted } from 'vue';
+  import { ref, computed, onMounted, onUnmounted } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { RefreshLeft, Download } from '@element-plus/icons-vue';
   import { getAllTables, updateTableInfo } from '@/api/data-management';
@@ -121,6 +173,10 @@
     selectionChange: [rows: TableInfo[]]
   }>();
 
+  const ASYNC_THRESHOLD = 10000;
+  const POLL_INTERVAL_MS = 3000;
+  const SYNC_TIMEOUT_MS = 60000;
+
   // 定义props
   const props = defineProps<{
     searchKeyword?: string
@@ -131,6 +187,7 @@
   const originalTables = ref<TableInfo[]>([]);
   const deletedTables = ref<TableInfo[]>([]);
   const loading = ref(false);
+  const exporting = ref(false);
   const tableRef = ref();
 
   // 修改对话框
@@ -140,6 +197,15 @@
     tableComment: ''
   });
   const selectedTable = ref<TableInfo | null>(null);
+  const selectedRows = ref<TableInfo[]>([]);
+
+  const progressVisible = ref(false);
+  const progressTableName = ref('');
+  const progressStatus = ref('');
+  const progressTotal = ref(0);
+  const progressProcessed = ref(0);
+  const progressError = ref('');
+  let pollTimer: ReturnType<typeof setInterval> | null = null;
 
   // 是否有已删除的数据
   const hasDeletedData = computed(() => {
@@ -235,11 +301,13 @@
   // 选中变化事件
   const handleSelectionChange = (rows: TableInfo[]) => {
     emit('selectionChange', rows);
+    selectedRows.value = rows;
     // 保存当前选中的表
     if (rows.length === 1) {
       selectedTable.value = rows[0];
     } else {
       selectedTable.value = null;
+
     }
   };
 
@@ -247,6 +315,8 @@
   const clearSelection = () => {
     tableRef.value?.clearSelection();
     selectedTable.value = null;
+    selectedRows.value = [];
+
   };
 
   // 打开修改表信息对话框（由父组件调用）
@@ -303,15 +373,121 @@
     }
   };
 
-  // 导出数据
-  const handleExport = () => {
-    console.log('导出数据');
+  const handleExport = async () => {
+    if (selectedRows.value.length === 0) { ElMessage.warning('请先勾选要导出的数据表'); return; }
+    if (selectedRows.value.length > 1) { ElMessage.warning('一次只能导出一张表'); return; }
+    const table = selectedRows.value[0];
+    const rowCount = table.rowCount || 0;
+    if (rowCount >= ASYNC_THRESHOLD) {
+      await startAsyncExport(table.tableName);
+    } else {
+      await startSyncDownload(table.tableName);
+    }
+  };
+
+  const startSyncDownload = async (tableName: string) => {
+    exporting.value = true;
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), SYNC_TIMEOUT_MS);
+      const response = await fetch('/api/export/' + encodeURIComponent(tableName), { signal: controller.signal });
+      clearTimeout(timeout);
+      if (!response.ok) {
+        const errData = await response.json().catch(() => null);
+        throw new Error(errData?.message || '导出失败');
+      }
+      const blob = await response.blob();
+      triggerDownload(blob, tableName + '.csv');
+      ElMessage.success('表导出完成');
+    } catch (error: unknown) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        ElMessage.error('导出超时（60秒），请使用大表导出或刷新后重试');
+      } else {
+        console.error('导出失败:', error);
+        ElMessage.error(error instanceof Error ? error.message : '导出失败');
+      }
+    } finally { exporting.value = false; }
+  };
+
+  const startAsyncExport = async (tableName: string) => {
+    exporting.value = true;
+    try {
+      const response = await fetch('/api/export/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tableName })
+      });
+      const result = await response.json();
+      const data = result.data || result;
+      if (!response.ok || (result.code && result.code !== 200)) {
+        throw new Error(data.message || result.message || '提交导出任务失败');
+      }
+      const taskId = data.taskId;
+      if (!taskId) throw new Error('未获取到任务ID');
+      progressTableName.value = tableName;
+      progressStatus.value = 'PENDING';
+      progressTotal.value = data.totalRows || 0;
+      progressProcessed.value = 0;
+      progressError.value = '';
+      progressVisible.value = true;
+      exporting.value = false;
+      pollTimer = setInterval(() => pollProgress(taskId, tableName), POLL_INTERVAL_MS);
+      pollProgress(taskId, tableName);
+    } catch (error: unknown) {
+      console.error('提交导出任务失败:', error);
+      ElMessage.error(error instanceof Error ? error.message : '提交导出任务失败');
+      exporting.value = false;
+    }
+  };
+
+  const pollProgress = async (taskId: number, tableName: string) => {
+    if (!taskId) return;
+    try {
+      const response = await fetch('/api/export/progress/' + taskId);
+      if (!response.ok) return;
+      const text = await response.text();
+      let result: any;
+      try { result = JSON.parse(text); } catch { return; }
+      const data = result.data || result;
+      progressStatus.value = data.status;
+      progressProcessed.value = data.processedRows || 0;
+      progressTotal.value = data.totalRows || progressTotal.value;
+      progressError.value = data.errorMessage || '';
+      if (data.status === 'COMPLETED') {
+        stopPolling();
+        progressStatus.value = 'COMPLETED';
+        ElMessage.success('表 ' + tableName + ' 导出完成，正在下载...');
+        setTimeout(() => { triggerDownloadByUrl('/api/export/download/' + taskId, tableName + '.csv'); }, 500);
+      } else if (data.status === 'FAILED') {
+        stopPolling();
+        progressStatus.value = 'FAILED';
+        progressError.value = data.errorMessage || '';
+        ElMessage.error('导出失败: ' + (data.errorMessage || '未知错误'));
+      }
+    } catch (e) { console.error('轮询异常:', e); }
+  };
+
+  const stopPolling = () => { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } };
+  const closeProgress = () => { progressVisible.value = false; };
+
+  const triggerDownload = (blob: Blob, filename: string) => {
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url; link.download = filename;
+    document.body.appendChild(link); link.click();
+    document.body.removeChild(link); window.URL.revokeObjectURL(url);
+  };
+
+  const triggerDownloadByUrl = (url: string, filename: string) => {
+    const link = document.createElement('a');
+    link.href = url; link.download = filename;
+    document.body.appendChild(link); link.click();
+    document.body.removeChild(link);
   };
 
   // 组件挂载时加载表列表
-  onMounted(() => {
-    loadAllTables();
-  });
+  onMounted(() => { loadAllTables(); });
+  onUnmounted(() => { stopPolling(); });
 
   // 暴露方法给父组件
   defineExpose({
