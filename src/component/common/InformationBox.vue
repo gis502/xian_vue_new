@@ -16,7 +16,11 @@
     </header>
     <div class="content">
       <table class="table">
-        <tr v-for="(tableData, index) in tableDatas" :key="index">
+        <tr
+          v-for="(tableData, index) in tableDatas"
+          :key="index"
+          :style="tableData.styles || {}"
+        >
           <td class="label">{{ tableData.title }}</td>
           <td>{{ tableData.content }}</td>
         </tr>
@@ -33,7 +37,7 @@
     title: string;
     data: Record<string, string>;
     field: Record<string, string>;
-    color: Record<string, string> | null;
+    style?: Record<string, Record<string, string>>;
     offsetX: number;
     offsetY: number;
   }>();
@@ -44,7 +48,8 @@
   const newOffsetX = ref(props.offsetX);
   const newOffsetY = ref(props.offsetY);
 
-  const tableDatas: Ref<{ title: string; content: string }[]> = ref([]);
+  const tableDatas: Ref<{ title: string; content: string; styles?: Record<string, string> }[]> =
+    ref([]);
 
   onMounted(() => {
     // 判断是否超出屏幕，超出就重新定位
@@ -59,10 +64,14 @@
     Object.entries(props.data).forEach(([key, value]) => {
       // 判断key是不是存在field中，存在就添加到表格数据，不存在则不添加
       if (Object.hasOwn(props.field, key) && value) {
-        tableDatas.value.push({
+        const rowData: { title: string; content: string; styles?: Record<string, string> } = {
           title: props.field[key],
           content: value,
-        });
+        };
+        if (props.style && Object.hasOwn(props.style, key)) {
+          rowData.styles = props.style[key];
+        }
+        tableDatas.value.push(rowData);
       }
     });
   });

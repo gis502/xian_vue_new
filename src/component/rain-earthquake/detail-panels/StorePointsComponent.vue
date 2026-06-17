@@ -15,6 +15,7 @@
     <InformationBox
       :data="storePointDetail as Record<string, any>"
       :field="field"
+      :style="{}"
       v-if="loadingInformationStore.storePoints.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"

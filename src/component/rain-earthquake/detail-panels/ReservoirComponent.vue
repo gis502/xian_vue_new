@@ -15,6 +15,7 @@
     <InformationBox
       :data="reservoirDetail as Record<string, any>"
       :field="field"
+      :style="{}"
       v-if="loadingInformationStore.reservoir.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"

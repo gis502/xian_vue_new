@@ -15,6 +15,7 @@
     <InformationBox
       :data="hospitalPointDetail as Record<string, any>"
       :field="field"
+      :style="{}"
       v-if="loadingInformationStore.hospital.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"

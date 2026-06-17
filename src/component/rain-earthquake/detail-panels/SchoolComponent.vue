@@ -15,6 +15,7 @@
     <InformationBox
       :data="schoolDetail as Record<string, any>"
       :field="field"
+      :style="{}"
       v-if="loadingInformationStore.school.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"

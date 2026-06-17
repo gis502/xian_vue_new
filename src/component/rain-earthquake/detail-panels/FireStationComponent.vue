@@ -15,6 +15,7 @@
     <InformationBox
       :data="fireStationPointDetail as Record<string, any>"
       :field="field"
+      :style="{}"
       v-if="loadingInformationStore.fireStation.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"

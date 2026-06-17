@@ -29,10 +29,10 @@ export const useRiskPoint = () => {
   };
 
   /**
-   * 颜色
+   * 样式
    */
-  const color = {
-    probability: 'red',
+  const style = {
+    probability: { background: '#888888' },
   };
 
   /**
@@ -43,5 +43,5 @@ export const useRiskPoint = () => {
     return riskAreaIcon;
   }
 
-  return { informationBoxTitle, field, color, getDisasterIcon };
+  return { informationBoxTitle, field, style, getDisasterIcon };
 };

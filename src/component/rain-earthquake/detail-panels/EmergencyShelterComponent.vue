@@ -15,6 +15,7 @@
     <InformationBox
       :data="emergencyShelterPointDetail as Record<string, any>"
       :field="field"
+      :style="{}"
       v-if="loadingInformationStore.emergencyShelter.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"

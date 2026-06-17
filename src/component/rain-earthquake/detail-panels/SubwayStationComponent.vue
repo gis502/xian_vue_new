@@ -15,6 +15,7 @@
     <InformationBox
       :data="subwayStationDetail as Record<string, any>"
       :field="field"
+      :style="{}"
       v-if="loadingInformationStore.subwayStation.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"

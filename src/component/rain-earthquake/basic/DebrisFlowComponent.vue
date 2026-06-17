@@ -15,7 +15,7 @@
     <InformationBox
       :data="debrisFlowPointDetail as Record<string, any>"
       :field="field"
-      :color="color"
+      :style="style"
       v-if="loadingInformationStore.debrisFlowHiddenPoint.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
@@ -51,7 +51,7 @@
   const loadingResourceStore = useLoadingResourceStore();
   const simulationIdStore = useSimulationIdStore();
 
-  const { field, color, getDisasterIcon } = useHiddenPoint();
+  const { field, style, getDisasterIcon } = useHiddenPoint();
 
   // 信息框相关配置
   const offsetX = ref(0);

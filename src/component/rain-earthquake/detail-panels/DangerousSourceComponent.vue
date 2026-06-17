@@ -15,6 +15,7 @@
     <InformationBox
       :data="dangerousSourcePointDetail as Record<string, any>"
       :field="field"
+      :style="{}"
       v-if="loadingInformationStore.dangerousSource.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"

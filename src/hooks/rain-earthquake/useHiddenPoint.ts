@@ -25,10 +25,10 @@ export const useHiddenPoint = () => {
   };
 
   /**
-   * 颜色
+   * 样式
    */
-  const color = {
-    probability: 'red',
+  const style = {
+    probability: { background: '#888888' },
   };
 
   /**
@@ -59,5 +59,5 @@ export const useHiddenPoint = () => {
     }
   }
 
-  return { field, color, getDisasterIcon };
+  return { field, style, getDisasterIcon };
 };
