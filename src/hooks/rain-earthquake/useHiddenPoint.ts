@@ -15,6 +15,7 @@ export const useHiddenPoint = () => {
    * 字段映射配置
    */
   const field = {
+    probability: '预测概率',
     fieldCode: '野外编号',
     disasterName: '灾害点名称',
     position: '位置',

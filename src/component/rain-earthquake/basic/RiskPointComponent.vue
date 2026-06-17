@@ -37,12 +37,14 @@
   import { useRiskPoint } from '@/hooks/rain-earthquake/useRiskPoint.ts';
   import { LoadingResource } from '@/types/common/LoadingResourceType.ts';
   import { useLoadingResourceStore } from '@/stores/useLoadingResourceStore.ts';
+  import { useSimulationIdStore } from '@/stores/useSimulationIdStore';
 
   const riskPoints = ref<Point[]>([]);
 
   const statusStore = useStatusStore();
   const loadingInformationStore = useLoadingInformationStore();
   const loadingResourceStore = useLoadingResourceStore();
+  const simulationIdStore = useSimulationIdStore();
 
   // 信息框相关配置
   const offsetX = ref(0);
@@ -72,7 +74,8 @@
       }
 
       const res = await $api.riskSpots.getPointDetailById(
-        loadingInformationStore.riskPoint.id
+        loadingInformationStore.riskPoint.id,
+        simulationIdStore.status ? simulationIdStore.id : -1
       );
 
       // 更新数据
@@ -100,15 +103,13 @@
     (newValue: boolean) => {
       if (newValue) {
         CesiumUtilsSingleton.batchShowPrimitives(
-          loadingResourceStore.getLoadingResource(
-            LoadingResource.RISK_POINT
-          ).ids
+          loadingResourceStore.getLoadingResource(LoadingResource.RISK_POINT)
+            .ids
         );
       } else {
         CesiumUtilsSingleton.batchHidePrimitives(
-          loadingResourceStore.getLoadingResource(
-            LoadingResource.RISK_POINT
-          ).ids
+          loadingResourceStore.getLoadingResource(LoadingResource.RISK_POINT)
+            .ids
         );
       }
     }

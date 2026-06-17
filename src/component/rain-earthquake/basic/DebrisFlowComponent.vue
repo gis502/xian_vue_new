@@ -41,12 +41,14 @@
     PointType,
     HiddenDangerPointTypeMap,
   } from '@/types/common/DisasterType.ts';
+  import { useSimulationIdStore } from '@/stores/useSimulationIdStore';
 
   const debrisFlowPoints = ref<Point[]>([]);
 
   const statusStore = useStatusStore();
   const loadingInformationStore = useLoadingInformationStore();
   const loadingResourceStore = useLoadingResourceStore();
+  const simulationIdStore = useSimulationIdStore();
 
   const { field, getDisasterIcon } = useHiddenPoint();
 
@@ -79,7 +81,8 @@
       }
 
       const res = await $api.hiddenDangerSpots.getPointDetailById(
-        loadingInformationStore.debrisFlowHiddenPoint.id
+        loadingInformationStore.debrisFlowHiddenPoint.id,
+        simulationIdStore.status ? simulationIdStore.id : -1
       );
 
       // 更新数据

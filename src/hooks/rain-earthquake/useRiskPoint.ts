@@ -14,6 +14,7 @@ export const useRiskPoint = () => {
    * 字段映射配置
    */
   const field = {
+    probability: '预测概率',
     riskName: '风险区名称',
     unitCode: '统一编号',
     housing: '住房（间）',

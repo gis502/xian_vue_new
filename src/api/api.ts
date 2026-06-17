@@ -87,12 +87,14 @@ export const $api = {
     /**
      * 根据id获取隐患点详情
      * @param id - 隐患点id
+     * @param simulationId - 模拟id
      * @returns 隐患点详情
      */
     getPointDetailById: (
-      id: number
+      id: number,
+      simulationId: number
     ): Promise<ApiResponse<XianHiddenDangerSpots>> =>
-      getHiddenDangerPointDetailById(id),
+      getHiddenDangerPointDetailById(id, simulationId),
   },
 
   // 风险点信息
@@ -107,10 +109,14 @@ export const $api = {
     /**
      * 根据id获取风险点详情
      * @param id - 风险点id
+     * @param simulationId - 模拟id
      * @returns 风险点详情
      */
-    getPointDetailById: (id: number): Promise<ApiResponse<XianRiskSpots>> =>
-      getRiskPointDetailById(id),
+    getPointDetailById: (
+      id: number,
+      simulationId: number
+    ): Promise<ApiResponse<XianRiskSpots>> =>
+      getRiskPointDetailById(id, simulationId),
   },
 
   // 医院信息

@@ -14,4 +14,6 @@ export interface Point {
   disasterType?: string;
   /** 名称 */
   name?: string;
+  /** 预测概率 */
+  probability?: string;
 }
