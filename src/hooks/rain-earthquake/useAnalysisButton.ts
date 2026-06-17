@@ -90,6 +90,8 @@ export const useAnalysisButton = (): AnalysisButtonState => {
   const showAreaDialog = ref(false);
   const radius = ref(10);
   const dialogPosition = reactive<DialogPosition>({ x: 0, y: 0 });
+  const pulsePoints = ref<PointResource[]>([]);
+  const showPulsePointList = ref(false);
 
   let clickHandler: ScreenSpaceEventHandler | null = null;
   let currentCenterPosition: Cartesian3 | null = null;
@@ -184,6 +186,8 @@ export const useAnalysisButton = (): AnalysisButtonState => {
     
     const pointsInCircle = getPointsInCircle(currentCenterPosition, radius.value);
     addPulseEffectToPoints(pointsInCircle);
+    pulsePoints.value = pointsInCircle;
+    showPulsePointList.value = true;
   };
 
   // ==================== 地图事件处理 ====================
@@ -236,17 +240,26 @@ export const useAnalysisButton = (): AnalysisButtonState => {
   };
 
   // ==================== 资源清理 ====================
-
   const clearAllAnalysisResources = () => {
     removeMarker();
     clearCircle();
     removePulseEffect();
     currentCenterPosition = null;
+    pulsePoints.value = [];
+    showPulsePointList.value = false;
   };
-
+  /**
+   * 仅清除视觉效果，保留标记点和中心点位置
+   */
+  const clearVisualEffectsOnly = () => {
+    clearCircle();
+    removePulseEffect();
+    pulsePoints.value = [];
+    showPulsePointList.value = false;
+  };
   // ==================== 事件处理 ====================
 
-  const handleConfirm = () => {
+    const handleConfirm = () => {
     if (!currentCenterPosition) {
       console.error('中心点位置不存在');
       return;
@@ -256,11 +269,16 @@ export const useAnalysisButton = (): AnalysisButtonState => {
       radius: radius.value,
       center: currentCenterPosition
     });
+    // 先清除上一次的视觉效果（保留标记点）
+    clearVisualEffectsOnly();
 
+    // 重新绘制当前选择的效果
     drawCircle(currentCenterPosition, radius.value);
 
     const pointsInCircle = getPointsInCircle(currentCenterPosition, radius.value);
     addPulseEffectToPoints(pointsInCircle);
+    pulsePoints.value = pointsInCircle;
+    showPulsePointList.value = true;
 
     const cartographic = Cartographic.fromCartesian(currentCenterPosition);
     const longitude = cartographic.longitude * (180 / Math.PI);
@@ -268,12 +286,28 @@ export const useAnalysisButton = (): AnalysisButtonState => {
 
     const flyHeight = Math.max(radius.value * FLY_HEIGHT_MULTIPLIER, MIN_FLY_HEIGHT);
     CesiumUtilsSingleton.flyToTarget([longitude, latitude, flyHeight], FLY_DURATION);
+    
+    // 关闭对话框并清理资源（包括鼠标样式）
     showAreaDialog.value = false;
+    
+    // 移除地图点击事件监听器，恢复鼠标默认样式
+    if (clickHandler) {
+      clickHandler.destroy();
+      clickHandler = null;
+    }
+    
+    // 恢复鼠标默认样式
+    const viewer = CesiumUtilsSingleton.getViewer();
+    if (viewer?.canvas) {
+      statusStore.cursorStyle = 'default';
+      viewer.canvas.style.cursor = 'default';
+    }
   };
-
   const handleCancel = () => {
     showAreaDialog.value = false;
     clearAllAnalysisResources();
+    pulsePoints.value = [];
+    showPulsePointList.value = false;
   };
 
   const handleButtonClick = (index: number, callback: (status: boolean) => void) => {
@@ -320,9 +354,12 @@ export const useAnalysisButton = (): AnalysisButtonState => {
     () => infra.value.showReservoir.show,
   ];
 
-  watch(layerVisibilityWatchers, () => {
-    console.log('检测到图层可见性变化，刷新脉冲效果');
-    refreshPulseEffect();
+   watch(layerVisibilityWatchers, () => {
+    // 只有当有中心点位置且脉冲点列表正在显示时，才刷新脉冲效果
+    if (currentCenterPosition && showPulsePointList.value) {
+      console.log('检测到图层可见性变化，刷新脉冲效果');
+      refreshPulseEffect();
+    }
   });
 
   onUnmounted(() => {
@@ -361,7 +398,7 @@ export const useAnalysisButton = (): AnalysisButtonState => {
     },
   ];
 
-  return {
+   return {
     selectedButtonIndex,
     showAreaDialog,
     radius,
@@ -371,5 +408,7 @@ export const useAnalysisButton = (): AnalysisButtonState => {
     handleConfirm,
     handleCancel,
     refreshPulseEffect,
+    pulsePoints,
+    showPulsePointList,
   };
 };

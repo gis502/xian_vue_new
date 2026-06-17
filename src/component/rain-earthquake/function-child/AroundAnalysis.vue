@@ -11,6 +11,9 @@
 
     <!-- 具体功能组件 -->
     <AroundAnalysisDetailComponent />
+
+    <!-- 脉冲点列表组件 -->
+    <PulsePointListComponent />
   </div>
 </template>
 
@@ -21,6 +24,8 @@ import { useAnalysisButton } from '@/hooks/rain-earthquake/useAnalysisButton';
 import AroundAnalysisDetailComponent from './around-analysis/AroundAnalysisDetailComponent.vue';
 import ButtonComponent from './around-analysis/ButtonComponent.vue';
 import SearchComponent from './around-analysis/SearchComponent.vue';
+import PulsePointListComponent from './around-analysis/PulsePointListComponent.vue';
+
 
 const statusStore = useStatusStore();
 

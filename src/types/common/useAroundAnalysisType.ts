@@ -111,4 +111,8 @@ export interface AnalysisButtonState {
   handleCancel: () => void;
   /** 刷新脉冲效果 */
   refreshPulseEffect: () => void;
+  /** 脉冲点列表 */
+  pulsePoints: Ref<PointResource[]>;
+  /** 是否显示脉冲点列表 */
+  showPulsePointList: Ref<boolean>;
 }
