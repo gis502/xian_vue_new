@@ -25,6 +25,13 @@ export const useHiddenPoint = () => {
   };
 
   /**
+   * 颜色
+   */
+  const color = {
+    probability: 'red',
+  };
+
+  /**
    * 根据灾害类型获取对应图标
    * @param disasterType - 灾害类型（支持中英文）
    * @returns 图标路径
@@ -52,5 +59,5 @@ export const useHiddenPoint = () => {
     }
   }
 
-  return { field, getDisasterIcon };
+  return { field, color, getDisasterIcon };
 };

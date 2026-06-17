@@ -15,6 +15,7 @@
     <InformationBox
       :data="riskPointDetail as Record<string, any>"
       :field="field"
+      :color="color"
       v-if="loadingInformationStore.riskPoint.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
@@ -52,7 +53,7 @@
   const riskPointDetail = ref<Point>();
 
   // 获取钩子函数
-  const { informationBoxTitle, field, getDisasterIcon } = useRiskPoint();
+  const { informationBoxTitle, field, color, getDisasterIcon } = useRiskPoint();
 
   $api.riskSpots.getBasePoints().then((res) => {
     riskPoints.value = res.data;

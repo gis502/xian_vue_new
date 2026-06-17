@@ -3,9 +3,7 @@
   <div>
     <!-- 加载内涝隐患点 -->
     <LoadingPoints
-      v-if="
-        statusStore.appLoadingCompleted && waterLoggingPoints.length > 0
-      "
+      v-if="statusStore.appLoadingCompleted && waterLoggingPoints.length > 0"
       :base-points="waterLoggingPoints"
       :get-disaster-icon="getDisasterIcon"
       :prefix="config.prefix.waterLoggingHiddenPointId"
@@ -17,6 +15,7 @@
     <InformationBox
       :data="waterLoggingPointDetail as Record<string, any>"
       :field="field"
+      :color="color"
       v-if="loadingInformationStore.waterLoggingHiddenPoint.loading"
       :title="informationBoxTitle"
       :offset-x="offsetX"
@@ -43,14 +42,16 @@
     PointType,
     HiddenDangerPointTypeMap,
   } from '@/types/common/DisasterType.ts';
+  import { useSimulationIdStore } from '@/stores/useSimulationIdStore';
 
   const waterLoggingPoints = ref<Point[]>([]);
 
   const statusStore = useStatusStore();
   const loadingInformationStore = useLoadingInformationStore();
   const loadingResourceStore = useLoadingResourceStore();
+  const simulationIdStore = useSimulationIdStore();
 
-  const { field, getDisasterIcon } = useHiddenPoint();
+  const { field, color, getDisasterIcon } = useHiddenPoint();
 
   // 信息框相关配置
   const offsetX = ref(0);
@@ -81,7 +82,8 @@
       }
 
       const res = await $api.hiddenDangerSpots.getPointDetailById(
-        loadingInformationStore.waterLoggingHiddenPoint.id
+        loadingInformationStore.waterLoggingHiddenPoint.id,
+        simulationIdStore.status ? simulationIdStore.id : -1
       );
 
       // 更新数据

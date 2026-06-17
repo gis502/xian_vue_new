@@ -33,6 +33,7 @@
     title: string;
     data: Record<string, string>;
     field: Record<string, string>;
+    color: Record<string, string> | null;
     offsetX: number;
     offsetY: number;
   }>();
