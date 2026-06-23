@@ -86,13 +86,29 @@
         <el-button type="primary" @click="confirmModify">确定</el-button>
       </template>
     </el-dialog>
+
+    <el-dialog
+      v-model="exportDialogVisible"
+      :title="'正在导出 - ' + exportTableName"
+      width="400px"
+      :close-on-click-modal="false"
+      :show-close="false"
+    >
+      <div style="text-align: center; padding: 20px;">
+        <el-icon class="is-loading" :size="40"><Loading /></el-icon>
+        <p style="margin-top: 16px; color: #666;">正在导出数据，请稍候...</p>
+      </div>
+      <template #footer>
+        <el-button type="danger" @click="cancelExport">取消导出</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
-  import { RefreshLeft, Download } from '@element-plus/icons-vue';
+  import { RefreshLeft, Download, Loading } from '@element-plus/icons-vue';
   import { getAllTables, updateTableInfo } from '@/api/data-management';
   import type { TableInfo } from '@/api/data-management';
 
@@ -115,6 +131,10 @@
   const modifyForm = ref({ tableName: '', tableComment: '' });
   const selectedTable = ref<TableInfo | null>(null);
   const selectedRows = ref<TableInfo[]>([]);
+
+  const exportDialogVisible = ref(false);
+  const exportTableName = ref('');
+  let abortController: AbortController | null = null;
 
   const hasDeletedData = computed(() => deletedTables.value.length > 0);
 
@@ -224,12 +244,16 @@
     if (selectedRows.value.length === 0) { ElMessage.warning('请先勾选要导出的数据表'); return; }
     if (selectedRows.value.length > 1) { ElMessage.warning('一次只能导出一张表'); return; }
     const tableName = selectedRows.value[0].tableName;
+
     exporting.value = true;
+    exportTableName.value = tableName;
+    exportDialogVisible.value = true;
+    abortController = new AbortController();
+
     try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 120000);
-      const response = await fetch('/api/export/' + encodeURIComponent(tableName), { signal: controller.signal });
-      clearTimeout(timeout);
+      const response = await fetch('/api/export/' + encodeURIComponent(tableName), {
+        signal: abortController.signal
+      });
       if (!response.ok) {
         const text = await response.text();
         throw new Error(text || '导出失败');
@@ -243,12 +267,22 @@
       ElMessage.success('导出完成');
     } catch (error: unknown) {
       if (error instanceof DOMException && error.name === 'AbortError') {
-        ElMessage.error('导出超时（120秒），请刷新后重试');
+        ElMessage.info('已取消导出');
       } else {
         console.error('导出失败:', error);
         ElMessage.error(error instanceof Error ? error.message : '导出失败');
       }
-    } finally { exporting.value = false; }
+    } finally {
+      exporting.value = false;
+      exportDialogVisible.value = false;
+      abortController = null;
+    }
+  };
+
+  const cancelExport = () => {
+    if (abortController) {
+      abortController.abort();
+    }
   };
 
   const formatDateTime = (dateTime?: string): string => {
